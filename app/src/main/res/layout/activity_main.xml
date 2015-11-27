@@ -11,11 +11,13 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/my_toolbar"
-            style="@style/ToolBarStyle.Event"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways" />
+            app:contentInsetLeft="72dp"
+            app:contentInsetStart="72dp"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:theme="@style/ToolBarStyle" />
 
     </android.support.design.widget.AppBarLayout>
 

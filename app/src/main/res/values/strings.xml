@@ -3,6 +3,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="save">Save</string>
+    <string name="save_menu">SAVE</string>
     <string name="new_habit">New Habit</string>
 </resources>

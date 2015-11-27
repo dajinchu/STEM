@@ -10,25 +10,36 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:layout_scrollFlags="scroll|enterAlways"
-        style="@style/ToolBarStyle.Event" />
+        app:contentInsetLeft="72dp"
+        app:contentInsetStart="72dp"
+        app:theme="@style/ToolBarStyle"
+        app:layout_scrollFlags="scroll|enterAlways" />
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/view2"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
 
-        <EditText
-            android:id="@+id/habit_name_edit_text"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/view2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Habit Name" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_height="wrap_content">
 
-    <Spinner
-        android:id="@+id/habit_frequency_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="start" />
+            <EditText
+                android:id="@+id/habit_name_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Habit Name" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/habit_frequency_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -10,33 +10,12 @@
         <item name="android:textColor">@color/primary_text</item>
         <item name="spinnerStyle">@style/Widget.AppCompat.Spinner.Underlined</item>
 
-        <item name="android:actionMenuTextAppearance">@style/ToolBarStyle.MenuTextStyle</item>
     </style>
-
     <!-- ToolBar -->
-    <style name="ToolBarStyle" parent="ToolBarStyle.Base" />
-
-    <style name="ToolBarStyle.Base" parent="">
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-    </style>
-
-    <style name="ToolBarStyle.Event" parent="ToolBarStyle">
-        <item name="titleTextAppearance">@style/TextAppearance.Widget.Event.Toolbar.Title</item>
-    </style>
-
-    <style name="TextAppearance.Widget.Event.Toolbar.Title"
-        parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:paddingTop">20dp</item>
-        <item name="android:paddingBottom">20dp</item>
-    </style>
-
-    <style name="ToolBarStyle.MenuTextStyle" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:paddingRight">16dp</item>
+    <style name="ToolBarStyle" parent="AppTheme">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="actionMenuTextColor">@android:color/holo_orange_dark</item>
     </style>
 
 </resources>
