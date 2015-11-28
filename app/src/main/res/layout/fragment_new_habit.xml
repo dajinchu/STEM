@@ -35,6 +35,24 @@
                 android:hint="Habit Name" />
         </android.support.design.widget.TextInputLayout>
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="@string/frequency"
+            android:id="@+id/textView"
+            android:theme="@style/AppTheme"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:textColor="@color/secondary_text_default_material_light" />
+
         <Spinner
             android:id="@+id/habit_frequency_spinner"
             android:layout_width="wrap_content"
