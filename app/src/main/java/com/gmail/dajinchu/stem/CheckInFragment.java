@@ -89,8 +89,7 @@ public class CheckInFragment extends Fragment {
                 c.moveToFirst();
                 Log.d("Checkin", "looking for data" + c.getCount());
                 habitList.clear();
-                while(c.moveToNext()){
-                    Log.d("Checkin", "data!");
+                for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()){
                     habitList.add(c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NAME)));
                 }
                 c.close();
@@ -101,6 +100,6 @@ public class CheckInFragment extends Fragment {
             protected void onPostExecute(Void aVoid) {
                 adapter.notifyDataSetChanged();
             }
-        }.execute();
+    }.execute();
     }
 }
