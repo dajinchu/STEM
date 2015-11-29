@@ -6,26 +6,15 @@
     android:orientation="vertical"
     android.support.design:layout_behavior="@string/appbar_scrolling_view_behavior"
     xmlns:android.support.design="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:paddingLeft="16dp"
-    android:paddingTop="8dp"
-    android:paddingRight="16dp">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/habit_check_list" />
+        android:id="@+id/habit_check_list"
+        android:clipToPadding="false"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:paddingRight="16dp" />
 
-    <android.support.v7.widget.AppCompatCheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/view"
-            android:gravity="center"
-            android:text="Hey"/>
-        <android.support.v7.widget.AppCompatCheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/check2"
-            android:gravity="center"
-            android:text="Hey2" />
 </LinearLayout>
