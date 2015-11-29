@@ -5,23 +5,29 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/new_habit_toolbar"
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:contentInsetLeft="72dp"
-        app:contentInsetStart="72dp"
-        app:theme="@style/ToolBarStyle"
-        app:layout_scrollFlags="scroll|enterAlways" />
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/new_habit_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:contentInsetLeft="72dp"
+            app:contentInsetStart="72dp"
+            app:theme="@style/ToolBarStyle" />
+    </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/habit_name_text_input_layout"
@@ -42,16 +48,16 @@
         </android.support.design.widget.TextInputLayout>
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="@string/frequency"
-            android:id="@+id/textView"
-            android:theme="@style/AppTheme"
-            android:layout_marginTop="16dp"
             android:layout_marginLeft="4dp"
             android:layout_marginStart="4dp"
-            android:textColor="@color/secondary_text_default_material_light" />
+            android:layout_marginTop="16dp"
+            android:text="@string/frequency"
+            android:textColor="@color/secondary_text_default_material_light"
+            android:textSize="12sp"
+            android:theme="@style/AppTheme" />
 
         <Spinner
             android:id="@+id/habit_frequency_spinner"
