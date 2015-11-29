@@ -53,7 +53,7 @@ public class NewHabitFragment extends DialogFragment {
         //set toolbar title using string resource
         toolbar.setTitle(R.string.new_habit);
         //Set up the toolbar's navigation icon and behavior
-        toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
+        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
