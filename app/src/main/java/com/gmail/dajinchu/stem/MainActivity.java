@@ -7,6 +7,8 @@ import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static HabitDbHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
 
         CheckInFragment checkInFragment = new CheckInFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.main_fragment_container, checkInFragment).commit();
+
+        dbHelper = new HabitDbHelper(this);
     }
 
     @Override

@@ -11,7 +11,12 @@
     android:paddingTop="8dp"
     android:paddingRight="16dp">
 
-        <android.support.v7.widget.AppCompatCheckBox
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/habit_check_list" />
+
+    <android.support.v7.widget.AppCompatCheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/view"
