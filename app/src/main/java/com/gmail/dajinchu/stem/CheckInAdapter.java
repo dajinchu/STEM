@@ -13,17 +13,18 @@ import java.util.ArrayList;
  */
 public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHolder>{
 
-    private ArrayList<String> dataset;
+    private ArrayList<Habit> dataset;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView checkBox;
+        public TextView name,frequency;
         public ViewHolder(View v){
             super(v);
-            checkBox = (TextView) v.findViewById(R.id.habit_item_name);
+            name = (TextView) v.findViewById(R.id.habit_item_name);
+            frequency = (TextView) v.findViewById(R.id.habit_item_frequency);
         }
     }
 
-    public CheckInAdapter(ArrayList<String> mDataset){
+    public CheckInAdapter(ArrayList<Habit> mDataset){
         dataset = mDataset;
     }
 
@@ -45,7 +46,9 @@ public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.checkBox.setText(dataset.get(position));
+        Habit habit = dataset.get(position);
+        holder.name.setText(habit.name);
+        holder.frequency.setText(habit.frequency);
 
     }
 

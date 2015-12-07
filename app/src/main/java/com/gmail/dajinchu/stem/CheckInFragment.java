@@ -28,7 +28,8 @@ import java.util.ArrayList;
  */
 public class CheckInFragment extends Fragment {
     private CheckInAdapter adapter;
-    ArrayList<String> habitList = new ArrayList<String>();
+    ArrayList<Habit> habitList = new ArrayList<>();
+
 
     public static final int NEW_HABIT_REQUEST_CODE = 1;
 
@@ -53,8 +54,7 @@ public class CheckInFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 int index = viewHolder.getLayoutPosition();
-                habitList.remove(index);
-                adapter.notifyItemRemoved(index);
+                markHabitDone(index);
             }
 
             @Override
@@ -62,18 +62,13 @@ public class CheckInFragment extends Fragment {
                 if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
                     // Get RecyclerView item from the ViewHolder
                     View itemView = viewHolder.itemView;
-
                     Paint p = new Paint();
                     p.setColor(Color.parseColor("#4CAF50"));
                     if (dX > 0) {
-                        /* Set your color for positive displacement */
-
                         // Draw Rect with varying right side, equal to displacement dX
                         c.drawRect((float) itemView.getLeft(), (float) itemView.getTop(), dX,
                                 (float) itemView.getBottom(), p);
                     } else {
-                        /* Set your color for negative displacement */
-
                         // Draw Rect with varying left side, equal to the item's right side plus negative displacement dX
                         c.drawRect((float) itemView.getRight() + dX, (float) itemView.getTop(),
                                 (float) itemView.getRight(), (float) itemView.getBottom(), p);
@@ -108,6 +103,12 @@ public class CheckInFragment extends Fragment {
         return view;
     }
 
+    private void markHabitDone(int listIndex){
+        habitList.remove(listIndex);
+        adapter.notifyItemRemoved(listIndex);
+
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -127,9 +128,11 @@ public class CheckInFragment extends Fragment {
 
                 // Define a projection that specifies which columns from the database
                 // you will actually use after this query.
-                String[] projection = {HabitContract.HabitEntry.COLUMN_NAME};
+                String[] projection = {HabitContract.HabitEntry.COLUMN_NAME, HabitContract.HabitEntry.COLUMN_FREQUENCY};
                 // How you want the results sorted in the resulting Cursor
                 String sortOrder = HabitContract.HabitEntry.COLUMN_NAME + " DESC";
+
+
 
                 Cursor c = db.query(HabitContract.HabitEntry.TABLE_NAME,
                         projection,
@@ -138,7 +141,11 @@ public class CheckInFragment extends Fragment {
                 Log.d("Checkin", "looking for data" + c.getCount());
                 habitList.clear();
                 for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                    habitList.add(c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NAME)));
+                    habitList.add(new Habit(
+                            c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NAME)),
+                            c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_FREQUENCY))
+                    ));
+                    System.out.println("habit freq "+c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_FREQUENCY)));
                 }
                 c.close();
                 return null;
