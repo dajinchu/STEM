@@ -15,14 +15,21 @@ public class HabitContract {
         public static final String COLUMN_NAME = "Name";
         public static final String COLUMN_FREQUENCY = "Frequency";
 
+        public static final String COLUMN_COMPLETION_TIMES = "CompletionTimes";
+        public static final String COLUMN_NEXT_INCOMPLETE = "NextIncomplete";
+
         public static final String SQL_CREATE_HABIT =
                 "CREATE TABLE " + TABLE_NAME + " ("
                         + COLUMN_HABIT_ID + " STRING PRIMARY KEY,"
                         + COLUMN_NAME + " TEXT,"
-                        + COLUMN_FREQUENCY + " TEXT"
+                        + COLUMN_FREQUENCY + " TEXT,"
+                        + COLUMN_COMPLETION_TIMES + " TEXT,"
+                        + COLUMN_NEXT_INCOMPLETE + " REAL"
                         +" )";
         public static final String SQL_DELETE_ENTRIES =
                 "DROP TABLE IF EXISTS" + TABLE_NAME;
+
+        //Convenience methods
 
     }
 }

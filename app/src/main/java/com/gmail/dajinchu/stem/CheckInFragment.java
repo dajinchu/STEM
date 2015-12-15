@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Da-Jin on 11/25/2015.
@@ -104,6 +105,7 @@ public class CheckInFragment extends Fragment {
     }
 
     private void markHabitDone(int listIndex){
+        habitList.get(listIndex).addCompletionNow();
         habitList.remove(listIndex);
         adapter.notifyItemRemoved(listIndex);
 
@@ -126,9 +128,16 @@ public class CheckInFragment extends Fragment {
             protected Void doInBackground(Void... params) {
                 SQLiteDatabase db = MainActivity.dbHelper.getReadableDatabase();
 
+                Calendar now = Calendar.getInstance();
+
                 // Define a projection that specifies which columns from the database
                 // you will actually use after this query.
-                String[] projection = {HabitContract.HabitEntry.COLUMN_NAME, HabitContract.HabitEntry.COLUMN_FREQUENCY};
+                String[] projection = {HabitContract.HabitEntry.COLUMN_NAME,
+                        HabitContract.HabitEntry.COLUMN_FREQUENCY,
+                        HabitContract.HabitEntry.COLUMN_COMPLETION_TIMES,
+                        HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE};
+                //Define selection which filters which rows. SQL WHERE clause
+                String selection = HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE+"<"+now.getTimeInMillis();
                 // How you want the results sorted in the resulting Cursor
                 String sortOrder = HabitContract.HabitEntry.COLUMN_NAME + " DESC";
 
@@ -136,15 +145,12 @@ public class CheckInFragment extends Fragment {
 
                 Cursor c = db.query(HabitContract.HabitEntry.TABLE_NAME,
                         projection,
-                        null, null, null, null, sortOrder);
+                        selection, null, null, null, sortOrder);
                 c.moveToFirst();
                 Log.d("Checkin", "looking for data" + c.getCount());
                 habitList.clear();
                 for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                    habitList.add(new Habit(
-                            c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NAME)),
-                            c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_FREQUENCY))
-                    ));
+                    habitList.add(new Habit(c));
                     System.out.println("habit freq "+c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_FREQUENCY)));
                 }
                 c.close();

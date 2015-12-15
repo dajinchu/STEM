@@ -112,6 +112,7 @@ public class NewHabitFragment extends DialogFragment {
                 values.put(HabitContract.HabitEntry.COLUMN_HABIT_ID, UUID.randomUUID().toString());
                 values.put(HabitContract.HabitEntry.COLUMN_NAME, name);
                 values.put(HabitContract.HabitEntry.COLUMN_FREQUENCY, frequency);
+                values.put(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE,0);
 
                 db.insert(HabitContract.HabitEntry.TABLE_NAME, "null", values);
                 Log.d("NewHabitFragment", "closing");
