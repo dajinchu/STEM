@@ -1,7 +1,7 @@
 package com.gmail.dajinchu.stem;
 
 import android.app.Activity;
-import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,21 +19,41 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.UUID;
-
 /**
  * Created by Da-Jin on 11/25/2015.
  */
 public class NewHabitFragment extends DialogFragment {
 
-    String name,frequency;
+    //TODO need to start using UUID so that when we edit the name, UUID will collide and know to be replacing instead of making new.
+
     private EditText nameEditText;
     private TextInputLayout nameTextInputLayout;
+    private Habit habit = new Habit("","","",0);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        String habitName = "";
+        Bundle bundle = this.getArguments();
+        if(bundle!=null){
+            habitName = bundle.getString("habitName","");
+            Log.d("NewHabitFragment","habitName: "+habitName);
+            if(!habitName.isEmpty()){
+                SQLiteDatabase db = MainActivity.dbHelper.getReadableDatabase();
+
+                String[] projection = {HabitContract.HabitEntry.COLUMN_NAME,
+                        HabitContract.HabitEntry.COLUMN_FREQUENCY,
+                        HabitContract.HabitEntry.COLUMN_COMPLETION_TIMES,
+                        HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE};
+                String selection = HabitContract.HabitEntry.COLUMN_NAME+"='"+habitName+"'";
+                Cursor c = db.query(HabitContract.HabitEntry.TABLE_NAME,projection,selection,null,null,null,null);
+
+                c.moveToFirst();
+                habit = new Habit(c);
+                c.close();
+            }
+        }
         //Make it full screen, in the future, we can have smarter options that can make it a
         //  true dialog depending on screen size/orientation
         setStyle(DialogFragment.STYLE_NO_TITLE,R.style.AppTheme);
@@ -73,11 +93,12 @@ public class NewHabitFragment extends DialogFragment {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.frequency, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         frequencySpinner.setAdapter(adapter);
+        //TODO change habits to save freq not as string. frequencySpinner.setSelection();
         //Listen to spinner to keep frequency up to date
         frequencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                frequency = parent.getItemAtPosition(position).toString();
+                habit.frequency = parent.getItemAtPosition(position).toString();
             }
 
             @Override
@@ -87,6 +108,8 @@ public class NewHabitFragment extends DialogFragment {
         });
         //For use during saving
         nameEditText = (EditText) view.findViewById(R.id.habit_name_edit_text);
+        nameEditText.setText(habit.name);
+
         nameTextInputLayout = (TextInputLayout)view.findViewById(R.id.habit_name_text_input_layout);
         nameTextInputLayout.setError(null);
         if (nameTextInputLayout.getChildCount() == 2)
@@ -94,33 +117,21 @@ public class NewHabitFragment extends DialogFragment {
         return view;
     }
 
-    private void save() {
+    public void save() {
         new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected void onPreExecute() {
-                name = nameEditText.getText().toString();
+                habit.name = nameEditText.getText().toString();
             }
             @Override
             protected Boolean doInBackground(Void... params) {
                 Log.d("NewHabitFragment", "saving");
-                if(name.isEmpty()){
+                if(habit.name.isEmpty()){
                     return false;
                 }
-                SQLiteDatabase db = MainActivity.dbHelper.getWritableDatabase();
-
-                ContentValues values = new ContentValues();
-                values.put(HabitContract.HabitEntry.COLUMN_HABIT_ID, UUID.randomUUID().toString());
-                values.put(HabitContract.HabitEntry.COLUMN_NAME, name);
-                values.put(HabitContract.HabitEntry.COLUMN_FREQUENCY, frequency);
-                values.put(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE,0);
-
-                db.insert(HabitContract.HabitEntry.TABLE_NAME, "null", values);
-                Log.d("NewHabitFragment", "closing");
-
-                db.close();
+                habit.save();
                 return true;
             }
-
             @Override
             protected void onPostExecute(Boolean success) {
                 if(!success){

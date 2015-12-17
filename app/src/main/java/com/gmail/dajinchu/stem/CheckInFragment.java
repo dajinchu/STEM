@@ -43,7 +43,7 @@ public class CheckInFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
         //recyclerView.setItemAnimator(new DefaultItemAnimator());
-        adapter = new CheckInAdapter(habitList);
+        adapter = new CheckInAdapter(habitList,this);
         recyclerView.setAdapter(adapter);
 
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
@@ -87,28 +87,35 @@ public class CheckInFragment extends Fragment {
         getActivity().findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-                if (prev != null) {
-                    ft.remove(prev);
-                }
-                ft.addToBackStack(null);
-
-                // Create and show the dialog.
-                DialogFragment newFragment = new NewHabitFragment();
-                newFragment.setTargetFragment(CheckInFragment.this, NEW_HABIT_REQUEST_CODE);
-                newFragment.show(ft, "dialog");
+                openHabitFragment("");
             }
         });
         loadHabits();
         return view;
     }
 
+    public void openHabitFragment(String name){
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("habitName",name);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = new NewHabitFragment();
+        newFragment.setArguments(bundle);
+        newFragment.setTargetFragment(CheckInFragment.this, NEW_HABIT_REQUEST_CODE);
+        newFragment.show(ft, "dialog");
+    }
+
     private void markHabitDone(int listIndex){
         habitList.get(listIndex).addCompletionNow();
         habitList.remove(listIndex);
         adapter.notifyItemRemoved(listIndex);
-
     }
 
     @Override
