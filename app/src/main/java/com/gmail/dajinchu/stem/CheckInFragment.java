@@ -137,9 +137,6 @@ public class CheckInFragment extends Fragment {
 
                 Calendar now = Calendar.getInstance();
 
-                // Define a projection that specifies which columns from the database
-                // you will actually use after this query.
-                String[] projection = null;
                 //Define selection which filters which rows. SQL WHERE clause
                 String selection = HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE+"<"+now.getTimeInMillis();
                 // How you want the results sorted in the resulting Cursor
@@ -148,7 +145,7 @@ public class CheckInFragment extends Fragment {
 
 
                 Cursor c = db.query(HabitContract.HabitEntry.TABLE_NAME,
-                        projection,
+                        null,
                         selection, null, null, null, sortOrder);
                 c.moveToFirst();
                 Log.d("Checkin", "looking for data" + c.getCount());

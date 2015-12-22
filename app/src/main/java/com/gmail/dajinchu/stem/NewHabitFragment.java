@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 /**
  * Created by Da-Jin on 11/25/2015.
@@ -70,7 +69,7 @@ public class NewHabitFragment extends DialogFragment {
             }
         });
         // Set the listener for the menu click, namely the "save" button
-        ((TextView)view.findViewById(R.id.new_habit_menu_save)).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.new_habit_menu_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 save();

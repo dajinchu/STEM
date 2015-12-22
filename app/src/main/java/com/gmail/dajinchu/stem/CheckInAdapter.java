@@ -34,7 +34,7 @@ public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHold
 
     public CheckInAdapter(ArrayList<Habit> mDataset, CheckInFragment host){
         dataset = mDataset;
-        this.host = host;
+        CheckInAdapter.host = host;
     }
 
     // Create new views (invoked by the layout manager)
@@ -46,8 +46,7 @@ public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHold
                 .inflate(R.layout.habit_checkbox, parent, false);
         // set the view's size, margins, paddings and layout parameters
         //v.setBackgroundResource(R.mipmap.ic_launcher);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)

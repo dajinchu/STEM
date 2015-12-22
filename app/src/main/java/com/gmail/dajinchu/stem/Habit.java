@@ -38,9 +38,8 @@ public class Habit {
     public static Habit getHabitFromId(String id){
         SQLiteDatabase db = MainActivity.dbHelper.getReadableDatabase();
 
-        String[] projection = null;
         String selection = HabitContract.HabitEntry.COLUMN_HABIT_ID+"='"+id+"'";
-        Cursor c = db.query(HabitContract.HabitEntry.TABLE_NAME,projection,selection,null,null,null,null);
+        Cursor c = db.query(HabitContract.HabitEntry.TABLE_NAME, null,selection,null,null,null,null);
 
         c.moveToFirst();
         Log.d("Habit","id = "+id);
@@ -49,12 +48,11 @@ public class Habit {
         return habit;
     }
     public static Habit getHabitFromCursor(Cursor c){
-        Habit habit = new Habit(c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NAME)),
+        return new Habit(c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NAME)),
                 c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_FREQUENCY)),
                 c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_COMPLETION_TIMES)),
                 c.getLong(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE)),
                 c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_HABIT_ID)));
-        return habit;
     }
 
     public void addCompletionNow(){
@@ -63,7 +61,7 @@ public class Habit {
             completionTimes = "";
         }
         completionTimes += c.getTimeInMillis()+" ";
-        c.add(Calendar.DATE,1);
+        c.add(Calendar.DATE, 1);
         nextIncomplete = c.getTimeInMillis();
         save();
     }
