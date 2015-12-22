@@ -94,7 +94,7 @@ public class CheckInFragment extends Fragment {
         return view;
     }
 
-    public void openHabitFragment(String name){
+    public void openHabitFragment(String id){
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
@@ -103,7 +103,7 @@ public class CheckInFragment extends Fragment {
         ft.addToBackStack(null);
 
         Bundle bundle = new Bundle();
-        bundle.putString("habitName",name);
+        bundle.putString("habitId",id);
 
         // Create and show the dialog.
         DialogFragment newFragment = new NewHabitFragment();
@@ -139,10 +139,7 @@ public class CheckInFragment extends Fragment {
 
                 // Define a projection that specifies which columns from the database
                 // you will actually use after this query.
-                String[] projection = {HabitContract.HabitEntry.COLUMN_NAME,
-                        HabitContract.HabitEntry.COLUMN_FREQUENCY,
-                        HabitContract.HabitEntry.COLUMN_COMPLETION_TIMES,
-                        HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE};
+                String[] projection = null;
                 //Define selection which filters which rows. SQL WHERE clause
                 String selection = HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE+"<"+now.getTimeInMillis();
                 // How you want the results sorted in the resulting Cursor
@@ -157,7 +154,7 @@ public class CheckInFragment extends Fragment {
                 Log.d("Checkin", "looking for data" + c.getCount());
                 habitList.clear();
                 for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                    habitList.add(new Habit(c));
+                    habitList.add(Habit.getHabitFromCursor(c));
                     System.out.println("habit freq "+c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_FREQUENCY)));
                 }
                 c.close();

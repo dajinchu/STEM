@@ -1,8 +1,6 @@
 package com.gmail.dajinchu.stem;
 
 import android.app.Activity;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -28,31 +26,22 @@ public class NewHabitFragment extends DialogFragment {
 
     private EditText nameEditText;
     private TextInputLayout nameTextInputLayout;
-    private Habit habit = new Habit("","","",0);
+    private Habit habit;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String habitName = "";
+        String habitId = "";
         Bundle bundle = this.getArguments();
         if(bundle!=null){
-            habitName = bundle.getString("habitName","");
-            Log.d("NewHabitFragment","habitName: "+habitName);
-            if(!habitName.isEmpty()){
-                SQLiteDatabase db = MainActivity.dbHelper.getReadableDatabase();
-
-                String[] projection = {HabitContract.HabitEntry.COLUMN_NAME,
-                        HabitContract.HabitEntry.COLUMN_FREQUENCY,
-                        HabitContract.HabitEntry.COLUMN_COMPLETION_TIMES,
-                        HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE};
-                String selection = HabitContract.HabitEntry.COLUMN_NAME+"='"+habitName+"'";
-                Cursor c = db.query(HabitContract.HabitEntry.TABLE_NAME,projection,selection,null,null,null,null);
-
-                c.moveToFirst();
-                habit = new Habit(c);
-                c.close();
-            }
+            habitId = bundle.getString("habitId","");
+            Log.d("NewHabitFragment","habitId: "+habitId);
+        }
+        if(!habitId.isEmpty()){
+            habit = Habit.getHabitFromId(habitId);
+        }else{
+            habit = Habit.createNewHabit();
         }
         //Make it full screen, in the future, we can have smarter options that can make it a
         //  true dialog depending on screen size/orientation

@@ -12,21 +12,51 @@ import java.util.UUID;
  * Created by Da-Jin on 12/7/2015.
  */
 public class Habit {
-    String name, frequency, completionTimes;
-    long nextIncomplete;
-    public Habit(String name, String frequency, String completionTimes, long nextIncomplete){
+    String name="", frequency="", completionTimes="";
+    final String id;
+    long nextIncomplete=0;
+
+    private boolean neverSaved = false;
+
+    private Habit(){
+        //Actually new Habit
+        id = UUID.randomUUID().toString();
+        neverSaved = true;
+    }
+    private Habit(String name, String frequency, String completionTimes, long nextIncomplete, String id){
+        //New habit instance, modeling an already made habit in the database
         this.name = name;
         this.frequency = frequency;
         this.completionTimes = completionTimes;
         this.nextIncomplete = nextIncomplete;
+        this.id = id;
     }
-    //Alternate convenience constructor for when loading from database
-    public Habit(Cursor c){
-        this(c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NAME)),
+
+    public static Habit createNewHabit(){
+        return new Habit();
+    }
+    public static Habit getHabitFromId(String id){
+        SQLiteDatabase db = MainActivity.dbHelper.getReadableDatabase();
+
+        String[] projection = null;
+        String selection = HabitContract.HabitEntry.COLUMN_HABIT_ID+"='"+id+"'";
+        Cursor c = db.query(HabitContract.HabitEntry.TABLE_NAME,projection,selection,null,null,null,null);
+
+        c.moveToFirst();
+        Log.d("Habit","id = "+id);
+        Habit habit = getHabitFromCursor(c);
+        c.close();
+        return habit;
+    }
+    public static Habit getHabitFromCursor(Cursor c){
+        Habit habit = new Habit(c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NAME)),
                 c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_FREQUENCY)),
                 c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_COMPLETION_TIMES)),
-                c.getLong(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE)));
+                c.getLong(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE)),
+                c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_HABIT_ID)));
+        return habit;
     }
+
     public void addCompletionNow(){
         Calendar c = Calendar.getInstance();
         if(completionTimes == null || completionTimes.isEmpty()){
@@ -35,27 +65,24 @@ public class Habit {
         completionTimes += c.getTimeInMillis()+" ";
         c.add(Calendar.DATE,1);
         nextIncomplete = c.getTimeInMillis();
-
-        SQLiteDatabase db = MainActivity.dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(HabitContract.HabitEntry.COLUMN_COMPLETION_TIMES, completionTimes);
-        values.put(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE, nextIncomplete);
-        db.update(HabitContract.HabitEntry.TABLE_NAME, values, HabitContract.HabitEntry.COLUMN_NAME+"=?",new String[]{name});
-
-        db.close();
+        save();
     }
 
     public void save() {
         SQLiteDatabase db = MainActivity.dbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(HabitContract.HabitEntry.COLUMN_HABIT_ID, UUID.randomUUID().toString());
+        values.put(HabitContract.HabitEntry.COLUMN_HABIT_ID, id);
         values.put(HabitContract.HabitEntry.COLUMN_NAME, name);
         values.put(HabitContract.HabitEntry.COLUMN_FREQUENCY, frequency);
-        values.put(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE, 0);
+        values.put(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE, nextIncomplete);
 
-        db.insert(HabitContract.HabitEntry.TABLE_NAME, "null", values);
-        Log.d("NewHabitFragment", "closing");
+        if(neverSaved) {
+            db.insert(HabitContract.HabitEntry.TABLE_NAME, "null", values);
+            neverSaved=false;
+        }else{
+            db.update(HabitContract.HabitEntry.TABLE_NAME, values, HabitContract.HabitEntry.COLUMN_HABIT_ID+"=?",new String[]{id});
+        }
 
         db.close();
     }

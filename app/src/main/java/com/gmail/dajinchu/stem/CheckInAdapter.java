@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHolder>{
 
     private static CheckInFragment host;
-    private ArrayList<Habit> dataset;
+    private static ArrayList<Habit> dataset;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView name,frequency;
@@ -28,7 +28,7 @@ public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHold
         @Override
         public void onClick(View v) {
             //TODO with all the actions and onclicks of this recyclerview spread out, MVP would really come in handy
-            host.openHabitFragment((String) name.getText());
+            host.openHabitFragment(dataset.get(getAdapterPosition()).id);
         }
     }
 
