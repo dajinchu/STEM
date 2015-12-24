@@ -2,12 +2,9 @@ package com.gmail.dajinchu.stem;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -16,13 +13,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * Created by Da-Jin on 11/25/2015.
@@ -114,8 +109,7 @@ public class CheckInFragment extends Fragment {
 
     private void markHabitDone(int listIndex){
         habitList.get(listIndex).addCompletionNow();
-        habitList.remove(listIndex);
-        adapter.notifyItemRemoved(listIndex);
+        loadHabits();
     }
 
     @Override
@@ -129,39 +123,8 @@ public class CheckInFragment extends Fragment {
     }
 
     private void loadHabits() {
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                SQLiteDatabase db = MainActivity.dbHelper.getReadableDatabase();
-
-                Calendar now = Calendar.getInstance();
-
-                //Define selection which filters which rows. SQL WHERE clause
-                String selection = HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE+"<"+now.getTimeInMillis();
-                // How you want the results sorted in the resulting Cursor
-                String sortOrder = HabitContract.HabitEntry.COLUMN_NAME + " DESC";
-
-
-
-                Cursor c = db.query(HabitContract.HabitEntry.TABLE_NAME,
-                        null,
-                        selection, null, null, null, sortOrder);
-                c.moveToFirst();
-                Log.d("Checkin", "looking for data" + c.getCount());
-                habitList.clear();
-                for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                    habitList.add(Habit.getHabitFromCursor(c));
-                    System.out.println("habit freq "+c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_FREQUENCY)));
-                }
-                c.close();
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                adapter.notifyDataSetChanged();
-            }
-        }.execute();
+        habitList.clear();
+        habitList.addAll(Habit.getAllHabits());
+        adapter.notifyDataSetChanged();
     }
 }

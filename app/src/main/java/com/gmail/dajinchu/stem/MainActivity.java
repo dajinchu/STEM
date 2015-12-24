@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         CheckInFragment checkInFragment = new CheckInFragment();
+
         getSupportFragmentManager().beginTransaction().add(R.id.main_fragment_container, checkInFragment).commit();
 
         dbHelper = new HabitDbHelper(this);

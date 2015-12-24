@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -23,13 +24,13 @@ public class Habit {
         id = UUID.randomUUID().toString();
         neverSaved = true;
     }
-    private Habit(String name, String frequency, String completionTimes, long nextIncomplete, String id){
+    private Habit(Cursor c){
         //New habit instance, modeling an already made habit in the database
-        this.name = name;
-        this.frequency = frequency;
-        this.completionTimes = completionTimes;
-        this.nextIncomplete = nextIncomplete;
-        this.id = id;
+        name = c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NAME));
+        frequency = c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_FREQUENCY));
+        completionTimes = c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_COMPLETION_TIMES));
+        nextIncomplete = c.getLong(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE));
+        id = c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_HABIT_ID));
     }
 
     public static Habit createNewHabit(){
@@ -48,17 +49,34 @@ public class Habit {
         return habit;
     }
     public static Habit getHabitFromCursor(Cursor c){
-        return new Habit(c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NAME)),
-                c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_FREQUENCY)),
-                c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_COMPLETION_TIMES)),
-                c.getLong(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE)),
-                c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_HABIT_ID)));
+        return new Habit(c);
+    }
+    public static ArrayList<Habit> getAllHabits(){
+        ArrayList<Habit> habitList = new ArrayList<>();
+        SQLiteDatabase db = MainActivity.dbHelper.getReadableDatabase();
+
+        /*Calendar now = Calendar.getInstance();
+        //Define selection which filters which rows. SQL WHERE clause
+        String selection = HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE+"<"+now.getTimeInMillis();
+        */
+        // How you want the results sorted in the resulting Cursor
+        String sortOrder = HabitContract.HabitEntry.COLUMN_NAME + " DESC";
+
+        Cursor c = db.query(HabitContract.HabitEntry.TABLE_NAME,
+                null,null, null, null, null, sortOrder);
+        c.moveToFirst();
+        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+            habitList.add(getHabitFromCursor(c));
+        }
+        c.close();
+        return habitList;
     }
 
     public void addCompletionNow(){
         Calendar c = Calendar.getInstance();
         if(completionTimes == null || completionTimes.isEmpty()){
             completionTimes = "";
+            //TODO I don't think this'll ever happen
         }
         completionTimes += c.getTimeInMillis()+" ";
         c.add(Calendar.DATE, 1);
