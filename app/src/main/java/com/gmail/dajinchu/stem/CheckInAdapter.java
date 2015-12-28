@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Da-Jin on 11/28/2015.
@@ -14,7 +16,8 @@ import java.util.ArrayList;
 public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHolder>{
 
     private static CheckInFragment host;
-    private static ArrayList<Habit> dataset;
+    private static ArrayList<Habit> dataset;//TODO this should not be static
+    private DateFormat format = DateFormat.getTimeInstance();
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView name,frequency;
@@ -56,7 +59,7 @@ public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHold
         // - replace the contents of the view with that element
         Habit habit = dataset.get(position);
         holder.name.setText(habit.name);
-        holder.frequency.setText(habit.frequency);
+        holder.frequency.setText(format.format(new Date(habit.timeToDo)));
 
     }
 

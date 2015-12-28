@@ -13,7 +13,8 @@ public class HabitContract {
         public static final String TABLE_NAME = "Habits";
         public static final String COLUMN_HABIT_ID = "HabitID";
         public static final String COLUMN_NAME = "Name";
-        public static final String COLUMN_FREQUENCY = "Frequency";
+        public static final String COLUMN_TIME_TO_DO = "TimeToDo";
+        public static final String COLUMN_DAYS_OF_WEEK = "DaysOfWeek";
 
         public static final String COLUMN_COMPLETION_TIMES = "CompletionTimes";
         public static final String COLUMN_NEXT_INCOMPLETE = "NextIncomplete";
@@ -22,7 +23,8 @@ public class HabitContract {
                 "CREATE TABLE " + TABLE_NAME + " ("
                         + COLUMN_HABIT_ID + " STRING PRIMARY KEY,"
                         + COLUMN_NAME + " TEXT,"
-                        + COLUMN_FREQUENCY + " TEXT,"
+                        + COLUMN_TIME_TO_DO + " REAL,"
+                        + COLUMN_DAYS_OF_WEEK + " TEXT,"
                         + COLUMN_COMPLETION_TIMES + " TEXT,"
                         + COLUMN_NEXT_INCOMPLETE + " REAL"
                         +" )";

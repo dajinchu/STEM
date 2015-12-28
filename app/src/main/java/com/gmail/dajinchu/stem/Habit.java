@@ -13,9 +13,9 @@ import java.util.UUID;
  * Created by Da-Jin on 12/7/2015.
  */
 public class Habit {
-    String name="", frequency="", completionTimes="";
+    String name="", daysOfTheWeek="", completionTimes="";
     final String id;
-    long nextIncomplete=0;
+    long nextIncomplete=0, timeToDo=0;
 
     private boolean neverSaved = false;
 
@@ -27,7 +27,8 @@ public class Habit {
     private Habit(Cursor c){
         //New habit instance, modeling an already made habit in the database
         name = c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NAME));
-        frequency = c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_FREQUENCY));
+        timeToDo = c.getLong(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_TIME_TO_DO));
+        daysOfTheWeek = c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_DAYS_OF_WEEK));
         completionTimes = c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_COMPLETION_TIMES));
         nextIncomplete = c.getLong(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE));
         id = c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_HABIT_ID));
@@ -90,7 +91,8 @@ public class Habit {
         ContentValues values = new ContentValues();
         values.put(HabitContract.HabitEntry.COLUMN_HABIT_ID, id);
         values.put(HabitContract.HabitEntry.COLUMN_NAME, name);
-        values.put(HabitContract.HabitEntry.COLUMN_FREQUENCY, frequency);
+        values.put(HabitContract.HabitEntry.COLUMN_TIME_TO_DO, timeToDo);
+        values.put(HabitContract.HabitEntry.COLUMN_DAYS_OF_WEEK, daysOfTheWeek);
         values.put(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE, nextIncomplete);
 
         if(neverSaved) {

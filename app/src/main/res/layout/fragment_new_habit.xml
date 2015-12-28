@@ -54,16 +54,27 @@
             android:layout_marginLeft="4dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="16dp"
-            android:text="@string/frequency"
+            android:text="@string/timeHint"
             android:textColor="@color/secondary_text_default_material_light"
             android:textSize="12sp"
             android:theme="@style/AppTheme" />
 
-        <Spinner
-            android:id="@+id/habit_frequency_spinner"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="start" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/time_to_do"
+            style="@style/AppTheme"
+            android:clickable="true"
+            android:text="3:00 PM" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Monday"
+            android:id="@+id/dayOfWeek"
+            android:checked="false" />
+
     </LinearLayout>
 
 </LinearLayout>

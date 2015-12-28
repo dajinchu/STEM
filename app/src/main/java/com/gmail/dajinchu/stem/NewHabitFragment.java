@@ -11,21 +11,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+
+import java.text.DateFormat;
+import java.util.Calendar;
 
 /**
  * Created by Da-Jin on 11/25/2015.
  */
-public class NewHabitFragment extends DialogFragment {
+public class NewHabitFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
     //TODO need to start using UUID so that when we edit the name, UUID will collide and know to be replacing instead of making new.
 
     private EditText nameEditText;
     private TextInputLayout nameTextInputLayout;
     private Habit habit;
+
+    Calendar calTimeToDo;//TODO this should be controller's job
+    private TextView timeTextView;
+    private DateFormat format = DateFormat.getTimeInstance();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,33 +86,66 @@ public class NewHabitFragment extends DialogFragment {
             }
         });
 
-        //attach array+adapter to spinner
-        Spinner frequencySpinner = (Spinner) view.findViewById(R.id.habit_frequency_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.frequency, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        frequencySpinner.setAdapter(adapter);
-        //TODO change habits to save freq not as string. frequencySpinner.setSelection();
-        //Listen to spinner to keep frequency up to date
-        frequencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                habit.frequency = parent.getItemAtPosition(position).toString();
-            }
+        calTimeToDo = Calendar.getInstance();
+        calTimeToDo.setTimeInMillis(habit.timeToDo);//TODO controller!
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
         //For use during saving
+        //Name
         nameEditText = (EditText) view.findViewById(R.id.habit_name_edit_text);
         nameEditText.setText(habit.name);
+
+        //Time of day
+        timeTextView = (TextView) view.findViewById(R.id.time_to_do);
+        timeTextView.setText(format.format(calTimeToDo.getTime()));
+        timeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calTimeToDo.setTimeInMillis(habit.timeToDo);
+                TimePickerDialog picker = TimePickerDialog.newInstance(NewHabitFragment.this,
+                        calTimeToDo.get(Calendar.HOUR_OF_DAY),
+                        calTimeToDo.get(Calendar.MINUTE),
+                        calTimeToDo.get(Calendar.SECOND),
+                        false);
+                picker.show(getActivity().getFragmentManager(),"timepickerdialog");
+            }
+        });
+
+        //Days of week
+        CheckBox monday = (CheckBox) view.findViewById(R.id.dayOfWeek);
+        monday.setChecked(habit.daysOfTheWeek.equals("M"));
+        monday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    habit.daysOfTheWeek="M";
+                }else{
+                    habit.daysOfTheWeek="";
+                }
+            }
+        });
 
         nameTextInputLayout = (TextInputLayout)view.findViewById(R.id.habit_name_text_input_layout);
         nameTextInputLayout.setError(null);
         if (nameTextInputLayout.getChildCount() == 2)
             nameTextInputLayout.getChildAt(1).setVisibility(View.GONE);
         return view;
+    }
+
+    @Override
+    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+        calTimeToDo.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        calTimeToDo.set(Calendar.MINUTE,minute);
+        habit.timeToDo = calTimeToDo.getTimeInMillis();
+        timeTextView.setText(format.format(calTimeToDo.getTime()));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        TimePickerDialog picker = (TimePickerDialog)getActivity().getFragmentManager().findFragmentByTag("timepickerdialog");
+        if(picker != null){
+            picker.setOnTimeSetListener(this);
+        }
     }
 
     public void save() {
