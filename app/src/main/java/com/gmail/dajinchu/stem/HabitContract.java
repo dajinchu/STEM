@@ -21,7 +21,7 @@ public class HabitContract {
 
         public static final String SQL_CREATE_HABIT =
                 "CREATE TABLE " + TABLE_NAME + " ("
-                        + COLUMN_HABIT_ID + " STRING PRIMARY KEY,"
+                        + COLUMN_HABIT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                         + COLUMN_NAME + " TEXT,"
                         + COLUMN_TIME_TO_DO + " REAL,"
                         + COLUMN_DAYS_OF_WEEK + " TEXT,"

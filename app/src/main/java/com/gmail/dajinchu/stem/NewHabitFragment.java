@@ -27,6 +27,9 @@ import java.util.Calendar;
  */
 public class NewHabitFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
+    //use ID_NEW_HABIT as habit ID to specify creating new habit
+    public static final int ID_NEW_HABIT = -1;
+
     //TODO need to start using UUID so that when we edit the name, UUID will collide and know to be replacing instead of making new.
 
     private EditText nameEditText;
@@ -41,13 +44,13 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String habitId = "";
+        int habitId = ID_NEW_HABIT;
         Bundle bundle = this.getArguments();
         if(bundle!=null){
-            habitId = bundle.getString("habitId","");
+            habitId = bundle.getInt("habitId",ID_NEW_HABIT);
             Log.d("NewHabitFragment","habitId: "+habitId);
         }
-        if(!habitId.isEmpty()){
+        if(habitId != ID_NEW_HABIT){
             habit = Habit.getHabitFromId(habitId);
         }else{
             habit = Habit.createNewHabit();
@@ -133,8 +136,10 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+        Log.d("NewHabitFragment","cal time to do"+calTimeToDo.getTimeInMillis());
         calTimeToDo.set(Calendar.HOUR_OF_DAY, hourOfDay);
         calTimeToDo.set(Calendar.MINUTE,minute);
+        Log.d("NewHabitFragment","cal time to do"+calTimeToDo.getTimeInMillis());
         habit.timeToDo = calTimeToDo.getTimeInMillis();
         timeTextView.setText(format.format(calTimeToDo.getTime()));
     }
@@ -161,6 +166,7 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
                     return false;
                 }
                 habit.save();
+                habit.updateNotification(getContext());
                 return true;
             }
             @Override

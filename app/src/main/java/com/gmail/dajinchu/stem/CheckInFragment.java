@@ -82,14 +82,14 @@ public class CheckInFragment extends Fragment {
         getActivity().findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openHabitFragment("");
+                openHabitFragment(NewHabitFragment.ID_NEW_HABIT);
             }
         });
         loadHabits();
         return view;
     }
 
-    public void openHabitFragment(String id){
+    public void openHabitFragment(int id){
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
@@ -98,7 +98,7 @@ public class CheckInFragment extends Fragment {
         ft.addToBackStack(null);
 
         Bundle bundle = new Bundle();
-        bundle.putString("habitId",id);
+        bundle.putInt("habitId",id);
 
         // Create and show the dialog.
         DialogFragment newFragment = new NewHabitFragment();

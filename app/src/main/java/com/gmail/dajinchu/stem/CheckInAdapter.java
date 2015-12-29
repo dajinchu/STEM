@@ -31,7 +31,7 @@ public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHold
         @Override
         public void onClick(View v) {
             //TODO with all the actions and onclicks of this recyclerview spread out, MVP would really come in handy
-            host.openHabitFragment(dataset.get(getAdapterPosition()).id);
+            host.openHabitFragment(dataset.get(getAdapterPosition()).getId());
         }
     }
 
