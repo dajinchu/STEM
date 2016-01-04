@@ -30,9 +30,9 @@ public class NotificationPublisher extends BroadcastReceiver {
         builder.setContentTitle(habit.name);
         builder.setContentText("Do it!");
         builder.setContentIntent(notificationResultPendingIntent);
-        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setSmallIcon(R.mipmap.ic_launcher);//TODO make a real white and transparent icon
         builder.setAutoCancel(true);
-        builder.setTicker("HEYEYYE");
+        builder.setTicker(habit.name);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(id,builder.build());

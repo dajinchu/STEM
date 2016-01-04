@@ -91,7 +91,7 @@ public class CheckInFragment extends Fragment {
 
     public void openHabitFragment(int id){
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        Fragment prev = getFragmentManager().findFragmentByTag("newhabit");
         if (prev != null) {
             ft.remove(prev);
         }
@@ -104,7 +104,7 @@ public class CheckInFragment extends Fragment {
         DialogFragment newFragment = new NewHabitFragment();
         newFragment.setArguments(bundle);
         newFragment.setTargetFragment(CheckInFragment.this, NEW_HABIT_REQUEST_CODE);
-        newFragment.show(ft, "dialog");
+        newFragment.show(ft, "newhabit");
     }
 
     private void markHabitDone(int listIndex){

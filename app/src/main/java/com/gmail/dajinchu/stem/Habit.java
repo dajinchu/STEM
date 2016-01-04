@@ -17,14 +17,18 @@ import java.util.Calendar;
  * Created by Da-Jin on 12/7/2015.
  */
 public class Habit {
-    String name="", daysOfTheWeek="", completionTimes="";
+    String name="", completionTimes="";
 
     public int getId() {
         return id;
     }
 
+    boolean[] days = new boolean[7];
+    private int storableDays;
+
     private int id;
-    long nextIncomplete=0, timeToDo=24*60*60*1000;
+    long nextIncomplete=0;
+    Calendar timeToDo = Calendar.getInstance();
 
     private boolean neverSaved = false;
 
@@ -35,11 +39,15 @@ public class Habit {
     private Habit(Cursor c){
         //New habit instance, modeling an already made habit in the database
         name = c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NAME));
-        timeToDo = c.getLong(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_TIME_TO_DO));
-        daysOfTheWeek = c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_DAYS_OF_WEEK));
+        timeToDo.setTimeInMillis(c.getLong(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_TIME_TO_DO)));
+        storableDays = c.getInt(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_DAYS_OF_WEEK));
         completionTimes = c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_COMPLETION_TIMES));
         nextIncomplete = c.getLong(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE));
         id = c.getInt(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_HABIT_ID));
+
+        for(int i = 0; i < 7; i++){
+            days[6-i] = (storableDays & (1<<i))!=0;
+        }
     }
 
     public static Habit createNewHabit(){
@@ -93,13 +101,21 @@ public class Habit {
         save();
     }
 
+    public void setDayOfWeek(int dayNum, boolean isOnThisDay){
+        days[dayNum]=isOnThisDay;
+    }
+
     public void save() {
         SQLiteDatabase db = MainActivity.dbHelper.getWritableDatabase();
 
+        for(int i = 0; i < 7; i++){
+            storableDays = (storableDays << 1) + (days[i] ? 1 : 0);
+        }
+
         ContentValues values = new ContentValues();
         values.put(HabitContract.HabitEntry.COLUMN_NAME, name);
-        values.put(HabitContract.HabitEntry.COLUMN_TIME_TO_DO, timeToDo);
-        values.put(HabitContract.HabitEntry.COLUMN_DAYS_OF_WEEK, daysOfTheWeek);
+        values.put(HabitContract.HabitEntry.COLUMN_TIME_TO_DO, timeToDo.getTimeInMillis());
+        values.put(HabitContract.HabitEntry.COLUMN_DAYS_OF_WEEK, storableDays);
         values.put(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE, nextIncomplete);
 
         if(neverSaved) {
@@ -123,15 +139,22 @@ public class Habit {
 
         DateFormat format = DateFormat.getDateTimeInstance();
 
-        Calendar c = Calendar.getInstance();
-        int todayTime = (int) (c.getTimeInMillis()%(60*60*24*1000));
-        Log.d("Habit",format.format(c.getTime()));
-        c.add(Calendar.MILLISECOND,-todayTime);//subtract today's time from today, to get today at 0:00 AM
-        Log.d("Habit",format.format(c.getTime()));
-        c.add(Calendar.MILLISECOND, (int) timeToDo);
+        Calendar now = Calendar.getInstance();
+        //update time to do to today
+        Log.d("Habit",format.format(timeToDo.getTime()));
 
-        Log.d("Habit",format.format(c.getTime()));
+        timeToDo.set(now.get(Calendar.YEAR),now.get(Calendar.MONTH),now.get(Calendar.DATE));
+        Log.d("Habit",format.format(timeToDo.getTime()));
 
-        am.setRepeating(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),24*60*60*1000,alarmIntent);
+        if(timeToDo.before(now)){
+            //timeToDo already happened today, set to tomorrow
+            timeToDo.add(Calendar.DATE, 1);
+            Log.d("Habit",format.format(timeToDo.getTime()));
+
+        }
+
+        Log.d("Habit",format.format(timeToDo.getTime()));
+
+        am.setRepeating(AlarmManager.RTC_WAKEUP,timeToDo.getTimeInMillis(),24*60*60*1000,alarmIntent);
     }
 }

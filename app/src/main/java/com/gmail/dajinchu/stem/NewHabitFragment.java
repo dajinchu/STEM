@@ -5,14 +5,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -25,18 +25,15 @@ import java.util.Calendar;
 /**
  * Created by Da-Jin on 11/25/2015.
  */
-public class NewHabitFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+public class NewHabitFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener, DayOfWeekPicker.OnDaysOfWeekPickedListener {
 
     //use ID_NEW_HABIT as habit ID to specify creating new habit
     public static final int ID_NEW_HABIT = -1;
-
-    //TODO need to start using UUID so that when we edit the name, UUID will collide and know to be replacing instead of making new.
 
     private EditText nameEditText;
     private TextInputLayout nameTextInputLayout;
     private Habit habit;
 
-    Calendar calTimeToDo;//TODO this should be controller's job
     private TextView timeTextView;
     private DateFormat format = DateFormat.getTimeInstance();
 
@@ -89,9 +86,6 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
             }
         });
 
-        calTimeToDo = Calendar.getInstance();
-        calTimeToDo.setTimeInMillis(habit.timeToDo);//TODO controller!
-
         //For use during saving
         //Name
         nameEditText = (EditText) view.findViewById(R.id.habit_name_edit_text);
@@ -99,31 +93,35 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
 
         //Time of day
         timeTextView = (TextView) view.findViewById(R.id.time_to_do);
-        timeTextView.setText(format.format(calTimeToDo.getTime()));
+        timeTextView.setText(format.format(habit.timeToDo.getTime()));
         timeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calTimeToDo.setTimeInMillis(habit.timeToDo);
                 TimePickerDialog picker = TimePickerDialog.newInstance(NewHabitFragment.this,
-                        calTimeToDo.get(Calendar.HOUR_OF_DAY),
-                        calTimeToDo.get(Calendar.MINUTE),
-                        calTimeToDo.get(Calendar.SECOND),
+                        habit.timeToDo.get(Calendar.HOUR_OF_DAY),
+                        habit.timeToDo.get(Calendar.MINUTE),
+                        habit.timeToDo.get(Calendar.SECOND),
                         false);
                 picker.show(getActivity().getFragmentManager(),"timepickerdialog");
             }
         });
 
-        //Days of week
-        CheckBox monday = (CheckBox) view.findViewById(R.id.dayOfWeek);
-        monday.setChecked(habit.daysOfTheWeek.equals("M"));
-        monday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        //Repeat Pattern
+        TextView repeat = (TextView) view.findViewById(R.id.repeat_button);
+        repeat.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    habit.daysOfTheWeek="M";
-                }else{
-                    habit.daysOfTheWeek="";
+            public void onClick(View v) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag("dayweekdialog");
+                if (prev != null) {
+                    ft.remove(prev);
                 }
+                ft.addToBackStack(null);
+
+                // Create and show the dialog.
+                DialogFragment newFragment = DayOfWeekPicker.newInstance(NewHabitFragment.this,
+                        habit.days);
+                newFragment.show(ft, "dayweekdialog");
             }
         });
 
@@ -136,12 +134,9 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
-        Log.d("NewHabitFragment","cal time to do"+calTimeToDo.getTimeInMillis());
-        calTimeToDo.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        calTimeToDo.set(Calendar.MINUTE,minute);
-        Log.d("NewHabitFragment","cal time to do"+calTimeToDo.getTimeInMillis());
-        habit.timeToDo = calTimeToDo.getTimeInMillis();
-        timeTextView.setText(format.format(calTimeToDo.getTime()));
+        habit.timeToDo.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        habit.timeToDo.set(Calendar.MINUTE,minute);
+        timeTextView.setText(format.format(habit.timeToDo.getTime()));
     }
 
     @Override
@@ -186,5 +181,10 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
     private void close(int resultCode){
         getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode,null);
         getActivity().getSupportFragmentManager().popBackStackImmediate();
+    }
+
+    @Override
+    public void onDaysOfWeekPicked(boolean[] daysPicked) {
+        habit.days=daysPicked;
     }
 }
