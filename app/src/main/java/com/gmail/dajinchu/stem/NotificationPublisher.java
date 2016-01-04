@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import java.util.Calendar;
+
 /**
  * Created by Da-Jin on 12/28/2015.
  */
@@ -21,6 +23,12 @@ public class NotificationPublisher extends BroadcastReceiver {
         int id = intent.getIntExtra(HABIT_ID,0);
 
         Habit habit = Habit.getHabitFromId(id);
+
+        int currentDayOfWeek = (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)-2)%7;
+        if(!habit.days[currentDayOfWeek]){
+            //not on today
+            return;
+        }
 
         Intent notificationResultIntent = new Intent(context,MainActivity.class);
         PendingIntent notificationResultPendingIntent = PendingIntent.getActivity(context,id,

@@ -35,6 +35,8 @@ public class Habit {
     private Habit(){
         //Actually new Habit
         neverSaved = true;
+        timeToDo.set(Calendar.SECOND, 0);
+        days = new boolean[]{true,true,true,true,true,true,true};
     }
     private Habit(Cursor c){
         //New habit instance, modeling an already made habit in the database
