@@ -8,4 +8,5 @@
     <string name="frequency">Frequency</string>
     <string name="do_now_header">Do Now</string>
     <string name="timeHint">Time</string>
+    <string name="repeatHint">Repeat</string>
 </resources>

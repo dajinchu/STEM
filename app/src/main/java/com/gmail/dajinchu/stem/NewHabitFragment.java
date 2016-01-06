@@ -35,7 +35,8 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
     private Habit habit;
 
     private TextView timeTextView;
-    private DateFormat format = DateFormat.getTimeInstance();
+    private DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT);
+    private TextView dayweekTextView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,7 +94,7 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
 
         //Time of day
         timeTextView = (TextView) view.findViewById(R.id.time_to_do);
-        timeTextView.setText(format.format(habit.timeToDo.getTime()));
+        updateTimeTextView();
         timeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,6 +125,8 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
                 newFragment.show(ft, "dayweekdialog");
             }
         });
+        dayweekTextView = (TextView) view.findViewById(R.id.repeat_textview);
+        updateDayWeekTextView();
 
         nameTextInputLayout = (TextInputLayout)view.findViewById(R.id.habit_name_text_input_layout);
         nameTextInputLayout.setError(null);
@@ -136,7 +139,24 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
         habit.timeToDo.set(Calendar.HOUR_OF_DAY, hourOfDay);
         habit.timeToDo.set(Calendar.MINUTE,minute);
+        updateTimeTextView();
+    }
+
+    private void updateTimeTextView(){
         timeTextView.setText(format.format(habit.timeToDo.getTime()));
+    }
+    private void updateDayWeekTextView(){
+        String[] shortDayNames={"MON","TUE","WED","THU","FRI","SAT","SUN"};
+        StringBuilder sb = new StringBuilder();
+        int index=0;
+        for(boolean day:habit.days){
+            if(day){
+                sb.append(shortDayNames[index]);
+                sb.append(" ");
+            }
+            index++;
+        }
+        dayweekTextView.setText(sb.toString());
     }
 
     @Override

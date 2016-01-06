@@ -38,7 +38,7 @@ public class DayOfWeekPicker extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle("Repeat")
+                .setTitle(R.string.repeatHint)
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             @Override
