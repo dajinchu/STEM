@@ -93,9 +93,9 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
         nameEditText.setText(habit.name);
 
         //Time of day
-        timeTextView = (TextView) view.findViewById(R.id.time_to_do);
+        timeTextView = (TextView) view.findViewById(R.id.time_text_view);
         updateTimeTextView();
-        timeTextView.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.time_to_do).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TimePickerDialog picker = TimePickerDialog.newInstance(NewHabitFragment.this,
@@ -108,8 +108,7 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
         });
 
         //Repeat Pattern
-        TextView repeat = (TextView) view.findViewById(R.id.repeat_button);
-        repeat.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.repeat_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
