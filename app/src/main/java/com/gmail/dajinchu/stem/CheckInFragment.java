@@ -18,12 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Da-Jin on 11/25/2015.
  */
 public class CheckInFragment extends Fragment {
     private CheckInAdapter adapter;
+    private SimpleSectionedRecyclerViewAdapter mSectionedAdapter;
     ArrayList<Habit> habitList = new ArrayList<>();
 
 
@@ -39,7 +42,9 @@ public class CheckInFragment extends Fragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
         //recyclerView.setItemAnimator(new DefaultItemAnimator());
         adapter = new CheckInAdapter(habitList,this);
-        recyclerView.setAdapter(adapter);
+
+        mSectionedAdapter = new SimpleSectionedRecyclerViewAdapter(getContext(), R.layout.section,R.id.section_text,adapter);
+        recyclerView.setAdapter(mSectionedAdapter);
 
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
@@ -49,14 +54,16 @@ public class CheckInFragment extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                int index = viewHolder.getLayoutPosition();
+                int index = mSectionedAdapter.sectionedPositionToPosition(viewHolder.getLayoutPosition());
                 markHabitDone(index);
+                loadHabits();
             }
 
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
                     // Get RecyclerView item from the ViewHolder
+                    if(mSectionedAdapter.isSectionHeaderPosition(viewHolder.getAdapterPosition()))return;
                     View itemView = viewHolder.itemView;
                     Paint p = new Paint();
                     p.setColor(Color.parseColor("#4CAF50"));
@@ -124,11 +131,36 @@ public class CheckInFragment extends Fragment {
 
     private void loadHabits() {
         habitList.clear();
+        Calendar now = Calendar.getInstance();
         for(Habit habit : Habit.getAllHabits()) {
             if(!habit.isCompletedNow()){
                 habitList.add(habit);
             }
         }
-        adapter.notifyDataSetChanged();
+
+        //TODO show a "nothing now" thing when there's no habits
+
+        //Section out the recyclerview
+        List<SimpleSectionedRecyclerViewAdapter.Section> sections =
+                new ArrayList<>();
+        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0,"Do Now"));
+        for(int i = 0; i < habitList.size(); i++){
+            if(timeSinceDayBegan(habitList.get(i).timeToDo)>timeSinceDayBegan(now)){
+                //habits are in ascending timetodo order, so the first habit happens after now
+                //will be the split between future and past events for this day
+                sections.add(new SimpleSectionedRecyclerViewAdapter.Section(i,"Later Today"));
+                break;
+            }
+        }
+        SimpleSectionedRecyclerViewAdapter.Section[] dummy = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
+        mSectionedAdapter.setSections(sections.toArray(dummy));
+        mSectionedAdapter.notifyDataSetChanged();
+    }
+
+    //Converts calendar into seconds since the day began
+    private int timeSinceDayBegan(Calendar a){
+        return a.get(Calendar.HOUR_OF_DAY)*3600+
+                a.get(Calendar.MINUTE)*60+
+                a.get(Calendar.SECOND);
     }
 }

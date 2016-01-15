@@ -30,6 +30,9 @@ public class Habit {
 
     private int id;
     long nextIncomplete=0;
+
+    //TimeToDo is just for alerts.
+    //Do NOT rely on this being on the right day, since it works with AlarmManager's setRepeating
     Calendar timeToDo = Calendar.getInstance();
 
     private boolean neverSaved = false;
@@ -84,7 +87,7 @@ public class Habit {
         String selection = HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE+"<"+now.getTimeInMillis();
         */
         // How you want the results sorted in the resulting Cursor
-        String sortOrder = HabitContract.HabitEntry.COLUMN_NAME + " DESC";
+        String sortOrder = HabitContract.HabitEntry.COLUMN_TIME_TO_DO + " ASC";
 
         Cursor c = db.query(HabitContract.HabitEntry.TABLE_NAME,
                 null,null, null, null, null, sortOrder);
