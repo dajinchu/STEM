@@ -205,5 +205,6 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
     @Override
     public void onDaysOfWeekPicked(boolean[] daysPicked) {
         habit.days=daysPicked;
+        updateDayWeekTextView();
     }
 }
