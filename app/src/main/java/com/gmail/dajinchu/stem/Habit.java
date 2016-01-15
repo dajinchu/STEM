@@ -17,7 +17,9 @@ import java.util.Calendar;
  * Created by Da-Jin on 12/7/2015.
  */
 public class Habit {
-    String name="", completionTimes="";
+    String name="";
+    ArrayList<Completion> completions = new ArrayList<>();
+    private DateFormat format = DateFormat.getDateTimeInstance();
 
     public int getId() {
         return id;
@@ -38,15 +40,18 @@ public class Habit {
         timeToDo.set(Calendar.SECOND, 0);
         days = new boolean[]{true,true,true,true,true,true,true};
     }
-    private Habit(Cursor c){
+    private Habit(Cursor habitcurs){
         //New habit instance, modeling an already made habit in the database
-        name = c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NAME));
-        timeToDo.setTimeInMillis(c.getLong(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_TIME_TO_DO)));
-        storableDays = c.getInt(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_DAYS_OF_WEEK));
-        completionTimes = c.getString(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_COMPLETION_TIMES));
-        nextIncomplete = c.getLong(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE));
-        id = c.getInt(c.getColumnIndex(HabitContract.HabitEntry.COLUMN_HABIT_ID));
+        name = habitcurs.getString(habitcurs.getColumnIndex(HabitContract.HabitEntry.COLUMN_NAME));
+        timeToDo.setTimeInMillis(habitcurs.getLong(habitcurs.getColumnIndex(HabitContract.HabitEntry.COLUMN_TIME_TO_DO)));
+        storableDays = habitcurs.getInt(habitcurs.getColumnIndex(HabitContract.HabitEntry.COLUMN_DAYS_OF_WEEK));
+        nextIncomplete = habitcurs.getLong(habitcurs.getColumnIndex(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE));
+        id = habitcurs.getInt(habitcurs.getColumnIndex(HabitContract.HabitEntry.COLUMN_HABIT_ID));
 
+        //Get completions using completion model/contract class
+        completions = Completion.loadCompletionsOfHabit(id);
+
+        //Convert the int representing days it should happen on into boolean array form
         for(int i = 0; i < 7; i++){
             days[6-i] = (storableDays & (1<<i))!=0;
         }
@@ -93,14 +98,46 @@ public class Habit {
 
     public void addCompletionNow(){
         Calendar c = Calendar.getInstance();
-        if(completionTimes == null || completionTimes.isEmpty()){
-            completionTimes = "";
-            //TODO I don't think this'll ever happen
-        }
-        completionTimes += c.getTimeInMillis()+" ";
-        c.add(Calendar.DATE, 1);
-        nextIncomplete = c.getTimeInMillis();
+
+        Completion.createNewCompletion(c.getTimeInMillis(),this.id,Completion.SUCCESSFUL).save();
+
+        updateTimeToDo();
         save();
+        for(Completion completion:completions){
+            Log.d("Habit",completion.time.toString());
+        }
+
+        //TODO unsure if this will be needed
+        /*c.add(Calendar.DATE, 1);
+        nextIncomplete = c.getTimeInMillis();
+        save();*/
+    }
+
+    public boolean isCompletedNow(){
+        if(completions.size()==0)return false;
+        int dayIndex = (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)-2)%7;
+        int offset = 0;
+        while(!days[(dayIndex+offset)%7]){
+            offset--;
+        }
+        Calendar lastOccurence = Calendar.getInstance();
+        lastOccurence.set(Calendar.MILLISECOND, 0);
+        lastOccurence.set(Calendar.SECOND, 0);
+        lastOccurence.set(Calendar.MINUTE, 0);
+        lastOccurence.set(Calendar.HOUR_OF_DAY, 0);
+        lastOccurence.add(Calendar.DATE, offset);
+
+        Log.d("Habit","last completed "+lastOccurence.toString());
+        return completions.get(completions.size()-1).time.after(lastOccurence);
+    }
+
+    public int daysToNextOccurence(){
+        int todayIndex = (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)-2)%7;
+        int offset = 1;
+        while(!days[(todayIndex+offset)%7]){
+            offset++;
+        }
+        return offset;
     }
 
     public void setDayOfWeek(int dayNum, boolean isOnThisDay){
@@ -118,7 +155,6 @@ public class Habit {
         values.put(HabitContract.HabitEntry.COLUMN_NAME, name);
         values.put(HabitContract.HabitEntry.COLUMN_TIME_TO_DO, timeToDo.getTimeInMillis());
         values.put(HabitContract.HabitEntry.COLUMN_DAYS_OF_WEEK, storableDays);
-        values.put(HabitContract.HabitEntry.COLUMN_NEXT_INCOMPLETE, nextIncomplete);
 
         if(neverSaved) {
             id = (int) db.insert(HabitContract.HabitEntry.TABLE_NAME, "null", values);
@@ -130,32 +166,27 @@ public class Habit {
         db.close();
     }
 
+    public void updateTimeToDo(){
+        Calendar now = Calendar.getInstance();
+        timeToDo.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DATE));
+        Log.d("Habit", format.format(timeToDo.getTime()));
+
+        if(timeToDo.before(now)){
+            //timeToDo already happened today, set to next
+            timeToDo.add(Calendar.DATE, daysToNextOccurence());
+            Log.d("Habit",format.format(timeToDo.getTime()));
+        }
+    }
+
     public void updateNotification(Context context){
 
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, NotificationPublisher.class);
-        intent.putExtra(NotificationPublisher.HABIT_ID,id);
+        intent.putExtra(NotificationPublisher.HABIT_ID, id);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, id, intent, 0);
         am.cancel(alarmIntent);
 
-
-        DateFormat format = DateFormat.getDateTimeInstance();
-
-        Calendar now = Calendar.getInstance();
-        //update time to do to today
-        Log.d("Habit",format.format(timeToDo.getTime()));
-
-        timeToDo.set(now.get(Calendar.YEAR),now.get(Calendar.MONTH),now.get(Calendar.DATE));
-        Log.d("Habit",format.format(timeToDo.getTime()));
-
-        if(timeToDo.before(now)){
-            //timeToDo already happened today, set to tomorrow
-            timeToDo.add(Calendar.DATE, 1);
-            Log.d("Habit",format.format(timeToDo.getTime()));
-
-        }
-
-        Log.d("Habit",format.format(timeToDo.getTime()));
+        updateTimeToDo();
 
         am.setRepeating(AlarmManager.RTC_WAKEUP,timeToDo.getTimeInMillis(),24*60*60*1000,alarmIntent);
     }

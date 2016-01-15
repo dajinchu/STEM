@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class HabitDbHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "Habit.db";
 
     public HabitDbHelper(Context context){
@@ -21,10 +21,13 @@ public class HabitDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         Log.d("HabitDbHelper","CODE:"+ HabitContract.HabitEntry.SQL_CREATE_HABIT);
         db.execSQL(HabitContract.HabitEntry.SQL_CREATE_HABIT);
+        db.execSQL(HabitContract.CompletionEntry.SQL_CREATE_COMPLETION);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //TODO figure this out
+        db.execSQL(HabitContract.HabitEntry.SQL_DELETE_ENTRIES);
+        db.execSQL(HabitContract.CompletionEntry.SQL_DELETE_ENTRIES);
     }
 }

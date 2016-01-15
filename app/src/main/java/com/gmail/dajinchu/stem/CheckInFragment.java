@@ -124,7 +124,11 @@ public class CheckInFragment extends Fragment {
 
     private void loadHabits() {
         habitList.clear();
-        habitList.addAll(Habit.getAllHabits());
+        for(Habit habit : Habit.getAllHabits()) {
+            if(!habit.isCompletedNow()){
+                habitList.add(habit);
+            }
+        }
         adapter.notifyDataSetChanged();
     }
 }
