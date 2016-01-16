@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import java.util.Calendar;
 
@@ -18,8 +17,6 @@ public class NotificationPublisher extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("NotificationPublisher","onReceive!");
-
         int id = intent.getIntExtra(HABIT_ID,0);
 
         Habit habit = Habit.getHabitFromId(id);
