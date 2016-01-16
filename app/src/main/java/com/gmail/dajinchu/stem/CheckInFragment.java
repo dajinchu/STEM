@@ -1,7 +1,10 @@
 package com.gmail.dajinchu.stem;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -148,7 +152,7 @@ public class CheckInFragment extends Fragment {
                 new ArrayList<>();
         sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0,"Do Now"));
         for(int i = 0; i < habitList.size(); i++){
-            if(new TimeComparator().compare(habitList.get(i).timeToDo,now)==1){
+            if(new TimeComparator().compare(habitList.get(i).timeToDo,now)!=-1){
                 //habits are in ascending timetodo order, so the first habit happens after now
                 //will be the split between future and past events for this day
                 sections.add(new SimpleSectionedRecyclerViewAdapter.Section(i,"Later Today"));
@@ -160,4 +164,27 @@ public class CheckInFragment extends Fragment {
         mSectionedAdapter.notifyDataSetChanged();
     }
 
+
+    //Broadcast receiver to intercept broadcast of it being time to do a habit
+    BroadcastReceiver updateReceiver = new BroadcastReceiver(){
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("UpdateReceiver","Received broadcast action timetodo");
+            loadHabits();
+            abortBroadcast();
+        }
+    };
+    @Override
+    public void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter(TimeToDoReceiver.ACTION_TIME_TO_DO);
+        filter.setPriority(1);
+        getContext().registerReceiver(updateReceiver, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getContext().unregisterReceiver(updateReceiver);
+    }
 }

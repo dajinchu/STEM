@@ -184,7 +184,7 @@ public class Habit {
     public void updateNotification(Context context){
 
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, NotificationPublisher.class);
+        Intent intent = new Intent(context, TimeToDoReceiver.class);
         intent.putExtra(NotificationPublisher.HABIT_ID, id);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, id, intent, 0);
         am.cancel(alarmIntent);
