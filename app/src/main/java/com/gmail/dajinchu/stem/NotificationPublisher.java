@@ -21,6 +21,13 @@ public class NotificationPublisher extends BroadcastReceiver {
 
         Habit habit = Habit.getHabitFromId(id);
 
+
+        //Check if notification should really go off
+        //Don't publish notification if it's already done.
+        if(habit.isCompletedNow()){
+            return;
+        }
+        //Don't publish if it's isn't today.
         int currentDayOfWeek = (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)-2)%7;
         if(!habit.days[currentDayOfWeek]){
             //not on today
