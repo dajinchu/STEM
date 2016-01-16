@@ -58,6 +58,8 @@ public class CheckInFragment extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                //prevent subheaders from being swiped
+                if(mSectionedAdapter.isSectionHeaderPosition(viewHolder.getAdapterPosition()))return;
                 int index = mSectionedAdapter.sectionedPositionToPosition(viewHolder.getLayoutPosition());
                 markHabitDone(index);
                 loadHabits();
@@ -66,8 +68,9 @@ public class CheckInFragment extends Fragment {
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-                    // Get RecyclerView item from the ViewHolder
+                    //prevent subheaders from being swiped
                     if(mSectionedAdapter.isSectionHeaderPosition(viewHolder.getAdapterPosition()))return;
+                    // Get RecyclerView item from the ViewHolder
                     View itemView = viewHolder.itemView;
                     Paint p = new Paint();
                     p.setColor(Color.parseColor("#4CAF50"));
