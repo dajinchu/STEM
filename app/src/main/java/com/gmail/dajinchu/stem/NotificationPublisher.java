@@ -30,9 +30,15 @@ public class NotificationPublisher extends BroadcastReceiver {
             return;
         }
 
+        //Intent for clicking on the notification
         Intent notificationResultIntent = new Intent(context,MainActivity.class);
         PendingIntent notificationResultPendingIntent = PendingIntent.getActivity(context,id,
                 notificationResultIntent,PendingIntent.FLAG_CANCEL_CURRENT);
+        //Intent for done action button in notification
+        Intent notificationDoneActionIntent = new Intent(context, DoneActionReceiver.class);
+        notificationDoneActionIntent.putExtra(HABIT_ID,id);
+        PendingIntent notificationDoneActionPendingIntent = PendingIntent.getBroadcast(context,id,
+                notificationDoneActionIntent,PendingIntent.FLAG_CANCEL_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setContentTitle(habit.name);
@@ -41,6 +47,7 @@ public class NotificationPublisher extends BroadcastReceiver {
         builder.setSmallIcon(R.mipmap.ic_launcher);//TODO make a real white and transparent icon
         builder.setAutoCancel(true);
         builder.setTicker(habit.name);
+        builder.addAction(R.drawable.ic_add_white_24dp,"Done",notificationDoneActionPendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(id,builder.build());
