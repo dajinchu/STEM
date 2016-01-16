@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -138,6 +139,8 @@ public class CheckInFragment extends Fragment {
             }
         }
 
+        Collections.sort(habitList,new HabitComparator());
+
         //TODO show a "nothing now" thing when there's no habits
 
         //Section out the recyclerview
@@ -145,7 +148,7 @@ public class CheckInFragment extends Fragment {
                 new ArrayList<>();
         sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0,"Do Now"));
         for(int i = 0; i < habitList.size(); i++){
-            if(timeSinceDayBegan(habitList.get(i).timeToDo)>timeSinceDayBegan(now)){
+            if(new TimeComparator().compare(habitList.get(i).timeToDo,now)==1){
                 //habits are in ascending timetodo order, so the first habit happens after now
                 //will be the split between future and past events for this day
                 sections.add(new SimpleSectionedRecyclerViewAdapter.Section(i,"Later Today"));
@@ -157,10 +160,4 @@ public class CheckInFragment extends Fragment {
         mSectionedAdapter.notifyDataSetChanged();
     }
 
-    //Converts calendar into seconds since the day began
-    private int timeSinceDayBegan(Calendar a){
-        return a.get(Calendar.HOUR_OF_DAY)*3600+
-                a.get(Calendar.MINUTE)*60+
-                a.get(Calendar.SECOND);
-    }
 }
