@@ -14,14 +14,16 @@ import java.util.ArrayList;
  */
 public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHolder>{
 
-    private static CheckInFragment host;
     private static ArrayList<Habit> dataset;//TODO this should not be static
     private DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT);
+    private CheckInFragment host;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private final CheckInFragment host;
         public TextView name,frequency;
-        public ViewHolder(View v){
+        public ViewHolder(View v, CheckInFragment host){
             super(v);
+            this.host = host;
             name = (TextView) v.findViewById(R.id.habit_item_name);
             frequency = (TextView) v.findViewById(R.id.habit_item_frequency);
             v.setOnClickListener(this);
@@ -30,13 +32,13 @@ public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHold
         @Override
         public void onClick(View v) {
             //TODO with all the actions and onclicks of this recyclerview spread out, MVP would really come in handy
-            host.openHabitFragment(dataset.get(getAdapterPosition()).getId());
+            host.openHabitFragment(dataset.get(host.mSectionedAdapter.sectionedPositionToPosition(getAdapterPosition())).getId());
         }
     }
 
     public CheckInAdapter(ArrayList<Habit> mDataset, CheckInFragment host){
         dataset = mDataset;
-        CheckInAdapter.host = host;
+        this.host = host;
     }
 
     // Create new views (invoked by the layout manager)
@@ -48,7 +50,7 @@ public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHold
                 .inflate(R.layout.habit_checkbox, parent, false);
         // set the view's size, margins, paddings and layout parameters
         //v.setBackgroundResource(R.mipmap.ic_launcher);
-        return new ViewHolder(v);
+        return new ViewHolder(v,host);
     }
 
     // Replace the contents of a view (invoked by the layout manager)

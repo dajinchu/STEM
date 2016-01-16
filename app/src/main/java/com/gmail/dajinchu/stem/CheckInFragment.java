@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class CheckInFragment extends Fragment {
     private CheckInAdapter adapter;
-    private SimpleSectionedRecyclerViewAdapter mSectionedAdapter;
+    SimpleSectionedRecyclerViewAdapter mSectionedAdapter;
     ArrayList<Habit> habitList = new ArrayList<>();
 
 
