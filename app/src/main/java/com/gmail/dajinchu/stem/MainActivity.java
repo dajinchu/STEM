@@ -1,11 +1,17 @@
 package com.gmail.dajinchu.stem;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,6 +51,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
         dbHelper = new HabitDbHelper(this);
+
+        AlarmManager am = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, MidnightFailureChecker.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
+        am.cancel(pendingIntent);
+
+        Calendar triggerTime = Calendar.getInstance();
+        triggerTime.add(Calendar.DATE,1);
+        triggerTime.set(Calendar.HOUR_OF_DAY,0);
+        triggerTime.set(Calendar.MINUTE,0);
+        triggerTime.set(Calendar.SECOND,1);
+
+        am.setRepeating(AlarmManager.RTC_WAKEUP,triggerTime.getTimeInMillis(),24*60*60*1000,pendingIntent);
     }
 
     private void setupViewPager(ViewPager viewPager) {

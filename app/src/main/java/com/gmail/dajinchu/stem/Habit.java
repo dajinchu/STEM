@@ -64,7 +64,7 @@ public class Habit {
         return new Habit();
     }
     public static Habit getHabitFromId(int id){
-        SQLiteDatabase db = MainActivity.dbHelper.getReadableDatabase();
+        SQLiteDatabase db = MainActivity.dbHelper.getReadableDatabase();//TODO null pointer from notif... migrate to sugar ORM??
 
         String selection = HabitContract.HabitEntry.COLUMN_HABIT_ID+"="+id;
         Cursor c = db.query(HabitContract.HabitEntry.TABLE_NAME, null,selection,null,null,null,null);
@@ -186,7 +186,7 @@ public class Habit {
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, TimeToDoReceiver.class);
         intent.putExtra(NotificationPublisher.HABIT_ID, id);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, id, intent, 0);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, id+1, intent, 0);
         am.cancel(alarmIntent);
 
         updateTimeToDo();
