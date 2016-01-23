@@ -143,6 +143,16 @@ public class Habit {
         return offset;
     }
 
+    public int successfulCompletions(){
+        int total = 0;
+        for(Completion comp : completions){
+            if(comp.successCode==Completion.SUCCESSFUL){
+                total++;
+            }
+        }
+        return total;
+    }
+
     public void setDayOfWeek(int dayNum, boolean isOnThisDay){
         days[dayNum]=isOnThisDay;
     }
