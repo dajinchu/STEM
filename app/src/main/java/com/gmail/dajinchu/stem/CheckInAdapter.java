@@ -14,13 +14,14 @@ import java.util.ArrayList;
  */
 public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHolder>{
 
-    private static ArrayList<Habit> dataset;//TODO this should not be static
-    private DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT);
+    private ArrayList<Habit> dataset;
+    private static DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT);
     private CheckInFragment host;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final CheckInFragment host;
         public TextView name,frequency;
+        private int id;
         public ViewHolder(View v, CheckInFragment host){
             super(v);
             this.host = host;
@@ -29,10 +30,16 @@ public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHold
             v.setOnClickListener(this);
         }
 
+        public void bind(Habit habit){
+            name.setText(habit.name);
+            frequency.setText(format.format(habit.timeToDo.getTime()));
+            id=habit.getId();
+        }
+
         @Override
         public void onClick(View v) {
             //TODO with all the actions and onclicks of this recyclerview spread out, MVP would really come in handy
-            host.openHabitFragment(dataset.get(host.mSectionedAdapter.sectionedPositionToPosition(getAdapterPosition())).getId());
+            host.openHabitFragment(id);
         }
     }
 
@@ -59,9 +66,7 @@ public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHold
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         Habit habit = dataset.get(position);
-        holder.name.setText(habit.name);
-        holder.frequency.setText(format.format(habit.timeToDo.getTime()));
-
+        holder.bind(habit);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
