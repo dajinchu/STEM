@@ -19,7 +19,7 @@ public class NotificationPublisher extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         int id = intent.getIntExtra(HABIT_ID,0);
 
-        Habit habit = Habit.getHabitFromId(id);
+        Habit habit = Habit.findById(Habit.class, id);
 
 
         //Check if notification should really go off
@@ -29,7 +29,7 @@ public class NotificationPublisher extends BroadcastReceiver {
         }
         //Don't publish if it's isn't today.
         int currentDayOfWeek = (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)-2)%7;
-        if(!habit.days[currentDayOfWeek]){
+        if(!habit.getDays()[currentDayOfWeek]){
             //not on today
             return;
         }
@@ -45,12 +45,12 @@ public class NotificationPublisher extends BroadcastReceiver {
                 notificationDoneActionIntent,PendingIntent.FLAG_CANCEL_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setContentTitle(habit.name);
+        builder.setContentTitle(habit.getName());
         builder.setContentText("Do it!");
         builder.setContentIntent(notificationResultPendingIntent);
         builder.setSmallIcon(R.mipmap.ic_launcher);//TODO make a real white and transparent icon
         builder.setAutoCancel(true);
-        builder.setTicker(habit.name);
+        builder.setTicker(habit.getName());
         builder.addAction(R.drawable.ic_add_white_24dp,"Done",notificationDoneActionPendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

@@ -27,8 +27,8 @@ public class ViewProgressFragment extends Fragment {
 
 
         ArrayList<Habit> habitsWithCompletions = new ArrayList<>();
-        for(Habit h:Habit.getAllHabits()){
-            if(h.completions.size()>0){
+        for(Habit h:Habit.listAll(Habit.class)){
+            if(h.getCompletions().size()>0){
                 habitsWithCompletions.add(h);
             }
         }

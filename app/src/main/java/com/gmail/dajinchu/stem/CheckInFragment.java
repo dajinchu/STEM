@@ -139,7 +139,7 @@ public class CheckInFragment extends Fragment {
     private void loadHabits() {
         habitList.clear();
         Calendar now = Calendar.getInstance();
-        for(Habit habit : Habit.getAllHabits()) {
+        for(Habit habit : Habit.listAll(Habit.class)) {
             if(!habit.isCompletedNow()){
                 habitList.add(habit);
             }
@@ -154,7 +154,7 @@ public class CheckInFragment extends Fragment {
                 new ArrayList<>();
         sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0,"Do Now"));
         for(int i = 0; i < habitList.size(); i++){
-            if(new TimeComparator().compare(habitList.get(i).timeToDo,now)!=-1){
+            if(new TimeComparator().compare(habitList.get(i).getTimeToDo(),now)!=-1){
                 //habits are in ascending timetodo order, so the first habit happens after now
                 //will be the split between future and past events for this day
                 sections.add(new SimpleSectionedRecyclerViewAdapter.Section(i,"Later Today"));

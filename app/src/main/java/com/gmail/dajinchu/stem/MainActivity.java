@@ -15,7 +15,6 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static HabitDbHelper dbHelper;
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
@@ -49,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        dbHelper = new HabitDbHelper(this);
 
         AlarmManager am = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, MidnightFailureChecker.class);

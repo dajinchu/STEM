@@ -11,6 +11,6 @@ public class HabitComparator implements Comparator<Habit> {
 
     @Override
     public int compare(Habit a, Habit b) {
-        return tc.compare(a.timeToDo,b.timeToDo);
+        return tc.compare(a.getTimeToDo(),b.getTimeToDo());
     }
 }

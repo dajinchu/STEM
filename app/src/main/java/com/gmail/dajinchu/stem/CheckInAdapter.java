@@ -31,9 +31,9 @@ public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHold
         }
 
         public void bind(Habit habit){
-            name.setText(habit.name);
-            frequency.setText(format.format(habit.timeToDo.getTime()));
-            id=habit.getId();
+            name.setText(habit.getName());
+            frequency.setText(format.format(habit.getTimeToDo().getTime()));
+            id=habit.getId().intValue();
         }
 
         @Override

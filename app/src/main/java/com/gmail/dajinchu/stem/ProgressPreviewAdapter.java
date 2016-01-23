@@ -49,9 +49,10 @@ public class ProgressPreviewAdapter extends RecyclerView.Adapter<ProgressPreview
         }
 
         public void bind(Habit habit) {
-            title.setText(habit.name);
+            title.setText(habit.getName());
+            percentCompletion.setDrawInnerCircle(true);
             percentCompletion.setUnit("%");
-            percentCompletion.showValue(habit.successfulCompletions()/(float)habit.completions.size()*100f,100f,true);
+            percentCompletion.showValue(habit.successfulCompletions()/(float)habit.getCompletions().size()*100f,100f,true);
         }
     }
 }

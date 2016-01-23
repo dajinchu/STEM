@@ -12,7 +12,7 @@ public class DoneActionReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         int id = intent.getIntExtra(NotificationPublisher.HABIT_ID,0);
-        Habit.getHabitFromId(id).addCompletionNow();
+        Habit.findById(Habit.class,id).addCompletionNow();
         NotificationManager mgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         mgr.cancel(id);
     }
