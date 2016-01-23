@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 /**
  * Created by Da-Jin on 1/16/2016.
  */
@@ -23,7 +25,14 @@ public class ViewProgressFragment extends Fragment {
         RecyclerView recycler = (RecyclerView) view.findViewById(R.id.progress_preview_list);
         recycler.setLayoutManager(new GridLayoutManager(getContext(),2));
 
-        ProgressPreviewAdapter adapter = new ProgressPreviewAdapter(Habit.getAllHabits());
+
+        ArrayList<Habit> habitsWithCompletions = new ArrayList<>();
+        for(Habit h:Habit.getAllHabits()){
+            if(h.completions.size()>0){
+                habitsWithCompletions.add(h);
+            }
+        }
+        ProgressPreviewAdapter adapter = new ProgressPreviewAdapter(habitsWithCompletions);
 
 
         recycler.setAdapter(adapter);
