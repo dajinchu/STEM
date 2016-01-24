@@ -140,7 +140,8 @@ public class CheckInFragment extends Fragment {
         habitList.clear();
         Calendar now = Calendar.getInstance();
         for(Habit habit : Habit.listAll(Habit.class)) {
-            if(!habit.isCompletedNow()){
+            if(!habit.isCompletedNow()
+                    &&habit.getDays()[habit.calendarDayWeekToDisplay(now.get(Calendar.DAY_OF_WEEK))]){
                 habitList.add(habit);
             }
         }
