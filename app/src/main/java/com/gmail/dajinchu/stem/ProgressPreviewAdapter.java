@@ -46,12 +46,12 @@ public class ProgressPreviewAdapter extends RecyclerView.Adapter<ProgressPreview
             percentCompletion = (CircleDisplay) v.findViewById(R.id.circle);
             percentCompletion.setTouchEnabled(false);
             percentCompletion.setAnimDuration(500);
+            percentCompletion.setUnit("%");
+            percentCompletion.setFormatDigits(0);
         }
 
         public void bind(Habit habit) {
             title.setText(habit.getName());
-            percentCompletion.setDrawInnerCircle(true);
-            percentCompletion.setUnit("%");
             percentCompletion.showValue(habit.successfulCompletions()/(float)habit.getCompletions().size()*100f,100f,true);
         }
     }

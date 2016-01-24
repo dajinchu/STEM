@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200dp">
+    android:layout_height="200dp"
+    android:layout_margin="8dp"
+    card_view:cardCornerRadius="4dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/card_linear_layout"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/progress_preview_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Large Text"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="center_horizontal|top"
+            android:layout_marginTop="24dp"
+            android:layout_marginLeft="16dp"
+            android:textSize="24sp"
+            android:layout_weight="1"
+            android:text="name" />
 
         <com.gmail.dajinchu.stem.CircleDisplay
             android:id="@+id/circle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp" />
     </LinearLayout>
-</FrameLayout>
+
+</android.support.v7.widget.CardView>
+

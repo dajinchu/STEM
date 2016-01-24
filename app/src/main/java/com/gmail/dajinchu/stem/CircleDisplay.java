@@ -854,4 +854,9 @@ public class CircleDisplay extends View implements OnGestureListener {
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(heightMeasureSpec, heightMeasureSpec);
+    }
 }
