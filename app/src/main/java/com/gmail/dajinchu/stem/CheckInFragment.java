@@ -151,14 +151,24 @@ public class CheckInFragment extends Fragment {
         //TODO show a "nothing now" thing when there's no habits
 
         //Section out the recyclerview
+        if(habitList.size()>0) {
+            setSections(now);
+        }
+    }
+
+    private void setSections(Calendar now){
         List<SimpleSectionedRecyclerViewAdapter.Section> sections =
                 new ArrayList<>();
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0,"Do Now"));
-        for(int i = 0; i < habitList.size(); i++){
-            if(new TimeComparator().compare(habitList.get(i).getTimeToDo(),now)!=-1){
+        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, "Do Now"));
+        for (int i = 0; i < habitList.size(); i++) {
+            if (new TimeComparator().compare(habitList.get(i).getTimeToDo(), now) != -1) {
                 //habits are in ascending timetodo order, so the first habit happens after now
                 //will be the split between future and past events for this day
-                sections.add(new SimpleSectionedRecyclerViewAdapter.Section(i,"Later Today"));
+                sections.add(new SimpleSectionedRecyclerViewAdapter.Section(i, "Later Today"));
+                if (i == 0) {
+                    //If LaterToday is on the top, that means the Do Now section is empty, so rm header
+                    sections.remove(0);
+                }
                 break;
             }
         }
@@ -166,7 +176,6 @@ public class CheckInFragment extends Fragment {
         mSectionedAdapter.setSections(sections.toArray(dummy));
         mSectionedAdapter.notifyDataSetChanged();
     }
-
 
     //Broadcast receiver to intercept broadcast of it being time to do a habit
     BroadcastReceiver updateReceiver = new BroadcastReceiver(){
