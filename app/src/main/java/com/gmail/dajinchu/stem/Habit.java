@@ -82,9 +82,9 @@ public class Habit extends SugarRecord{
 
     public boolean isCompletedNow(){
         if(getCompletions().size()==0)return false;
-        int dayIndex = (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)-2)%7;
+        int dayIndex = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         int offset = 0;
-        while(!getDays()[(dayIndex+offset)%7]){
+        while(!getDays()[calendarDayWeekToDisplay(dayIndex+offset)]){
             offset--;
         }
         Calendar lastOccurence = Calendar.getInstance();
@@ -99,10 +99,15 @@ public class Habit extends SugarRecord{
                 .after(lastOccurence);
     }
 
+    public int calendarDayWeekToDisplay(int index){
+        int r = (index-2)%7;
+        return r<0 ? r+7 : r;
+    }
+
     public int daysToNextOccurence(){
-        int todayIndex = (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)-2)%7;
+        int todayIndex = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         int offset = 1;
-        while(!getDays()[(todayIndex+offset)%7]){
+        while(!getDays()[calendarDayWeekToDisplay(todayIndex+offset)]){
             offset++;
         }
         return offset;
