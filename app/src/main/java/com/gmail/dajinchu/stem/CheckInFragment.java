@@ -19,6 +19,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,20 +36,24 @@ public class CheckInFragment extends Fragment {
 
 
     public static final int NEW_HABIT_REQUEST_CODE = 1;
+    private TextView noHabitText;
+    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_check_in, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.habit_check_list);
+        recyclerView = (RecyclerView) view.findViewById(R.id.habit_check_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
         //recyclerView.setItemAnimator(new DefaultItemAnimator());
-        adapter = new CheckInAdapter(habitList,this);
+        adapter = new CheckInAdapter(habitList, this);
 
-        mSectionedAdapter = new SimpleSectionedRecyclerViewAdapter(getContext(), R.layout.section,R.id.section_text,adapter);
+        mSectionedAdapter = new SimpleSectionedRecyclerViewAdapter(getContext(), R.layout.section, R.id.section_text, adapter);
         recyclerView.setAdapter(mSectionedAdapter);
+
+        noHabitText = (TextView) view.findViewById(R.id.no_habits);
 
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
@@ -59,7 +64,8 @@ public class CheckInFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 //prevent subheaders from being swiped
-                if(mSectionedAdapter.isSectionHeaderPosition(viewHolder.getAdapterPosition()))return;
+                if (mSectionedAdapter.isSectionHeaderPosition(viewHolder.getAdapterPosition()))
+                    return;
                 int index = mSectionedAdapter.sectionedPositionToPosition(viewHolder.getLayoutPosition());
                 markHabitDone(index);
                 loadHabits();
@@ -69,7 +75,8 @@ public class CheckInFragment extends Fragment {
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
                     //prevent subheaders from being swiped
-                    if(mSectionedAdapter.isSectionHeaderPosition(viewHolder.getAdapterPosition()))return;
+                    if (mSectionedAdapter.isSectionHeaderPosition(viewHolder.getAdapterPosition()))
+                        return;
                     // Get RecyclerView item from the ViewHolder
                     View itemView = viewHolder.itemView;
                     Paint p = new Paint();
@@ -103,7 +110,7 @@ public class CheckInFragment extends Fragment {
         return view;
     }
 
-    public void openHabitFragment(int id){
+    public void openHabitFragment(int id) {
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("newhabit");
         if (prev != null) {
@@ -112,7 +119,7 @@ public class CheckInFragment extends Fragment {
         ft.addToBackStack(null);
 
         Bundle bundle = new Bundle();
-        bundle.putInt("habitId",id);
+        bundle.putInt("habitId", id);
 
         // Create and show the dialog.
         DialogFragment newFragment = new NewHabitFragment();
@@ -121,7 +128,7 @@ public class CheckInFragment extends Fragment {
         newFragment.show(ft, "newhabit");
     }
 
-    private void markHabitDone(int listIndex){
+    private void markHabitDone(int listIndex) {
         habitList.get(listIndex).addCompletionNow();
         loadHabits();
     }
@@ -139,24 +146,31 @@ public class CheckInFragment extends Fragment {
     private void loadHabits() {
         habitList.clear();
         Calendar now = Calendar.getInstance();
-        for(Habit habit : Habit.listAll(Habit.class)) {
-            if(!habit.isCompletedNow()
-                    &&habit.getDays()[habit.calendarDayWeekToDisplay(now.get(Calendar.DAY_OF_WEEK))]){
+        for (Habit habit : Habit.listAll(Habit.class)) {
+            if (!habit.isCompletedNow()
+                    && habit.getDays()[habit.calendarDayWeekToDisplay(now.get(Calendar.DAY_OF_WEEK))]) {
                 habitList.add(habit);
             }
         }
 
-        Collections.sort(habitList,new HabitComparator());
+        Collections.sort(habitList, new HabitComparator());
 
         //TODO show a "nothing now" thing when there's no habits
 
         //Section out the recyclerview
-        if(habitList.size()>0) {
-            setSections(now);
+        if(habitList.size()>0){
+            mSectionedAdapter.setSections(calcSections(now));
+            noHabitText.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }else{
+            noHabitText.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
         }
+        mSectionedAdapter.notifyDataSetChanged();
+
     }
 
-    private void setSections(Calendar now){
+    private SimpleSectionedRecyclerViewAdapter.Section[] calcSections(Calendar now) {
         List<SimpleSectionedRecyclerViewAdapter.Section> sections =
                 new ArrayList<>();
         sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, "Do Now"));
@@ -173,18 +187,18 @@ public class CheckInFragment extends Fragment {
             }
         }
         SimpleSectionedRecyclerViewAdapter.Section[] dummy = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
-        mSectionedAdapter.setSections(sections.toArray(dummy));
-        mSectionedAdapter.notifyDataSetChanged();
+        return sections.toArray(dummy);
     }
 
     //Broadcast receiver to intercept broadcast of it being time to do a habit
-    BroadcastReceiver updateReceiver = new BroadcastReceiver(){
+    BroadcastReceiver updateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             loadHabits();
             abortBroadcast();
         }
     };
+
     @Override
     public void onResume() {
         super.onResume();

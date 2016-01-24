@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:clipToPadding="false"
-    android:orientation="vertical"
-    android.support.design:layout_behavior="@string/appbar_scrolling_view_behavior"
-    xmlns:android.support.design="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/material_grey_300">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#70000000"
+        android:textSize="56sp"
+        android:text="@string/no_habits_todo"
+        android:id="@+id/no_habits"
+        android:visibility="visible"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp" />
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/habit_check_list"
-        android:clipToPadding="false"/>
+        android:clipToPadding="false"
+        android:visibility="visible" />
 
-</LinearLayout>
+</RelativeLayout>

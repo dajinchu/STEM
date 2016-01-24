@@ -9,4 +9,5 @@
     <string name="do_now_header">Do Now</string>
     <string name="timeHint">Time</string>
     <string name="repeatHint">Repeat</string>
+    <string name="no_habits_todo">Nothing to do today.\nYou\'re all set!</string>
 </resources>
