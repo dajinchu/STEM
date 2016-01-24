@@ -57,7 +57,7 @@ public class Habit extends SugarRecord{
 
 
     public Habit(){
-
+        this("",Calendar.getInstance(),new boolean[]{true,true,true,true,true,true,true});
     }
 
     public Habit(String name, Calendar time, boolean[] days){
