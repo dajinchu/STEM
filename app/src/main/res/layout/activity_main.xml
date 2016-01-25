@@ -15,9 +15,19 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            style="@style/ToolBarStyle"
             app:layout_scrollFlags="scroll|enterAlways"
             app:contentInsetLeft="72dp"
-            app:contentInsetStart="72dp" />
+            app:contentInsetStart="72dp" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="@string/main_title"
+                style="@style/ToolBarStyle"/>
+
+        </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
             android:layout_width="match_parent"
