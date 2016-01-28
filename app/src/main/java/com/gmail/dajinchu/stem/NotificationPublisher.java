@@ -28,8 +28,8 @@ public class NotificationPublisher extends BroadcastReceiver {
             return;
         }
         //Don't publish if it's isn't today.
-        int currentDayOfWeek = (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)-2)%7;
-        if(!habit.getDays()[currentDayOfWeek]){
+        int currentDayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        if(!habit.getDays()[Habit.calendarDayWeekToDisplay(currentDayOfWeek)]){
             //not on today
             return;
         }

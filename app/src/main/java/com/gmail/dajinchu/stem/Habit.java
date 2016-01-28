@@ -99,7 +99,7 @@ public class Habit extends SugarRecord{
                 .after(lastOccurence);
     }
 
-    public int calendarDayWeekToDisplay(int index){
+    public static int calendarDayWeekToDisplay(int index){
         int r = (index-2)%7;
         return r<0 ? r+7 : r;
     }
