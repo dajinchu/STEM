@@ -10,6 +10,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 
+import com.facebook.appevents.AppEventsLogger;
+
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
@@ -52,10 +54,9 @@ public class MainActivity extends AppCompatActivity {
         am.cancel(pendingIntent);
 
         Calendar triggerTime = Calendar.getInstance();
-        triggerTime.add(Calendar.DATE,1);
-        triggerTime.set(Calendar.HOUR_OF_DAY,0);
-        triggerTime.set(Calendar.MINUTE,0);
-        triggerTime.set(Calendar.SECOND,1);
+        triggerTime.set(Calendar.HOUR_OF_DAY,23);
+        triggerTime.set(Calendar.MINUTE,59);
+        triggerTime.set(Calendar.SECOND,50);
 
         am.setRepeating(AlarmManager.RTC_WAKEUP,triggerTime.getTimeInMillis(),24*60*60*1000,pendingIntent);
     }
@@ -71,5 +72,18 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         return false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AppEventsLogger.deactivateApp(this);
+
     }
 }

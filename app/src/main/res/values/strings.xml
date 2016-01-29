@@ -11,4 +11,7 @@
     <string name="repeatHint">Repeat</string>
     <string name="no_habits_todo">Nothing to do today.\nYou\'re all set!</string>
     <string name="main_title">Routine Tracker</string>
+
+    <string name="facebook_app_id">834969276620921</string>
+
 </resources>
