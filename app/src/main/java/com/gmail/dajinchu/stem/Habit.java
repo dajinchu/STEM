@@ -81,24 +81,32 @@ public class Habit extends SugarRecord{
     }
 
     public boolean isCompletedNow(){
-        if(getCompletions().size()==0)return false;
-        int dayIndex = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-        int offset = 0;
-        while(!getDays()[calendarDayWeekToDisplay(dayIndex+offset)]){
-            offset--;
-        }
-        Calendar lastOccurence = Calendar.getInstance();
-        lastOccurence.set(Calendar.MILLISECOND, 0);
-        lastOccurence.set(Calendar.SECOND, 0);
-        lastOccurence.set(Calendar.MINUTE, 0);
-        lastOccurence.set(Calendar.HOUR_OF_DAY, 0);
-        lastOccurence.add(Calendar.DATE, offset);
-
-        Log.d("Habit","last completed "+lastOccurence.toString());
-        return getCompletions().get(getCompletions().size()-1).getCompletionTime()
-                .after(lastOccurence);
+        return isCompletedAtTime(Calendar.getInstance());
     }
 
+    public boolean isCompletedAtTime(Calendar checkTime){
+        if(getCompletions().size()==0)return false;
+
+        Calendar dayBegin = Calendar.getInstance();
+        dayBegin.setTimeInMillis(checkTime.getTimeInMillis());
+        dayBegin.set(Calendar.MILLISECOND, 0);
+        dayBegin.set(Calendar.SECOND, 0);
+        dayBegin.set(Calendar.MINUTE, 0);
+        dayBegin.set(Calendar.HOUR_OF_DAY, 0);
+
+        for(Completion c : getCompletions()){
+            //See if there is a completion between when this day began, and the 'current' time
+            //If there is then, the routine is 'currently' completed
+            if(c.getSuccessCode()==Completion.SUCCESSFUL
+                    &&dayBegin.before(c.getCompletionTime())
+                    &&checkTime.after(c.getCompletionTime())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //TODO figure out how to not need this stupid shit
     public static int calendarDayWeekToDisplay(int index){
         int r = (index-2)%7;
         return r<0 ? r+7 : r;

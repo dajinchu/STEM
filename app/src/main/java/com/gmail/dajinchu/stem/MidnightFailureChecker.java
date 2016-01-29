@@ -15,15 +15,23 @@ public class MidnightFailureChecker extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d("FailureChecker","Triggered!!!");
-        Calendar now = Calendar.getInstance();
+
+        //Get Calendar for time of the beginning of the day that just finished.
+        //Things are checked relative to this, so this day of week is used,
+        // and success that day is checked
         Calendar check = Calendar.getInstance();
-        check.set(Calendar.DATE,check.get(Calendar.DATE)-1);
-        int yesterdayOfWeek = now.get(Calendar.DAY_OF_WEEK);
+        if(check.get(Calendar.AM_PM)==Calendar.AM){
+            //If it's morning, check yesterday, because today hasn't finished
+            //TODO change this to something like 12am-1am time range. it's like this for testing now
+            check.add(Calendar.DATE,-1);
+        }
+        check.set(Calendar.HOUR_OF_DAY,23);
+        check.set(Calendar.MINUTE,59);
+        check.set(Calendar.SECOND,59);
         List<Habit> habits = Habit.listAll(Habit.class);
         for(Habit habit : habits){
-            if(!habit.getDays()[Habit.calendarDayWeekToDisplay(yesterdayOfWeek)])continue;
-            if(habit.getCompletions().size()>0&&
-                    habit.getCompletions().get(habit.getCompletions().size()-1).getCompletionTime().after(check))continue;
+            if(!habit.getDays()[Habit.calendarDayWeekToDisplay(check.get(Calendar.DAY_OF_WEEK))])continue;
+            if(habit.isCompletedAtTime(check))continue;
             Log.d("MidnightFailureChecker","marking "+habit.getName());
             new Completion(check,Completion.FAILED,habit).save();
         }
