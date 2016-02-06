@@ -11,15 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by Da-Jin on 1/16/2016.
  */
-public class ViewProgressFragment extends Fragment implements Subscriber{
+public class ViewProgressFragment extends Fragment {
 
     private ArrayList<Routine> routinesWithCompletions;
     private ProgressPreviewAdapter adapter;
+    private FilteringRoutineListener routineListener;
 
     @Nullable
     @Override
@@ -29,9 +29,21 @@ public class ViewProgressFragment extends Fragment implements Subscriber{
         RecyclerView recycler = (RecyclerView) view.findViewById(R.id.progress_preview_list);
         recycler.setLayoutManager(new GridLayoutManager(getContext(),2));
 
-
         routinesWithCompletions = new ArrayList<>();
-        getRoutines();
+
+        routineListener = new FilteringRoutineListener(routinesWithCompletions){
+
+            @Override
+            public boolean shouldKeep(Routine routine) {
+                return routine.getCompletions().size()>0;
+            }
+
+            @Override
+            public void onListChanged() {
+                adapter.notifyDataSetChanged();
+            }
+        };
+
         adapter = new ProgressPreviewAdapter(routinesWithCompletions);
 
 
@@ -42,38 +54,14 @@ public class ViewProgressFragment extends Fragment implements Subscriber{
 
     @Override
     public void onResume() {
-        //TODO getRoutines here instead of in Create?? same applies to CheckIn
         super.onResume();
-        Routine.subscribe(this);
+        Routine.subscribe(routineListener);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Routine.unsubscribe(this);
+        Routine.unsubscribe(routineListener);
     }
 
-    public void getRoutines(){
-        routinesWithCompletions.clear();
-        for(Routine h:Routine.listAll(Routine.class)){
-            if(h.getCompletions().size()>0){
-                routinesWithCompletions.add(h);
-            }
-        }
-    }
-
-    @Override
-    public void update(SubscribableSugarRecord record) {
-        Routine routine = (Routine) record;
-        Iterator<Routine> iterator = routinesWithCompletions.iterator();
-        while(iterator.hasNext()){
-            if(iterator.next().getId().equals(routine.getId())){
-                iterator.remove();
-            }
-        }
-        if(routine.getCompletions().size()>0) {
-            routinesWithCompletions.add(routine);
-        }
-        adapter.notifyDataSetChanged();
-    }
 }

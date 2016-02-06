@@ -4,23 +4,29 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 
+import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 /**
  * Created by Da-Jin on 12/7/2015.
  */
-public class Routine extends SubscribableSugarRecord implements ParentRecord {
+public class Routine extends SugarRecord implements ParentRecord {
     private String _name;
     private long _timeToDo;
     private int _days;
 
     @Ignore
     private static DateFormat format = DateFormat.getDateTimeInstance();
+    @Ignore
+    private static List<RoutineListener> subs = new ArrayList<>();
     @Ignore
     private List<Completion> cachedCompletions;
 
@@ -184,5 +190,24 @@ public class Routine extends SubscribableSugarRecord implements ParentRecord {
 
     private void refreshCompletionCache(){
         cachedCompletions = Completion.find(Completion.class,"routine = ?", String.valueOf(getId()));
+    }
+
+
+    public void notifyAllSubscribers() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                for (RoutineListener sub : subs) {//TODO use a central model class that caches
+                    sub.update(Routine.this);
+                }
+            }
+        });
+    }
+    public static void unsubscribe(RoutineListener subscriber) {
+        subs.remove(subscriber);
+    }
+
+    public static void subscribe(RoutineListener subscriber) {
+        subs.add(subscriber);
     }
 }

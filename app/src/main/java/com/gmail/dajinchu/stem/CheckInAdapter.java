@@ -7,14 +7,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.text.DateFormat;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Da-Jin on 11/28/2015.
  */
 public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHolder>{
 
-    private ArrayList<Routine> dataset;
+    private List<Routine> dataset;
     private static DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT);
     private CheckInFragment host;
 
@@ -43,7 +43,7 @@ public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHold
         }
     }
 
-    public CheckInAdapter(ArrayList<Routine> mDataset, CheckInFragment host){
+    public CheckInAdapter(List<Routine> mDataset, CheckInFragment host){
         dataset = mDataset;
         this.host = host;
     }

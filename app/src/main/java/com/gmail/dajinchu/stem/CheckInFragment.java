@@ -23,25 +23,36 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by Da-Jin on 11/25/2015.
  */
-public class CheckInFragment extends Fragment implements Subscriber{
+public class CheckInFragment extends Fragment {
     private CheckInAdapter adapter;
     SimpleSectionedRecyclerViewAdapter mSectionedAdapter;
-    ArrayList<Routine> routineList = new ArrayList<>();
-
+    List<Routine> routineList = new ArrayList<>();
 
     public static final int NEW_HABIT_REQUEST_CODE = 1;
     private TextView noRoutineText;
     private RecyclerView recyclerView;
+    private FilteringRoutineListener routineListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_check_in, container, false);
+
+        routineListener = new FilteringRoutineListener(routineList){
+            @Override
+            public boolean shouldKeep(Routine routine) {
+                return !routine.isCompletedNow()
+                        && routine.getDays()[Routine.calendarDayWeekToDisplay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))];
+            }
+            @Override
+            public void onListChanged() {
+                sortAndSectionRoutines();
+            }
+        };
 
         recyclerView = (RecyclerView) view.findViewById(R.id.routine_check_list);
         recyclerView.setHasFixedSize(true);
@@ -105,8 +116,6 @@ public class CheckInFragment extends Fragment implements Subscriber{
                 openRoutineFragment(NewRoutineFragment.ID_NEW_HABIT);
             }
         });
-        loadAllFromSugar();
-        sortAndSectionRoutines();//TODO actually needed cause it's the first load I believe
         return view;
     }
 
@@ -129,22 +138,6 @@ public class CheckInFragment extends Fragment implements Subscriber{
 
     private void markRoutineDone(int listIndex) {
         routineList.get(listIndex).addCompletionNow();
-    }
-
-    private void loadAllFromSugar(){
-        routineList.clear();
-        List<Routine> routines = Routine.listAll(Routine.class);
-        for (Routine routine :routines) {
-            if (shouldShowRoutine(routine)) {
-                routineList.add(routine);
-            }
-        }
-    }
-
-    private boolean shouldShowRoutine(Routine routine){
-        boolean completedNow = routine.isCompletedNow();
-        return !completedNow
-                && routine.getDays()[Routine.calendarDayWeekToDisplay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))];
     }
 
     private void sortAndSectionRoutines() {
@@ -198,7 +191,7 @@ public class CheckInFragment extends Fragment implements Subscriber{
         filter.setPriority(1);
         getContext().registerReceiver(updateReceiver, filter);
 
-        Routine.subscribe(this);
+        Routine.subscribe(routineListener);
     }
 
     @Override
@@ -206,22 +199,8 @@ public class CheckInFragment extends Fragment implements Subscriber{
         super.onPause();
         getContext().unregisterReceiver(updateReceiver);
 
-        Routine.unsubscribe(this);
+        Routine.unsubscribe(routineListener);
     }
 
-    @Override
-    public void update(SubscribableSugarRecord record) {
-        //TODO this won't support remove a record!!
-        Routine routine = (Routine) record;
-        Iterator<Routine> iterator = routineList.iterator();
-        while(iterator.hasNext()){
-            if(iterator.next().getId().equals(routine.getId())){
-                iterator.remove();
-            }
-        }
-        if (shouldShowRoutine(routine)) {
-            routineList.add(routine);
-        }
-        sortAndSectionRoutines();
-    }
+
 }

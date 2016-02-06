@@ -1,6 +1,5 @@
 package com.gmail.dajinchu.stem;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -74,7 +73,7 @@ public class NewRoutineFragment extends DialogFragment implements TimePickerDial
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                close(Activity.RESULT_CANCELED);
+                close();
             }
         });
         // Set the listener for the menu click, namely the "save" button
@@ -191,13 +190,13 @@ public class NewRoutineFragment extends DialogFragment implements TimePickerDial
                     }
                     nameTextInputLayout.setError("This field is required");
                 }else{
-                    close(Activity.RESULT_OK);
+                    close();
                 }
             }
         }.execute();
     }
 
-    private void close(int resultCode){
+    private void close(){
         getActivity().getSupportFragmentManager().popBackStackImmediate();
     }
 
