@@ -30,6 +30,8 @@ public class ViewProgressFragment extends Fragment {
         recycler.setLayoutManager(new GridLayoutManager(getContext(),2));
 
         routinesWithCompletions = new ArrayList<>();
+        adapter = new ProgressPreviewAdapter(routinesWithCompletions);
+        recycler.setAdapter(adapter);
 
         routineListener = new FilteringRoutineListener(routinesWithCompletions){
 
@@ -43,12 +45,6 @@ public class ViewProgressFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         };
-
-        adapter = new ProgressPreviewAdapter(routinesWithCompletions);
-
-
-        recycler.setAdapter(adapter);
-
         return view;
     }
 

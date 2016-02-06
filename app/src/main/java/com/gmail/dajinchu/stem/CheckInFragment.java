@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -41,20 +42,11 @@ public class CheckInFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_check_in, container, false);
-
-        routineListener = new FilteringRoutineListener(routineList){
-            @Override
-            public boolean shouldKeep(Routine routine) {
-                return !routine.isCompletedNow()
-                        && routine.getDays()[Routine.calendarDayWeekToDisplay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))];
-            }
-            @Override
-            public void onListChanged() {
-                sortAndSectionRoutines();
-            }
-        };
-
         recyclerView = (RecyclerView) view.findViewById(R.id.routine_check_list);
+        noRoutineText = (TextView) view.findViewById(R.id.no_routines);
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.my_toolbar);
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
@@ -64,7 +56,6 @@ public class CheckInFragment extends Fragment {
         mSectionedAdapter = new SimpleSectionedRecyclerViewAdapter(getContext(), R.layout.section, R.id.section_text, adapter);
         recyclerView.setAdapter(mSectionedAdapter);
 
-        noRoutineText = (TextView) view.findViewById(R.id.no_routines);
 
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
@@ -108,14 +99,28 @@ public class CheckInFragment extends Fragment {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-        getActivity().findViewById(R.id.fab).setVisibility(View.VISIBLE);
-        ((Toolbar) getActivity().findViewById(R.id.my_toolbar)).setNavigationIcon(null);
-        getActivity().findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
+        fab.setVisibility(View.VISIBLE);
+        toolbar.setNavigationIcon(null);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openRoutineFragment(NewRoutineFragment.ID_NEW_HABIT);
             }
         });
+
+
+        routineListener = new FilteringRoutineListener(routineList){
+            @Override
+            public boolean shouldKeep(Routine routine) {
+                return !routine.isCompletedNow()
+                        && routine.getDays()[Routine.calendarDayWeekToDisplay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))];
+            }
+            @Override
+            public void onListChanged() {
+                sortAndSectionRoutines();
+            }
+        };
+
         return view;
     }
 
