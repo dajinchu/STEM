@@ -201,7 +201,6 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
     }
 
     private void close(int resultCode){
-        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode,null);
         getActivity().getSupportFragmentManager().popBackStackImmediate();
     }
 

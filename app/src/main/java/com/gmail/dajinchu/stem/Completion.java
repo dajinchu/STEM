@@ -1,13 +1,11 @@
 package com.gmail.dajinchu.stem;
 
-import com.orm.SugarRecord;
-
 import java.util.Calendar;
 
 /**
  * Created by Da-Jin on 1/13/2016.
  */
-public class Completion extends SugarRecord {
+public class Completion extends ChildRecord {
 
     private long completionTime;
     private int successCode;
@@ -50,5 +48,10 @@ public class Completion extends SugarRecord {
 
     public void setHabit(Habit habit) {
         this.habit = habit;
+    }
+
+    @Override
+    protected ParentRecord getParent() {
+        return habit;
     }
 }

@@ -11,11 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Da-Jin on 1/16/2016.
  */
-public class ViewProgressFragment extends Fragment {
+public class ViewProgressFragment extends Fragment implements Subscriber{
+
+    private ArrayList<Habit> habitsWithCompletions;
+    private ProgressPreviewAdapter adapter;
 
     @Nullable
     @Override
@@ -26,17 +30,50 @@ public class ViewProgressFragment extends Fragment {
         recycler.setLayoutManager(new GridLayoutManager(getContext(),2));
 
 
-        ArrayList<Habit> habitsWithCompletions = new ArrayList<>();
-        for(Habit h:Habit.listAll(Habit.class)){
-            if(h.getCompletions().size()>0){
-                habitsWithCompletions.add(h);
-            }
-        }
-        ProgressPreviewAdapter adapter = new ProgressPreviewAdapter(habitsWithCompletions);
+        habitsWithCompletions = new ArrayList<>();
+        getHabits();
+        adapter = new ProgressPreviewAdapter(habitsWithCompletions);
 
 
         recycler.setAdapter(adapter);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        //TODO getHabits here instead of in Create?? same applies to CheckIn
+        super.onResume();
+        Habit.subscribe(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Habit.unsubscribe(this);
+    }
+
+    public void getHabits(){
+        habitsWithCompletions.clear();
+        for(Habit h:Habit.listAll(Habit.class)){
+            if(h.getCompletions().size()>0){
+                habitsWithCompletions.add(h);
+            }
+        }
+    }
+
+    @Override
+    public void update(SubscribableSugarRecord record) {
+        Habit habit = (Habit) record;
+        Iterator<Habit> iterator = habitsWithCompletions.iterator();
+        while(iterator.hasNext()){
+            if(iterator.next().getId().equals(habit.getId())){
+                iterator.remove();
+            }
+        }
+        if(habit.getCompletions().size()>0) {
+            habitsWithCompletions.add(habit);
+        }
+        adapter.notifyDataSetChanged();
     }
 }

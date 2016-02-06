@@ -1,6 +1,5 @@
 package com.gmail.dajinchu.stem;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +24,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by Da-Jin on 11/25/2015.
  */
-public class CheckInFragment extends Fragment {
+public class CheckInFragment extends Fragment implements Subscriber{
     private CheckInAdapter adapter;
     SimpleSectionedRecyclerViewAdapter mSectionedAdapter;
     ArrayList<Habit> habitList = new ArrayList<>();
@@ -68,7 +69,6 @@ public class CheckInFragment extends Fragment {
                     return;
                 int index = mSectionedAdapter.sectionedPositionToPosition(viewHolder.getLayoutPosition());
                 markHabitDone(index);
-                loadHabits();
             }
 
             @Override
@@ -106,7 +106,8 @@ public class CheckInFragment extends Fragment {
                 openHabitFragment(NewHabitFragment.ID_NEW_HABIT);
             }
         });
-        loadHabits();
+        loadAllFromSugar();
+        sortAndSectionHabits();//TODO actually needed cause it's the first load I believe
         return view;
     }
 
@@ -124,42 +125,43 @@ public class CheckInFragment extends Fragment {
         // Create and show the dialog.
         DialogFragment newFragment = new NewHabitFragment();
         newFragment.setArguments(bundle);
-        newFragment.setTargetFragment(CheckInFragment.this, NEW_HABIT_REQUEST_CODE);
         newFragment.show(ft, "newhabit");
     }
 
     private void markHabitDone(int listIndex) {
         habitList.get(listIndex).addCompletionNow();
-        loadHabits();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case NEW_HABIT_REQUEST_CODE:
-                if (resultCode == Activity.RESULT_OK) {
-                    loadHabits();
-                }
-        }
-    }
-
-    private void loadHabits() {
+    private void loadAllFromSugar(){
         habitList.clear();
-        Calendar now = Calendar.getInstance();
-        for (Habit habit : Habit.listAll(Habit.class)) {
-            if (!habit.isCompletedNow()
-                    && habit.getDays()[Habit.calendarDayWeekToDisplay(now.get(Calendar.DAY_OF_WEEK))]) {
+        List<Habit> habits = Habit.listAll(Habit.class);
+        Bench.start("filter checkin habits");
+        for (Habit habit :habits) {
+            if (shouldShowHabit(habit)) {
                 habitList.add(habit);
             }
         }
+        Bench.end("filter checkin habits");
+    }
 
+    private boolean shouldShowHabit(Habit habit){
+        boolean completedNow = habit.isCompletedNow();
+        return !completedNow
+                && habit.getDays()[Habit.calendarDayWeekToDisplay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))];
+    }
+
+    private void sortAndSectionHabits() {
+        Bench.start("checkin Load Habits");
+
+        Bench.start("checkin sort habits");
         Collections.sort(habitList, new HabitComparator());
+        Bench.end("checkin sort habits");
 
-        //TODO show a "nothing now" thing when there's no habits
 
+        Bench.start("section recycler");
         //Section out the recyclerview
         if(habitList.size()>0){
-            mSectionedAdapter.setSections(calcSections(now));
+            mSectionedAdapter.setSections(calcSections(Calendar.getInstance()));
             noHabitText.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
         }else{
@@ -167,7 +169,9 @@ public class CheckInFragment extends Fragment {
             recyclerView.setVisibility(View.GONE);
         }
         mSectionedAdapter.notifyDataSetChanged();
+        Bench.end("section recycler");
 
+        Bench.end("checkin Load Habits");
     }
 
     private SimpleSectionedRecyclerViewAdapter.Section[] calcSections(Calendar now) {
@@ -194,7 +198,7 @@ public class CheckInFragment extends Fragment {
     BroadcastReceiver updateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            loadHabits();
+            sortAndSectionHabits();
             abortBroadcast();
         }
     };
@@ -205,11 +209,32 @@ public class CheckInFragment extends Fragment {
         IntentFilter filter = new IntentFilter(TimeToDoReceiver.ACTION_TIME_TO_DO);
         filter.setPriority(1);
         getContext().registerReceiver(updateReceiver, filter);
+
+        Habit.subscribe(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         getContext().unregisterReceiver(updateReceiver);
+
+        Habit.unsubscribe(this);
+    }
+
+    @Override
+    public void update(SubscribableSugarRecord record) {
+        //TODO this won't support remove a record!!
+        Log.d("CheckIn","notified, checkinfragment loading habits");
+        Habit habit = (Habit) record;
+        Iterator<Habit> iterator = habitList.iterator();
+        while(iterator.hasNext()){
+            if(iterator.next().getId().equals(habit.getId())){
+                iterator.remove();
+            }
+        }
+        if (shouldShowHabit(habit)) {
+            habitList.add(habit);
+        }
+        sortAndSectionHabits();
     }
 }

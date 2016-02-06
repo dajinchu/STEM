@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 
 import java.text.DateFormat;
@@ -16,17 +15,22 @@ import java.util.List;
 /**
  * Created by Da-Jin on 12/7/2015.
  */
-public class Habit extends SugarRecord{
+public class Habit extends SubscribableSugarRecord implements ParentRecord {
     private String _name;
     private long _timeToDo;
     private int _days;
 
     @Ignore
     private static DateFormat format = DateFormat.getDateTimeInstance();
+    @Ignore
+    private List<Completion> cachedCompletions;
 
     //Getters and Setters
     public List<Completion> getCompletions(){
-        return Completion.find(Completion.class,"habit = ?", String.valueOf(getId()));
+        if(cachedCompletions==null){
+            refreshCompletionCache();
+        }
+        return cachedCompletions;
     }
     public String getName(){
         return _name;
@@ -71,9 +75,6 @@ public class Habit extends SugarRecord{
 
         new Completion(c,Completion.SUCCESSFUL,this).save();
 
-        updateTimeToDo();
-        save();
-
         //TODO unsure if this will be needed
         /*c.add(Calendar.DATE, 1);
         nextIncomplete = c.getTimeInMillis();
@@ -85,7 +86,11 @@ public class Habit extends SugarRecord{
     }
 
     public boolean isCompletedAtTime(Calendar checkTime){
-        if(getCompletions().size()==0)return false;
+        Bench.start("isCompletedAtTime");
+        Bench.start("getCompletions");
+        List<Completion> completions = getCompletions();
+        Bench.end("getCompletions");
+        if(completions.size()==0)return false;
 
         Calendar dayBegin = Calendar.getInstance();
         dayBegin.setTimeInMillis(checkTime.getTimeInMillis());
@@ -94,15 +99,18 @@ public class Habit extends SugarRecord{
         dayBegin.set(Calendar.MINUTE, 0);
         dayBegin.set(Calendar.HOUR_OF_DAY, 0);
 
-        for(Completion c : getCompletions()){
+        for(Completion c : completions){
             //See if there is a completion between when this day began, and the 'current' time
             //If there is then, the routine is 'currently' completed
             if(c.getSuccessCode()==Completion.SUCCESSFUL
                     &&dayBegin.before(c.getCompletionTime())
                     &&checkTime.after(c.getCompletionTime())){
+                Bench.end("isCompletedAtTime");
                 return true;
             }
         }
+        Bench.end("isCompletedAtTime");
+
         return false;
     }
 
@@ -141,6 +149,7 @@ public class Habit extends SugarRecord{
         Calendar now = Calendar.getInstance();
         Calendar timeToDo = getTimeToDo();
         timeToDo.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DATE));
+        timeToDo.set(Calendar.SECOND,0);
         setTimeToDo(timeToDo);
         Log.d("Habit", format.format(getTimeToDo().getTime()));
 
@@ -161,5 +170,22 @@ public class Habit extends SugarRecord{
         updateTimeToDo();
 
         am.setRepeating(AlarmManager.RTC_WAKEUP,getTimeToDo().getTimeInMillis(),24*60*60*1000,alarmIntent);
+    }
+
+    @Override
+    public void childUpdated() {
+        refreshCompletionCache();
+        notifyAllSubscribers();
+    }
+
+    @Override
+    public long save() {
+        long save = super.save();
+        notifyAllSubscribers();
+        return save;
+    }
+
+    private void refreshCompletionCache(){
+        cachedCompletions = Completion.find(Completion.class,"habit = ?", String.valueOf(getId()));
     }
 }
