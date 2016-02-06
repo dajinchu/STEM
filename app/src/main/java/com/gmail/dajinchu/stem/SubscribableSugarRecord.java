@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class SubscribableSugarRecord extends SugarRecord {
     private static List<Subscriber> subs = new ArrayList<Subscriber>();
-    //TODO this is terrible way to do it, just move all this code to Habit, because static doesn't extend ya dumb butt
+    //TODO this is terrible way to do it, just move all this code to Routine, because static doesn't extend ya dumb butt
 
     public void notifyAllSubscribers() {
         new Handler(Looper.getMainLooper()).post(new Runnable() {

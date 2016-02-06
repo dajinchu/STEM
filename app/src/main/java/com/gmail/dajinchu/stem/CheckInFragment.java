@@ -33,28 +33,28 @@ import java.util.List;
 public class CheckInFragment extends Fragment implements Subscriber{
     private CheckInAdapter adapter;
     SimpleSectionedRecyclerViewAdapter mSectionedAdapter;
-    ArrayList<Habit> habitList = new ArrayList<>();
+    ArrayList<Routine> routineList = new ArrayList<>();
 
 
     public static final int NEW_HABIT_REQUEST_CODE = 1;
-    private TextView noHabitText;
+    private TextView noRoutineText;
     private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_check_in, container, false);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.habit_check_list);
+        recyclerView = (RecyclerView) view.findViewById(R.id.routine_check_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
         //recyclerView.setItemAnimator(new DefaultItemAnimator());
-        adapter = new CheckInAdapter(habitList, this);
+        adapter = new CheckInAdapter(routineList, this);
 
         mSectionedAdapter = new SimpleSectionedRecyclerViewAdapter(getContext(), R.layout.section, R.id.section_text, adapter);
         recyclerView.setAdapter(mSectionedAdapter);
 
-        noHabitText = (TextView) view.findViewById(R.id.no_habits);
+        noRoutineText = (TextView) view.findViewById(R.id.no_routines);
 
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
@@ -68,7 +68,7 @@ public class CheckInFragment extends Fragment implements Subscriber{
                 if (mSectionedAdapter.isSectionHeaderPosition(viewHolder.getAdapterPosition()))
                     return;
                 int index = mSectionedAdapter.sectionedPositionToPosition(viewHolder.getLayoutPosition());
-                markHabitDone(index);
+                markRoutineDone(index);
             }
 
             @Override
@@ -103,84 +103,84 @@ public class CheckInFragment extends Fragment implements Subscriber{
         getActivity().findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openHabitFragment(NewHabitFragment.ID_NEW_HABIT);
+                openRoutineFragment(NewRoutineFragment.ID_NEW_HABIT);
             }
         });
         loadAllFromSugar();
-        sortAndSectionHabits();//TODO actually needed cause it's the first load I believe
+        sortAndSectionRoutines();//TODO actually needed cause it's the first load I believe
         return view;
     }
 
-    public void openHabitFragment(int id) {
+    public void openRoutineFragment(int id) {
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("newhabit");
+        Fragment prev = getFragmentManager().findFragmentByTag("newroutine");
         if (prev != null) {
             ft.remove(prev);
         }
         ft.addToBackStack(null);
 
         Bundle bundle = new Bundle();
-        bundle.putInt("habitId", id);
+        bundle.putInt("routineId", id);
 
         // Create and show the dialog.
-        DialogFragment newFragment = new NewHabitFragment();
+        DialogFragment newFragment = new NewRoutineFragment();
         newFragment.setArguments(bundle);
-        newFragment.show(ft, "newhabit");
+        newFragment.show(ft, "newroutine");
     }
 
-    private void markHabitDone(int listIndex) {
-        habitList.get(listIndex).addCompletionNow();
+    private void markRoutineDone(int listIndex) {
+        routineList.get(listIndex).addCompletionNow();
     }
 
     private void loadAllFromSugar(){
-        habitList.clear();
-        List<Habit> habits = Habit.listAll(Habit.class);
-        Bench.start("filter checkin habits");
-        for (Habit habit :habits) {
-            if (shouldShowHabit(habit)) {
-                habitList.add(habit);
+        routineList.clear();
+        List<Routine> routines = Routine.listAll(Routine.class);
+        Bench.start("filter checkin routines");
+        for (Routine routine :routines) {
+            if (shouldShowRoutine(routine)) {
+                routineList.add(routine);
             }
         }
-        Bench.end("filter checkin habits");
+        Bench.end("filter checkin routines");
     }
 
-    private boolean shouldShowHabit(Habit habit){
-        boolean completedNow = habit.isCompletedNow();
+    private boolean shouldShowRoutine(Routine routine){
+        boolean completedNow = routine.isCompletedNow();
         return !completedNow
-                && habit.getDays()[Habit.calendarDayWeekToDisplay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))];
+                && routine.getDays()[Routine.calendarDayWeekToDisplay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))];
     }
 
-    private void sortAndSectionHabits() {
-        Bench.start("checkin Load Habits");
+    private void sortAndSectionRoutines() {
+        Bench.start("checkin Load Routines");
 
-        Bench.start("checkin sort habits");
-        Collections.sort(habitList, new HabitComparator());
-        Bench.end("checkin sort habits");
+        Bench.start("checkin sort routines");
+        Collections.sort(routineList, new RoutineComparator());
+        Bench.end("checkin sort routines");
 
 
         Bench.start("section recycler");
         //Section out the recyclerview
-        if(habitList.size()>0){
+        if(routineList.size()>0){
             mSectionedAdapter.setSections(calcSections(Calendar.getInstance()));
-            noHabitText.setVisibility(View.GONE);
+            noRoutineText.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
         }else{
-            noHabitText.setVisibility(View.VISIBLE);
+            noRoutineText.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         }
         mSectionedAdapter.notifyDataSetChanged();
         Bench.end("section recycler");
 
-        Bench.end("checkin Load Habits");
+        Bench.end("checkin Load Routines");
     }
 
     private SimpleSectionedRecyclerViewAdapter.Section[] calcSections(Calendar now) {
         List<SimpleSectionedRecyclerViewAdapter.Section> sections =
                 new ArrayList<>();
         sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, "Do Now"));
-        for (int i = 0; i < habitList.size(); i++) {
-            if (new TimeComparator().compare(habitList.get(i).getTimeToDo(), now) != -1) {
-                //habits are in ascending timetodo order, so the first habit happens after now
+        for (int i = 0; i < routineList.size(); i++) {
+            if (new TimeComparator().compare(routineList.get(i).getTimeToDo(), now) != -1) {
+                //routines are in ascending timetodo order, so the first routine happens after now
                 //will be the split between future and past events for this day
                 sections.add(new SimpleSectionedRecyclerViewAdapter.Section(i, "Later Today"));
                 if (i == 0) {
@@ -194,11 +194,11 @@ public class CheckInFragment extends Fragment implements Subscriber{
         return sections.toArray(dummy);
     }
 
-    //Broadcast receiver to intercept broadcast of it being time to do a habit
+    //Broadcast receiver to intercept broadcast of it being time to do a routine
     BroadcastReceiver updateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            sortAndSectionHabits();
+            sortAndSectionRoutines();
             abortBroadcast();
         }
     };
@@ -210,7 +210,7 @@ public class CheckInFragment extends Fragment implements Subscriber{
         filter.setPriority(1);
         getContext().registerReceiver(updateReceiver, filter);
 
-        Habit.subscribe(this);
+        Routine.subscribe(this);
     }
 
     @Override
@@ -218,23 +218,23 @@ public class CheckInFragment extends Fragment implements Subscriber{
         super.onPause();
         getContext().unregisterReceiver(updateReceiver);
 
-        Habit.unsubscribe(this);
+        Routine.unsubscribe(this);
     }
 
     @Override
     public void update(SubscribableSugarRecord record) {
         //TODO this won't support remove a record!!
-        Log.d("CheckIn","notified, checkinfragment loading habits");
-        Habit habit = (Habit) record;
-        Iterator<Habit> iterator = habitList.iterator();
+        Log.d("CheckIn","notified, checkinfragment loading routines");
+        Routine routine = (Routine) record;
+        Iterator<Routine> iterator = routineList.iterator();
         while(iterator.hasNext()){
-            if(iterator.next().getId().equals(habit.getId())){
+            if(iterator.next().getId().equals(routine.getId())){
                 iterator.remove();
             }
         }
-        if (shouldShowHabit(habit)) {
-            habitList.add(habit);
+        if (shouldShowRoutine(routine)) {
+            routineList.add(routine);
         }
-        sortAndSectionHabits();
+        sortAndSectionRoutines();
     }
 }

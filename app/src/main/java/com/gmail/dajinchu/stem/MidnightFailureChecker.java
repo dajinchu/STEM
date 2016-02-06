@@ -28,12 +28,12 @@ public class MidnightFailureChecker extends BroadcastReceiver {
         check.set(Calendar.HOUR_OF_DAY,23);
         check.set(Calendar.MINUTE,59);
         check.set(Calendar.SECOND,59);
-        List<Habit> habits = Habit.listAll(Habit.class);
-        for(Habit habit : habits){
-            if(!habit.getDays()[Habit.calendarDayWeekToDisplay(check.get(Calendar.DAY_OF_WEEK))])continue;
-            if(habit.isCompletedAtTime(check))continue;
-            Log.d("MidnightFailureChecker","marking "+habit.getName());
-            new Completion(check,Completion.FAILED,habit).save();
+        List<Routine> routines = Routine.listAll(Routine.class);
+        for(Routine routine : routines){
+            if(!routine.getDays()[Routine.calendarDayWeekToDisplay(check.get(Calendar.DAY_OF_WEEK))])continue;
+            if(routine.isCompletedAtTime(check))continue;
+            Log.d("MidnightFailureChecker","marking "+routine.getName());
+            new Completion(check,Completion.FAILED,routine).save();
         }
     }
 }

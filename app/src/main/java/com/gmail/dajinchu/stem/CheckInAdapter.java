@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHolder>{
 
-    private ArrayList<Habit> dataset;
+    private ArrayList<Routine> dataset;
     private static DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT);
     private CheckInFragment host;
 
@@ -25,25 +25,25 @@ public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHold
         public ViewHolder(View v, CheckInFragment host){
             super(v);
             this.host = host;
-            name = (TextView) v.findViewById(R.id.habit_item_name);
-            frequency = (TextView) v.findViewById(R.id.habit_item_frequency);
+            name = (TextView) v.findViewById(R.id.routine_item_name);
+            frequency = (TextView) v.findViewById(R.id.routine_item_frequency);
             v.setOnClickListener(this);
         }
 
-        public void bind(Habit habit){
-            name.setText(habit.getName());
-            frequency.setText(format.format(habit.getTimeToDo().getTime()));
-            id=habit.getId().intValue();
+        public void bind(Routine routine){
+            name.setText(routine.getName());
+            frequency.setText(format.format(routine.getTimeToDo().getTime()));
+            id=routine.getId().intValue();
         }
 
         @Override
         public void onClick(View v) {
             //TODO with all the actions and onclicks of this recyclerview spread out, MVP would really come in handy
-            host.openHabitFragment(id);
+            host.openRoutineFragment(id);
         }
     }
 
-    public CheckInAdapter(ArrayList<Habit> mDataset, CheckInFragment host){
+    public CheckInAdapter(ArrayList<Routine> mDataset, CheckInFragment host){
         dataset = mDataset;
         this.host = host;
     }
@@ -54,7 +54,7 @@ public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHold
                                                    int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.habit_checkbox, parent, false);
+                .inflate(R.layout.routine_checkbox, parent, false);
         // set the view's size, margins, paddings and layout parameters
         //v.setBackgroundResource(R.mipmap.ic_launcher);
         return new ViewHolder(v,host);
@@ -65,8 +65,8 @@ public class CheckInAdapter extends RecyclerView.Adapter<CheckInAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        Habit habit = dataset.get(position);
-        holder.bind(habit);
+        Routine routine = dataset.get(position);
+        holder.bind(routine);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

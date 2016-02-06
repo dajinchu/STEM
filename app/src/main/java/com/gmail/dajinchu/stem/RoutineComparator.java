@@ -5,12 +5,12 @@ import java.util.Comparator;
 /**
  * Created by Da-Jin on 1/16/2016.
  */
-public class HabitComparator implements Comparator<Habit> {
+public class RoutineComparator implements Comparator<Routine> {
 
     private static TimeComparator tc = new TimeComparator();
 
     @Override
-    public int compare(Habit a, Habit b) {
+    public int compare(Routine a, Routine b) {
         return tc.compare(a.getTimeToDo(),b.getTimeToDo());
     }
 }

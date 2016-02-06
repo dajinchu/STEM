@@ -25,14 +25,14 @@ import java.util.Calendar;
 /**
  * Created by Da-Jin on 11/25/2015.
  */
-public class NewHabitFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener, DayOfWeekPicker.OnDaysOfWeekPickedListener {
+public class NewRoutineFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener, DayOfWeekPicker.OnDaysOfWeekPickedListener {
 
-    //use ID_NEW_HABIT as habit ID to specify creating new habit
+    //use ID_NEW_HABIT as routine ID to specify creating new routine
     public static final int ID_NEW_HABIT = -1;
 
     private EditText nameEditText;
     private TextInputLayout nameTextInputLayout;
-    private Habit habit;
+    private Routine routine;
 
     private TextView timeTextView;
     private DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT);
@@ -42,16 +42,16 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int habitId = ID_NEW_HABIT;
+        int routineId = ID_NEW_HABIT;
         Bundle bundle = this.getArguments();
         if(bundle!=null){
-            habitId = bundle.getInt("habitId",ID_NEW_HABIT);
-            Log.d("NewHabitFragment","habitId: "+habitId);
+            routineId = bundle.getInt("routineId",ID_NEW_HABIT);
+            Log.d("NewRoutineFragment","routineId: "+routineId);
         }
-        if(habitId != ID_NEW_HABIT){
-            habit = Habit.findById(Habit.class, habitId);
+        if(routineId != ID_NEW_HABIT){
+            routine = Routine.findById(Routine.class, routineId);
         }else{
-            habit = new Habit();
+            routine = new Routine();
         }
         //Make it full screen, in the future, we can have smarter options that can make it a
         //  true dialog depending on screen size/orientation
@@ -63,14 +63,14 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
         //Get rid of the dialog title, we have our own toolbar stuff.
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         //Inflate the fragment early so we can call findViewById on things inside the fragment
-        View view = inflater.inflate(R.layout.fragment_new_habit, container, false);
+        View view = inflater.inflate(R.layout.fragment_new_routine, container, false);
 
         //Get the fragment toolbar(NOT the activity toolbar)
-        Toolbar toolbar = ((Toolbar)view.findViewById(R.id.new_habit_toolbar));
+        Toolbar toolbar = ((Toolbar)view.findViewById(R.id.new_routine_toolbar));
         //add the save menu button to the toolbar
         toolbar.inflateMenu(R.menu.save_menu);
         //set toolbar title using string resource
-        toolbar.setTitle(R.string.new_habit);
+        toolbar.setTitle(R.string.new_routine);
         //Set up the toolbar's navigation icon and behavior
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -80,7 +80,7 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
             }
         });
         // Set the listener for the menu click, namely the "save" button
-        view.findViewById(R.id.new_habit_menu_save).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.new_routine_menu_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 save();
@@ -89,8 +89,8 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
 
         //For use during saving
         //Name
-        nameEditText = (EditText) view.findViewById(R.id.habit_name_edit_text);
-        nameEditText.setText(habit.getName());
+        nameEditText = (EditText) view.findViewById(R.id.routine_name_edit_text);
+        nameEditText.setText(routine.getName());
 
         //Time of day
         timeTextView = (TextView) view.findViewById(R.id.time_text_view);
@@ -98,8 +98,8 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
         view.findViewById(R.id.time_to_do).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar timeToDo = habit.getTimeToDo();
-                TimePickerDialog picker = TimePickerDialog.newInstance(NewHabitFragment.this,
+                Calendar timeToDo = routine.getTimeToDo();
+                TimePickerDialog picker = TimePickerDialog.newInstance(NewRoutineFragment.this,
                         timeToDo.get(Calendar.HOUR_OF_DAY),
                         timeToDo.get(Calendar.MINUTE),
                         timeToDo.get(Calendar.SECOND),
@@ -120,15 +120,15 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
                 ft.addToBackStack(null);
 
                 // Create and show the dialog.
-                DialogFragment newFragment = DayOfWeekPicker.newInstance(NewHabitFragment.this,
-                        habit.getDays());
+                DialogFragment newFragment = DayOfWeekPicker.newInstance(NewRoutineFragment.this,
+                        routine.getDays());
                 newFragment.show(ft, "dayweekdialog");
             }
         });
         dayweekTextView = (TextView) view.findViewById(R.id.repeat_textview);
         updateDayWeekTextView();
 
-        nameTextInputLayout = (TextInputLayout)view.findViewById(R.id.habit_name_text_input_layout);
+        nameTextInputLayout = (TextInputLayout)view.findViewById(R.id.routine_name_text_input_layout);
         nameTextInputLayout.setError(null);
         if (nameTextInputLayout.getChildCount() == 2)
             nameTextInputLayout.getChildAt(1).setVisibility(View.GONE);
@@ -137,21 +137,21 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
-        Calendar timeToDo= habit.getTimeToDo();
+        Calendar timeToDo= routine.getTimeToDo();
         timeToDo.set(Calendar.HOUR_OF_DAY, hourOfDay);
         timeToDo.set(Calendar.MINUTE,minute);
-        habit.setTimeToDo(timeToDo);
+        routine.setTimeToDo(timeToDo);
         updateTimeTextView();
     }
 
     private void updateTimeTextView(){
-        timeTextView.setText(format.format(habit.getTimeToDo().getTime()));
+        timeTextView.setText(format.format(routine.getTimeToDo().getTime()));
     }
     private void updateDayWeekTextView(){
         String[] shortDayNames={"MON","TUE","WED","THU","FRI","SAT","SUN"};
         StringBuilder sb = new StringBuilder();
         int index=0;
-        for(boolean day:habit.getDays()){
+        for(boolean day:routine.getDays()){
             if(day){
                 sb.append(shortDayNames[index]);
                 sb.append(" ");
@@ -174,16 +174,16 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
         new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected void onPreExecute() {
-                habit.setName(nameEditText.getText().toString());
+                routine.setName(nameEditText.getText().toString());
             }
             @Override
             protected Boolean doInBackground(Void... params) {
-                Log.d("NewHabitFragment", "saving");
-                if(habit.getName().isEmpty()){
+                Log.d("NewRoutineFragment", "saving");
+                if(routine.getName().isEmpty()){
                     return false;
                 }
-                habit.save();
-                habit.updateNotification(getContext());
+                routine.save();
+                routine.updateNotification(getContext());
                 return true;
             }
             @Override
@@ -206,7 +206,7 @@ public class NewHabitFragment extends DialogFragment implements TimePickerDialog
 
     @Override
     public void onDaysOfWeekPicked(boolean[] daysPicked) {
-        habit.setDays(daysPicked);
+        routine.setDays(daysPicked);
         updateDayWeekTextView();
     }
 }

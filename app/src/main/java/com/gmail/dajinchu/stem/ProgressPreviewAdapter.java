@@ -12,10 +12,10 @@ import java.util.ArrayList;
  * Created by Da-Jin on 1/20/2016.
  */
 public class ProgressPreviewAdapter extends RecyclerView.Adapter<ProgressPreviewAdapter.ViewHolder>{
-    private ArrayList<Habit> habits;
+    private ArrayList<Routine> routines;
 
-    public ProgressPreviewAdapter(ArrayList<Habit> allHabits) {
-        habits = allHabits;
+    public ProgressPreviewAdapter(ArrayList<Routine> allRoutines) {
+        routines = allRoutines;
     }
 
     @Override
@@ -27,13 +27,13 @@ public class ProgressPreviewAdapter extends RecyclerView.Adapter<ProgressPreview
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Habit habit = habits.get(position);
-        holder.bind(habit);
+        Routine routine = routines.get(position);
+        holder.bind(routine);
     }
 
     @Override
     public int getItemCount() {
-        return habits.size();
+        return routines.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -50,9 +50,9 @@ public class ProgressPreviewAdapter extends RecyclerView.Adapter<ProgressPreview
             percentCompletion.setFormatDigits(0);
         }
 
-        public void bind(Habit habit) {
-            title.setText(habit.getName());
-            percentCompletion.showValue(habit.successfulCompletions()/(float)habit.getCompletions().size()*100f,100f,true);
+        public void bind(Routine routine) {
+            title.setText(routine.getName());
+            percentCompletion.showValue(routine.successfulCompletions()/(float)routine.getCompletions().size()*100f,100f,true);
         }
     }
 }

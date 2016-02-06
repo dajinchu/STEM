@@ -13,23 +13,23 @@ import java.util.Calendar;
  * Created by Da-Jin on 12/28/2015.
  */
 public class NotificationPublisher extends BroadcastReceiver {
-    public static final String HABIT_ID = "habitId";
+    public static final String HABIT_ID = "routineId";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         int id = intent.getIntExtra(HABIT_ID,0);
 
-        Habit habit = Habit.findById(Habit.class, id);
+        Routine routine = Routine.findById(Routine.class, id);
 
 
         //Check if notification should really go off
         //Don't publish notification if it's already done.
-        if(habit.isCompletedNow()){
+        if(routine.isCompletedNow()){
             return;
         }
         //Don't publish if it's isn't today.
         int currentDayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-        if(!habit.getDays()[Habit.calendarDayWeekToDisplay(currentDayOfWeek)]){
+        if(!routine.getDays()[Routine.calendarDayWeekToDisplay(currentDayOfWeek)]){
             //not on today
             return;
         }
@@ -45,12 +45,12 @@ public class NotificationPublisher extends BroadcastReceiver {
                 notificationDoneActionIntent,PendingIntent.FLAG_CANCEL_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setContentTitle(habit.getName());
+        builder.setContentTitle(routine.getName());
         builder.setContentText("Do it!");
         builder.setContentIntent(notificationResultPendingIntent);
         builder.setSmallIcon(R.mipmap.ic_launcher);//TODO make a real white and transparent icon
         builder.setAutoCancel(true);
-        builder.setTicker(habit.getName());
+        builder.setTicker(routine.getName());
         builder.addAction(R.drawable.ic_add_white_24dp,"Done",notificationDoneActionPendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

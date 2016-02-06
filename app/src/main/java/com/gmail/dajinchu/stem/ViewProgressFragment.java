@@ -18,7 +18,7 @@ import java.util.Iterator;
  */
 public class ViewProgressFragment extends Fragment implements Subscriber{
 
-    private ArrayList<Habit> habitsWithCompletions;
+    private ArrayList<Routine> routinesWithCompletions;
     private ProgressPreviewAdapter adapter;
 
     @Nullable
@@ -30,9 +30,9 @@ public class ViewProgressFragment extends Fragment implements Subscriber{
         recycler.setLayoutManager(new GridLayoutManager(getContext(),2));
 
 
-        habitsWithCompletions = new ArrayList<>();
-        getHabits();
-        adapter = new ProgressPreviewAdapter(habitsWithCompletions);
+        routinesWithCompletions = new ArrayList<>();
+        getRoutines();
+        adapter = new ProgressPreviewAdapter(routinesWithCompletions);
 
 
         recycler.setAdapter(adapter);
@@ -42,37 +42,37 @@ public class ViewProgressFragment extends Fragment implements Subscriber{
 
     @Override
     public void onResume() {
-        //TODO getHabits here instead of in Create?? same applies to CheckIn
+        //TODO getRoutines here instead of in Create?? same applies to CheckIn
         super.onResume();
-        Habit.subscribe(this);
+        Routine.subscribe(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Habit.unsubscribe(this);
+        Routine.unsubscribe(this);
     }
 
-    public void getHabits(){
-        habitsWithCompletions.clear();
-        for(Habit h:Habit.listAll(Habit.class)){
+    public void getRoutines(){
+        routinesWithCompletions.clear();
+        for(Routine h:Routine.listAll(Routine.class)){
             if(h.getCompletions().size()>0){
-                habitsWithCompletions.add(h);
+                routinesWithCompletions.add(h);
             }
         }
     }
 
     @Override
     public void update(SubscribableSugarRecord record) {
-        Habit habit = (Habit) record;
-        Iterator<Habit> iterator = habitsWithCompletions.iterator();
+        Routine routine = (Routine) record;
+        Iterator<Routine> iterator = routinesWithCompletions.iterator();
         while(iterator.hasNext()){
-            if(iterator.next().getId().equals(habit.getId())){
+            if(iterator.next().getId().equals(routine.getId())){
                 iterator.remove();
             }
         }
-        if(habit.getCompletions().size()>0) {
-            habitsWithCompletions.add(habit);
+        if(routine.getCompletions().size()>0) {
+            routinesWithCompletions.add(routine);
         }
         adapter.notifyDataSetChanged();
     }

@@ -9,7 +9,7 @@ public class Completion extends ChildRecord {
 
     private long completionTime;
     private int successCode;
-    private Habit habit;
+    private Routine routine;
 
     public static final int SUCCESSFUL = 1;
     public static final int FAILED = 0;
@@ -18,10 +18,10 @@ public class Completion extends ChildRecord {
     public Completion(){
     }
 
-    public Completion(Calendar time, int successCode, Habit habit){
+    public Completion(Calendar time, int successCode, Routine routine){
         setCompletionTime(time);
         setSuccessCode(successCode);
-        setHabit(habit);
+        setRoutine(routine);
     }
 
     public Calendar getCompletionTime() {
@@ -42,16 +42,16 @@ public class Completion extends ChildRecord {
         this.successCode = successCode;
     }
 
-    public Habit getHabit() {
-        return habit;
+    public Routine getRoutine() {
+        return routine;
     }
 
-    public void setHabit(Habit habit) {
-        this.habit = habit;
+    public void setRoutine(Routine routine) {
+        this.routine = routine;
     }
 
     @Override
     protected ParentRecord getParent() {
-        return habit;
+        return routine;
     }
 }

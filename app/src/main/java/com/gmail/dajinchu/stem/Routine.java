@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by Da-Jin on 12/7/2015.
  */
-public class Habit extends SubscribableSugarRecord implements ParentRecord {
+public class Routine extends SubscribableSugarRecord implements ParentRecord {
     private String _name;
     private long _timeToDo;
     private int _days;
@@ -60,11 +60,11 @@ public class Habit extends SubscribableSugarRecord implements ParentRecord {
     }
 
 
-    public Habit(){
+    public Routine(){
         this("",Calendar.getInstance(),new boolean[]{true,true,true,true,true,true,true});
     }
 
-    public Habit(String name, Calendar time, boolean[] days){
+    public Routine(String name, Calendar time, boolean[] days){
         setName(name);
         setTimeToDo(time);
         setDays(days);
@@ -151,12 +151,12 @@ public class Habit extends SubscribableSugarRecord implements ParentRecord {
         timeToDo.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DATE));
         timeToDo.set(Calendar.SECOND,0);
         setTimeToDo(timeToDo);
-        Log.d("Habit", format.format(getTimeToDo().getTime()));
+        Log.d("Routine", format.format(getTimeToDo().getTime()));
 
         if(timeToDo.before(now)){
             //timeToDo already happened today, set to next
             timeToDo.add(Calendar.DATE, daysToNextOccurence());
-            Log.d("Habit",format.format(timeToDo.getTime()));
+            Log.d("Routine",format.format(timeToDo.getTime()));
         }
     }
 
@@ -186,6 +186,6 @@ public class Habit extends SubscribableSugarRecord implements ParentRecord {
     }
 
     private void refreshCompletionCache(){
-        cachedCompletions = Completion.find(Completion.class,"habit = ?", String.valueOf(getId()));
+        cachedCompletions = Completion.find(Completion.class,"routine = ?", String.valueOf(getId()));
     }
 }

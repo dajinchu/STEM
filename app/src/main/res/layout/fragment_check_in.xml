@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:textColor="#70000000"
         android:textSize="56sp"
-        android:text="@string/no_habits_todo"
-        android:id="@+id/no_habits"
+        android:text="@string/no_routines_todo"
+        android:id="@+id/no_routines"
         android:visibility="visible"
         android:gravity="center"
         android:layout_alignParentTop="true"
@@ -22,7 +22,7 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/habit_check_list"
+        android:id="@+id/routine_check_list"
         android:clipToPadding="false"
         android:visibility="visible" />
 
