@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.orm.dsl.Ignore;
 
@@ -151,12 +150,10 @@ public class Routine extends SubscribableSugarRecord implements ParentRecord {
         timeToDo.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DATE));
         timeToDo.set(Calendar.SECOND,0);
         setTimeToDo(timeToDo);
-        Log.d("Routine", format.format(getTimeToDo().getTime()));
 
         if(timeToDo.before(now)){
             //timeToDo already happened today, set to next
             timeToDo.add(Calendar.DATE, daysToNextOccurence());
-            Log.d("Routine",format.format(timeToDo.getTime()));
         }
     }
 

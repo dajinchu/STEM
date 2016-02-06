@@ -3,7 +3,6 @@ package com.gmail.dajinchu.stem;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import java.util.Calendar;
 import java.util.List;
@@ -14,8 +13,6 @@ import java.util.List;
 public class MidnightFailureChecker extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("FailureChecker","Triggered!!!");
-
         //Get Calendar for time of the beginning of the day that just finished.
         //Things are checked relative to this, so this day of week is used,
         // and success that day is checked
@@ -32,7 +29,6 @@ public class MidnightFailureChecker extends BroadcastReceiver {
         for(Routine routine : routines){
             if(!routine.getDays()[Routine.calendarDayWeekToDisplay(check.get(Calendar.DAY_OF_WEEK))])continue;
             if(routine.isCompletedAtTime(check))continue;
-            Log.d("MidnightFailureChecker","marking "+routine.getName());
             new Completion(check,Completion.FAILED,routine).save();
         }
     }

@@ -8,7 +8,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +45,6 @@ public class NewRoutineFragment extends DialogFragment implements TimePickerDial
         Bundle bundle = this.getArguments();
         if(bundle!=null){
             routineId = bundle.getInt("routineId",ID_NEW_HABIT);
-            Log.d("NewRoutineFragment","routineId: "+routineId);
         }
         if(routineId != ID_NEW_HABIT){
             routine = Routine.findById(Routine.class, routineId);
@@ -178,7 +176,6 @@ public class NewRoutineFragment extends DialogFragment implements TimePickerDial
             }
             @Override
             protected Boolean doInBackground(Void... params) {
-                Log.d("NewRoutineFragment", "saving");
                 if(routine.getName().isEmpty()){
                     return false;
                 }

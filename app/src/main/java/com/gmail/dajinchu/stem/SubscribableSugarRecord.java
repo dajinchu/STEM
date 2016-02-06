@@ -2,7 +2,6 @@ package com.gmail.dajinchu.stem;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.orm.SugarRecord;
 
@@ -21,10 +20,7 @@ public class SubscribableSugarRecord extends SugarRecord {
             @Override
             public void run() {
                 for (Subscriber sub : subs) {//TODO use a central model class that caches
-                    Bench.start("notify a sub");
-                    Log.d("Subscriabable record", "notifying subs");
                     sub.update(SubscribableSugarRecord.this);
-                    Bench.end("notify a sub");
                 }
             }
         });

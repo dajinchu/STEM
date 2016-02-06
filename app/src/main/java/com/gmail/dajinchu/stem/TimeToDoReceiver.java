@@ -3,7 +3,6 @@ package com.gmail.dajinchu.stem;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 /**
  * Created by Da-Jin on 1/16/2016.

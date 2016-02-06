@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,13 +134,11 @@ public class CheckInFragment extends Fragment implements Subscriber{
     private void loadAllFromSugar(){
         routineList.clear();
         List<Routine> routines = Routine.listAll(Routine.class);
-        Bench.start("filter checkin routines");
         for (Routine routine :routines) {
             if (shouldShowRoutine(routine)) {
                 routineList.add(routine);
             }
         }
-        Bench.end("filter checkin routines");
     }
 
     private boolean shouldShowRoutine(Routine routine){
@@ -151,14 +148,8 @@ public class CheckInFragment extends Fragment implements Subscriber{
     }
 
     private void sortAndSectionRoutines() {
-        Bench.start("checkin Load Routines");
-
-        Bench.start("checkin sort routines");
         Collections.sort(routineList, new RoutineComparator());
-        Bench.end("checkin sort routines");
 
-
-        Bench.start("section recycler");
         //Section out the recyclerview
         if(routineList.size()>0){
             mSectionedAdapter.setSections(calcSections(Calendar.getInstance()));
@@ -169,9 +160,6 @@ public class CheckInFragment extends Fragment implements Subscriber{
             recyclerView.setVisibility(View.GONE);
         }
         mSectionedAdapter.notifyDataSetChanged();
-        Bench.end("section recycler");
-
-        Bench.end("checkin Load Routines");
     }
 
     private SimpleSectionedRecyclerViewAdapter.Section[] calcSections(Calendar now) {
@@ -224,7 +212,6 @@ public class CheckInFragment extends Fragment implements Subscriber{
     @Override
     public void update(SubscribableSugarRecord record) {
         //TODO this won't support remove a record!!
-        Log.d("CheckIn","notified, checkinfragment loading routines");
         Routine routine = (Routine) record;
         Iterator<Routine> iterator = routineList.iterator();
         while(iterator.hasNext()){
