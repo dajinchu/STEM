@@ -4,7 +4,7 @@ package com.gmail.dajinchu.stem;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,19 +27,17 @@ public class ViewProgressFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_view_progress, container, false);
 
         RecyclerView recycler = (RecyclerView) view.findViewById(R.id.progress_preview_list);
-        recycler.setLayoutManager(new GridLayoutManager(getContext(),2));
 
         routinesWithCompletions = new ArrayList<>();
         adapter = new ProgressPreviewAdapter(routinesWithCompletions);
         recycler.setAdapter(adapter);
+        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         routineListener = new FilteringRoutineListener(routinesWithCompletions){
-
             @Override
             public boolean shouldKeep(Routine routine) {
                 return routine.getCompletions().size()>0;
             }
-
             @Override
             public void onListChanged() {
                 adapter.notifyDataSetChanged();

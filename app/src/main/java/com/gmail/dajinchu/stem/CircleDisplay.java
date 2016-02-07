@@ -857,6 +857,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(heightMeasureSpec, heightMeasureSpec);
+        int lesser = widthMeasureSpec<heightMeasureSpec ? widthMeasureSpec:heightMeasureSpec;
+        super.onMeasure(lesser, lesser);
     }
 }

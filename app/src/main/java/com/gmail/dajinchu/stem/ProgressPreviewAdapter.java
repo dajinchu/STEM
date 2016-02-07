@@ -37,22 +37,24 @@ public class ProgressPreviewAdapter extends RecyclerView.Adapter<ProgressPreview
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView title;
+        TextView title, completionText;
         CircleDisplay percentCompletion;
 
         public ViewHolder(View v) {
             super(v);
             title = (TextView) v.findViewById(R.id.progress_preview_title);
             percentCompletion = (CircleDisplay) v.findViewById(R.id.circle);
+            completionText = (TextView) v.findViewById(R.id.progress_preview_percent_text);
             percentCompletion.setTouchEnabled(false);
-            percentCompletion.setAnimDuration(500);
-            percentCompletion.setUnit("%");
-            percentCompletion.setFormatDigits(0);
+            percentCompletion.setAnimDuration(200);
+            percentCompletion.setDrawText(false);
         }
 
         public void bind(Routine routine) {
+            float percent = routine.successfulCompletions()/(float)routine.getCompletions().size()*100f;
             title.setText(routine.getName());
-            percentCompletion.showValue(routine.successfulCompletions()/(float)routine.getCompletions().size()*100f,100f,true);
+            completionText.setText(percent+"% successful");
+            percentCompletion.showValue(percent,100f,true);
         }
     }
 }
