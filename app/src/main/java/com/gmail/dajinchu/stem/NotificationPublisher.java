@@ -13,11 +13,11 @@ import java.util.Calendar;
  * Created by Da-Jin on 12/28/2015.
  */
 public class NotificationPublisher extends BroadcastReceiver {
-    public static final String HABIT_ID = "routineId";
+    public static final String ROUTINE_ID = "routineId";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        int id = intent.getIntExtra(HABIT_ID,0);
+        int id = intent.getIntExtra(ROUTINE_ID,0);
 
         Routine routine = Routine.findById(Routine.class, id);
 
@@ -40,7 +40,7 @@ public class NotificationPublisher extends BroadcastReceiver {
                 notificationResultIntent,PendingIntent.FLAG_CANCEL_CURRENT);
         //Intent for done action button in notification
         Intent notificationDoneActionIntent = new Intent(context, DoneActionReceiver.class);
-        notificationDoneActionIntent.putExtra(HABIT_ID,id);
+        notificationDoneActionIntent.putExtra(ROUTINE_ID,id);
         PendingIntent notificationDoneActionPendingIntent = PendingIntent.getBroadcast(context,id,
                 notificationDoneActionIntent,PendingIntent.FLAG_CANCEL_CURRENT);
 

@@ -1,17 +1,15 @@
 package com.gmail.dajinchu.stem;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -23,31 +21,36 @@ import java.util.Calendar;
 /**
  * Created by Da-Jin on 11/25/2015.
  */
-public class NewRoutineFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener, DayOfWeekPicker.OnDaysOfWeekPickedListener {
+public class NewRoutineFragment extends DialogFragment implements
+        TimePickerDialog.OnTimeSetListener,
+        DayOfWeekPicker.OnDaysOfWeekPickedListener,
+        ImplementationIntentionDialog.OnSetIntentionListener, BackupAlarmDialog.OnSetAlarmListener {
 
-    //use ID_NEW_HABIT as routine ID to specify creating new routine
-    public static final int ID_NEW_HABIT = -1;
+    //use ID_NEW_ROUTINE as routine ID to specify creating new routine
+    public static final int ID_NEW_ROUTINE = -1;
 
-    private EditText nameEditText;
-    private TextInputLayout nameTextInputLayout;
     private Routine routine;
 
     private TextView timeTextView;
     private DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT);
     private TextView dayweekTextView;
+    private TextView iiTextView;
+    private TextView backupTextView;
+    private boolean newroutine = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int routineId = ID_NEW_HABIT;
+        int routineId = ID_NEW_ROUTINE;
         Bundle bundle = this.getArguments();
         if(bundle!=null){
-            routineId = bundle.getInt("routineId",ID_NEW_HABIT);
+            routineId = bundle.getInt("routineId", ID_NEW_ROUTINE);
         }
-        if(routineId != ID_NEW_HABIT){
+        if(routineId != ID_NEW_ROUTINE){
             routine = Routine.findById(Routine.class, routineId);
         }else{
+            newroutine = true;
             routine = new Routine();
         }
         //Make it full screen, in the future, we can have smarter options that can make it a
@@ -67,7 +70,7 @@ public class NewRoutineFragment extends DialogFragment implements TimePickerDial
         //add the save menu button to the toolbar
         toolbar.inflateMenu(R.menu.save_menu);
         //set toolbar title using string resource
-        toolbar.setTitle(R.string.new_routine);
+        toolbar.setTitle(R.string.set_routine);
         //Set up the toolbar's navigation icon and behavior
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -84,10 +87,15 @@ public class NewRoutineFragment extends DialogFragment implements TimePickerDial
             }
         });
 
-        //For use during saving
         //Name
-        nameEditText = (EditText) view.findViewById(R.id.routine_name_edit_text);
-        nameEditText.setText(routine.getName());
+        iiTextView = (TextView) view.findViewById(R.id.ii_text_view);
+        updateIITextView();
+        view.findViewById(R.id.ii_layout_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openIIDialog();
+            }
+        });
 
         //Time of day
         timeTextView = (TextView) view.findViewById(R.id.time_text_view);
@@ -102,6 +110,26 @@ public class NewRoutineFragment extends DialogFragment implements TimePickerDial
                         timeToDo.get(Calendar.SECOND),
                         false);
                 picker.show(getActivity().getFragmentManager(),"timepickerdialog");
+            }
+        });
+
+        //Backup Alarm
+        backupTextView = (TextView) view.findViewById(R.id.backup_alarm_text_view);
+        updateBackupTextView();
+        view.findViewById(R.id.back_up_alarm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag("backupdialog");
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+
+                // Create and show the dialog.
+                BackupAlarmDialog newFragment = BackupAlarmDialog.newInstance(NewRoutineFragment.this,
+                        Routine.minuteIntToString(routine.getBackupMinutes()));
+                newFragment.show(ft, "backupdialog");
             }
         });
 
@@ -125,11 +153,23 @@ public class NewRoutineFragment extends DialogFragment implements TimePickerDial
         dayweekTextView = (TextView) view.findViewById(R.id.repeat_textview);
         updateDayWeekTextView();
 
-        nameTextInputLayout = (TextInputLayout)view.findViewById(R.id.routine_name_text_input_layout);
-        nameTextInputLayout.setError(null);
-        if (nameTextInputLayout.getChildCount() == 2)
-            nameTextInputLayout.getChildAt(1).setVisibility(View.GONE);
+
+        //Open Intention dialog if it's a new routine
+        if(newroutine)openIIDialog();
         return view;
+    }
+
+    private void openIIDialog() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("iidialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        //create and show
+        ImplementationIntentionDialog ii = ImplementationIntentionDialog.newInstance(NewRoutineFragment.this,
+                routine.getName(), routine.getRelativity(), routine.getCue());
+        ii.show(ft,"iidialog");
     }
 
     @Override
@@ -141,8 +181,31 @@ public class NewRoutineFragment extends DialogFragment implements TimePickerDial
         updateTimeTextView();
     }
 
+    @Override
+    public void onDaysOfWeekPicked(boolean[] daysPicked) {
+        routine.setDays(daysPicked);
+        updateDayWeekTextView();
+    }
+
+    @Override
+    public void onImplementationIntentionSet(String name, String relativity, String cue) {
+        Log.d("NewRoutineFragment",name+" "+relativity+" "+cue);
+        routine.setName(name);
+        routine.setRelativity(relativity);
+        routine.setCue(cue);
+        updateIITextView();
+    }
+    @Override
+    public void onMinutesPicked(String minutes) {
+        routine.setBackupMinutes(Routine.minuteStringToInt(minutes));
+        updateBackupTextView();
+    }
+
     private void updateTimeTextView(){
         timeTextView.setText(format.format(routine.getTimeToDo().getTime()));
+    }
+    private void updateIITextView() {
+        iiTextView.setText(routine.getName()+" "+routine.getRelativity()+" "+routine.getCue());
     }
     private void updateDayWeekTextView(){
         String[] shortDayNames={"MON","TUE","WED","THU","FRI","SAT","SUN"};
@@ -157,6 +220,9 @@ public class NewRoutineFragment extends DialogFragment implements TimePickerDial
         }
         dayweekTextView.setText(sb.toString());
     }
+    private void updateBackupTextView(){
+        backupTextView.setText(Routine.minuteIntToString(routine.getBackupMinutes())+" after reminder");
+    }
 
     @Override
     public void onResume() {
@@ -168,41 +234,14 @@ public class NewRoutineFragment extends DialogFragment implements TimePickerDial
     }
 
     public void save() {
-        new AsyncTask<Void, Void, Boolean>() {
-            @Override
-            protected void onPreExecute() {
-                routine.setName(nameEditText.getText().toString());
-            }
-            @Override
-            protected Boolean doInBackground(Void... params) {
-                if(routine.getName().isEmpty()){
-                    return false;
-                }
-                routine.save();
-                routine.updateNotification(getContext());
-                return true;
-            }
-            @Override
-            protected void onPostExecute(Boolean success) {
-                if(!success){
-                    if (nameTextInputLayout.getChildCount() == 2) {
-                        nameTextInputLayout.getChildAt(1).setVisibility(View.VISIBLE);
-                    }
-                    nameTextInputLayout.setError("This field is required");
-                }else{
-                    close();
-                }
-            }
-        }.execute();
+        //TODO handle empty name
+        routine.save();
+        routine.updateNotification(getContext());
+        close();
     }
 
     private void close(){
         getActivity().getSupportFragmentManager().popBackStackImmediate();
     }
 
-    @Override
-    public void onDaysOfWeekPicked(boolean[] daysPicked) {
-        routine.setDays(daysPicked);
-        updateDayWeekTextView();
-    }
 }

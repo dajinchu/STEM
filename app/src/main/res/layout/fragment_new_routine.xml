@@ -29,23 +29,47 @@
         android:layout_marginTop="8dp"
         android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/routine_name_text_input_layout"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/ii_layout_button">
 
-            <EditText
-                android:id="@+id/routine_name_edit_text"
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_edit_black_24dp"
+                android:layout_gravity="center_vertical" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Routine Name" />
-        </android.support.design.widget.TextInputLayout>
+                android:orientation="vertical"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/implementation_intention"
+                    android:textColor="@color/primary_text_default_material_light"
+                    android:textSize="16sp"
+                    android:theme="@style/AppTheme" />
 
-        </android.support.design.widget.TextInputLayout>
+                <TextView
+                    style="@style/AppTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
+                    android:id="@+id/ii_text_view"
+                    android:textColor="@color/secondary_text_default_material_light"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,15 +80,15 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_alarm_black_36dp"
+                android:src="@drawable/ic_access_time_black_36dp"
                 android:layout_gravity="center_vertical" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="20dp"
-                android:paddingTop="20dp">
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp">
 
                 <TextView
                     android:id="@+id/textView"
@@ -83,8 +107,49 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
                     android:layout_marginStart="4dp"
-                    android:clickable="true"
                     android:id="@+id/time_text_view"
+                    android:textColor="@color/secondary_text_default_material_light"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/back_up_alarm">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_alarm_black_36dp"
+                android:layout_gravity="center_vertical" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/backup_alarm_hint"
+                    android:textColor="@color/primary_text_default_material_light"
+                    android:textSize="16sp"
+                    android:theme="@style/AppTheme" />
+
+                <TextView
+                    style="@style/AppTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
+                    android:id="@+id/backup_alarm_text_view"
                     android:textColor="@color/secondary_text_default_material_light"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -106,15 +171,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="20dp"
-                android:paddingTop="20dp">
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
                     android:layout_marginStart="4dp"
-                    android:clickable="true"
                     android:text="@string/repeatHint"
                     android:textColor="@color/primary_text_default_material_light"
                     android:textSize="16sp"

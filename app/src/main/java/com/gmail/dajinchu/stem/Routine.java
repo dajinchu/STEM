@@ -20,8 +20,11 @@ import java.util.List;
  */
 public class Routine extends SugarRecord implements ParentRecord {
     private String _name;
+    private String _relativity;
+    private String _cue;
     private long _timeToDo;
     private int _days;
+    private int _backupMins;
 
     @Ignore
     private static DateFormat format = DateFormat.getDateTimeInstance();
@@ -29,6 +32,10 @@ public class Routine extends SugarRecord implements ParentRecord {
     private static List<RoutineListener> subs = new ArrayList<>();
     @Ignore
     private List<Completion> cachedCompletions;
+    @Ignore
+    private static String[] choiceNames = new String[]{"5 minutes", "Half hour", "1 hour", "2 hours"};
+    @Ignore
+    private static Integer[] choiceValues = new Integer[]{5,30,60,120};
 
     //Getters and Setters
     public List<Completion> getCompletions(){
@@ -43,6 +50,10 @@ public class Routine extends SugarRecord implements ParentRecord {
     public void setName(String name){
         _name = name;
     }
+    public String getRelativity(){return _relativity;}
+    public void setRelativity(String relativity){_relativity=relativity;}
+    public String getCue(){return _cue;}
+    public void setCue(String cue){_cue = cue;}
     public Calendar getTimeToDo(){
         Calendar temp = Calendar.getInstance();
         temp.setTimeInMillis(_timeToDo);
@@ -66,13 +77,16 @@ public class Routine extends SugarRecord implements ParentRecord {
 
 
     public Routine(){
-        this("",Calendar.getInstance(),new boolean[]{true,true,true,true,true,true,true});
+        this("","","",choiceValues[1],Calendar.getInstance(),new boolean[]{true,true,true,true,true,true,true});
     }
 
-    public Routine(String name, Calendar time, boolean[] days){
+    public Routine(String name, String rel, String cue, int mins, Calendar time, boolean[] days){
         setName(name);
+        setRelativity(rel);
+        setCue(cue);
         setTimeToDo(time);
         setDays(days);
+        setBackupMinutes(mins);
     }
 
     public void addCompletionNow(){
@@ -166,7 +180,7 @@ public class Routine extends SugarRecord implements ParentRecord {
     public void updateNotification(Context context){
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, TimeToDoReceiver.class);
-        intent.putExtra(NotificationPublisher.HABIT_ID, getId().intValue());
+        intent.putExtra(NotificationPublisher.ROUTINE_ID, getId().intValue());
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, getId().intValue(), intent, 0);
         am.cancel(alarmIntent);
 
@@ -209,5 +223,34 @@ public class Routine extends SugarRecord implements ParentRecord {
 
     public static void subscribe(RoutineListener subscriber) {
         subs.add(subscriber);
+    }
+
+    public int getBackupMinutes() {
+        return _backupMins;
+    }
+
+    public void setBackupMinutes(int backupMinutes) {
+        this._backupMins = backupMinutes;
+    }
+
+    public static String[] possibleBackupChoices(){
+        return choiceNames;
+    }
+
+    public static int minuteStringToInt(String s){
+        for(int i = 0; i<choiceNames.length; i++){
+            if(s.equals(choiceNames[i])){
+                return choiceValues[i];
+            }
+        }
+        return 1;
+    }
+    public static String minuteIntToString(int minInt){
+        for(int i = 0; i<choiceValues.length; i++){
+            if(minInt==choiceValues[i]){
+                return choiceNames[i];
+            }
+        }
+        return "";
     }
 }

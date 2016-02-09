@@ -4,14 +4,21 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="save_menu">SAVE</string>
-    <string name="new_routine">New Routine</string>
+    <string name="set_routine">Set Routine</string>
     <string name="frequency">Frequency</string>
     <string name="do_now_header">Do Now</string>
-    <string name="timeHint">Time</string>
+    <string name="timeHint">Reminder</string>
     <string name="repeatHint">Repeat</string>
     <string name="no_routines_todo">Nothing to do today.\nYou\'re all set!</string>
     <string name="main_title">Routine Tracker</string>
 
     <string name="facebook_app_id">834969276620921</string>
+    <string name="implementation_intention">Intention</string>
+    <string name="dismiss">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="imp_cue_hint">trigger event</string>
+    <string name="imp_name_hint">action</string>
+    <string name="backup_alarm_hint">Backup Alarm</string>
+    <string name="backup_alarm_dialog_title">Alert you again after...</string>
 
 </resources>

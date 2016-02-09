@@ -12,7 +12,7 @@ public class TimeToDoReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Intent orderedIntent = new Intent(ACTION_TIME_TO_DO);
-        orderedIntent.putExtra(NotificationPublisher.HABIT_ID,intent.getIntExtra(NotificationPublisher.HABIT_ID,0));
+        orderedIntent.putExtra(NotificationPublisher.ROUTINE_ID,intent.getIntExtra(NotificationPublisher.ROUTINE_ID,0));
         context.sendOrderedBroadcast(orderedIntent, null);
     }
 }

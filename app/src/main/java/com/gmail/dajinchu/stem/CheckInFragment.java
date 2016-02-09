@@ -34,7 +34,6 @@ public class CheckInFragment extends Fragment {
     SimpleSectionedRecyclerViewAdapter mSectionedAdapter;
     List<Routine> routineList = new ArrayList<>();
 
-    public static final int NEW_HABIT_REQUEST_CODE = 1;
     private TextView noRoutineText;
     private RecyclerView recyclerView;
     private FilteringRoutineListener routineListener;
@@ -104,7 +103,7 @@ public class CheckInFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openRoutineFragment(NewRoutineFragment.ID_NEW_HABIT);
+                openRoutineFragment(NewRoutineFragment.ID_NEW_ROUTINE);
             }
         });
 
