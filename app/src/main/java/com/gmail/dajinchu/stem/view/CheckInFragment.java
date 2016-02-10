@@ -21,11 +21,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.gmail.dajinchu.stem.model.FilteringRoutineListener;
+import com.gmail.dajinchu.stem.models.FilteringRoutineListener;
 import com.gmail.dajinchu.stem.R;
-import com.gmail.dajinchu.stem.model.Routine;
-import com.gmail.dajinchu.stem.model.RoutineComparator;
-import com.gmail.dajinchu.stem.model.TimeComparator;
+import com.gmail.dajinchu.stem.models.Routine;
+import com.gmail.dajinchu.stem.models.RoutineComparator;
+import com.gmail.dajinchu.stem.models.TimeComparator;
 import com.gmail.dajinchu.stem.receivers.TimeToDoReceiver;
 
 import java.util.ArrayList;

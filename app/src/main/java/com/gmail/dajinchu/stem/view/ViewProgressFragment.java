@@ -10,9 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.gmail.dajinchu.stem.model.FilteringRoutineListener;
+import com.gmail.dajinchu.stem.models.FilteringRoutineListener;
 import com.gmail.dajinchu.stem.R;
-import com.gmail.dajinchu.stem.model.Routine;
+import com.gmail.dajinchu.stem.models.Routine;
 
 import java.util.ArrayList;
 

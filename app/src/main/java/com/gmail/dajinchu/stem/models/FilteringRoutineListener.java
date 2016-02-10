@@ -1,7 +1,4 @@
-package com.gmail.dajinchu.stem.model;
-
-import com.gmail.dajinchu.stem.model.Routine;
-import com.gmail.dajinchu.stem.model.RoutineListener;
+package com.gmail.dajinchu.stem.models;
 
 import java.util.Iterator;
 import java.util.List;

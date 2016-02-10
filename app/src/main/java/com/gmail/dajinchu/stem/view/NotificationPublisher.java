@@ -11,7 +11,7 @@ import android.util.Log;
 
 import com.gmail.dajinchu.stem.receivers.DoneActionReceiver;
 import com.gmail.dajinchu.stem.R;
-import com.gmail.dajinchu.stem.model.Routine;
+import com.gmail.dajinchu.stem.models.Routine;
 
 /**
  * Created by Da-Jin on 12/28/2015.

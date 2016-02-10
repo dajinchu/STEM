@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.gmail.dajinchu.stem.model.Routine;
+import com.gmail.dajinchu.stem.models.Routine;
 import com.gmail.dajinchu.stem.view.NotificationPublisher;
 
 import java.util.Calendar;

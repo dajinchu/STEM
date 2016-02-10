@@ -1,4 +1,4 @@
-package com.gmail.dajinchu.stem.dialogs;
+package com.gmail.dajinchu.stem.view.dialogs;
 
 import android.app.Dialog;
 import android.content.DialogInterface;

@@ -4,8 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.gmail.dajinchu.stem.model.Completion;
-import com.gmail.dajinchu.stem.model.Routine;
+import com.gmail.dajinchu.stem.models.Completion;
+import com.gmail.dajinchu.stem.models.Routine;
 
 import java.util.Calendar;
 import java.util.List;

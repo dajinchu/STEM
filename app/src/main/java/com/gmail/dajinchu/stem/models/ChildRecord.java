@@ -1,4 +1,4 @@
-package com.gmail.dajinchu.stem.model;
+package com.gmail.dajinchu.stem.models;
 
 import com.orm.SugarRecord;
 

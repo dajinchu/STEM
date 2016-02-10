@@ -12,10 +12,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
 
-import com.gmail.dajinchu.stem.dialogs.BackupAlarmDialog;
-import com.gmail.dajinchu.stem.dialogs.DayOfWeekPicker;
-import com.gmail.dajinchu.stem.dialogs.ImplementationIntentionDialog;
-import com.gmail.dajinchu.stem.model.Routine;
+import com.gmail.dajinchu.stem.view.dialogs.BackupAlarmDialog;
+import com.gmail.dajinchu.stem.view.dialogs.DayOfWeekPicker;
+import com.gmail.dajinchu.stem.view.dialogs.ImplementationIntentionDialog;
+import com.gmail.dajinchu.stem.models.Routine;
 import com.gmail.dajinchu.stem.R;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;

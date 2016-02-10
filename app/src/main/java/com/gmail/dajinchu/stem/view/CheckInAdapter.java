@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gmail.dajinchu.stem.R;
-import com.gmail.dajinchu.stem.model.Routine;
+import com.gmail.dajinchu.stem.models.Routine;
 
 import java.text.DateFormat;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.gmail.dajinchu.stem.dialogs;
+package com.gmail.dajinchu.stem.view.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.gmail.dajinchu.stem.model.Routine;
+import com.gmail.dajinchu.stem.models.Routine;
 import com.gmail.dajinchu.stem.R;
 
 import org.solovyev.android.views.llm.LinearLayoutManager;
