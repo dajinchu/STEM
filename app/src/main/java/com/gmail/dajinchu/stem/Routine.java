@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
@@ -179,14 +180,23 @@ public class Routine extends SugarRecord implements ParentRecord {
 
     public void updateNotification(Context context){
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, TimeToDoReceiver.class);
-        intent.putExtra(NotificationPublisher.ROUTINE_ID, getId().intValue());
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, getId().intValue(), intent, 0);
-        am.cancel(alarmIntent);
+        Intent reminderIntent = new Intent(context, TimeToDoReceiver.class);
+        reminderIntent.putExtra(NotificationPublisher.ROUTINE_ID, getId().intValue());
+        PendingIntent reminderPending = PendingIntent.getBroadcast(context, getId().intValue()*2, reminderIntent, 0);
+        am.cancel(reminderPending);
+
+        Intent backupIntent = new Intent(context, BackupAlarmReceiver.class);
+        backupIntent.putExtra(NotificationPublisher.ROUTINE_ID, getId().intValue());
+        PendingIntent backupPending = PendingIntent.getBroadcast(context, getId().intValue()*2-1, backupIntent,0);
+        am.cancel(backupPending);
 
         updateTimeToDo();
-
-        am.setRepeating(AlarmManager.RTC_WAKEUP,getTimeToDo().getTimeInMillis(),24*60*60*1000,alarmIntent);
+        am.setRepeating(AlarmManager.RTC_WAKEUP,getTimeToDo().getTimeInMillis(),24*60*60*1000,reminderPending);
+        Log.d("Routine","backup at "+getBackupMinutes()*60*1000);
+        am.setRepeating(AlarmManager.RTC_WAKEUP,
+                getTimeToDo().getTimeInMillis()+getBackupMinutes()*60*1000,
+                24*60*60*1000,
+                backupPending);
     }
 
     @Override

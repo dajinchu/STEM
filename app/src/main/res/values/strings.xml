@@ -19,6 +19,8 @@
     <string name="imp_cue_hint">trigger event</string>
     <string name="imp_name_hint">action</string>
     <string name="backup_alarm_hint">Backup Alarm</string>
-    <string name="backup_alarm_dialog_title">Alert you again after...</string>
+    <string name="backup_alarm_dialog_title">Alert you again after…</string>
+    <string name="gentle_remind">Don\'t forget to</string>
+    <string name="backup_notif">Did you remember to</string>
 
 </resources>

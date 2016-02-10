@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,6 +75,11 @@ public class ImplementationIntentionDialog extends DialogFragment implements Tex
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerArrayAdapter);
 
+        //Set up EditText inputType
+        name.setInputType(InputType.TYPE_CLASS_TEXT);
+        cue.setInputType(InputType.TYPE_CLASS_TEXT);
+
+        //set and build the custom view dialog
         builder.customView(v, true);
         MaterialDialog dialog = builder.show();
 

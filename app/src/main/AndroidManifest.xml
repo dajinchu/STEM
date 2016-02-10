@@ -37,6 +37,7 @@
         </receiver>
         <receiver android:name=".DoneActionReceiver" />
         <receiver android:name=".MidnightFailureChecker"/>
+        <receiver android:name=".BackupAlarmReceiver"/>
     </application>
 
 </manifest>

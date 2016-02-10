@@ -3,16 +3,20 @@ package com.gmail.dajinchu.stem;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import java.util.Calendar;
 
 /**
- * Created by Da-Jin on 1/16/2016.
+ * Created by Da-Jin on 2/9/2016.
  */
-public class TimeToDoReceiver extends BroadcastReceiver {
-    public static final String ACTION_TIME_TO_DO = "com.dajinchu.stem.TIME_TO_DO";
+public class BackupAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        /*TODO this could be merged with TimeTODo but stay separate,
+        mainly because to prevent backup and timetodo pendingIntents from filterEqual to be true*/
+
+        Log.d("Backup","received");
         int id = intent.getIntExtra(NotificationPublisher.ROUTINE_ID, 0);
         Routine routine = Routine.findById(Routine.class,id);
         //Check if notification should really go off
@@ -26,9 +30,9 @@ public class TimeToDoReceiver extends BroadcastReceiver {
             //not on today
             return;
         }
-        Intent orderedIntent = new Intent(ACTION_TIME_TO_DO);
-        orderedIntent.putExtra(NotificationPublisher.ROUTINE_ID, id);
-        orderedIntent.putExtra(NotificationPublisher.NOTIF_TYPE,NotificationPublisher.TIME_TO_DO);
-        context.sendOrderedBroadcast(orderedIntent, null);
+        Intent i = new Intent(context,NotificationPublisher.class);
+        i.putExtra(NotificationPublisher.ROUTINE_ID, id);
+        i.putExtra(NotificationPublisher.NOTIF_TYPE, NotificationPublisher.BACKUP_ALARM);
+        context.sendBroadcast(i);
     }
 }
