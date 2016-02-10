@@ -1,4 +1,4 @@
-package com.gmail.dajinchu.stem;
+package com.gmail.dajinchu.stem.view;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,6 +8,10 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.gmail.dajinchu.stem.receivers.DoneActionReceiver;
+import com.gmail.dajinchu.stem.R;
+import com.gmail.dajinchu.stem.model.Routine;
 
 /**
  * Created by Da-Jin on 12/28/2015.

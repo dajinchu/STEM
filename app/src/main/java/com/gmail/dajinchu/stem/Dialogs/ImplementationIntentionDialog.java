@@ -1,4 +1,4 @@
-package com.gmail.dajinchu.stem;
+package com.gmail.dajinchu.stem.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.internal.MDButton;
+import com.gmail.dajinchu.stem.R;
 
 /**
  * Created by Da-Jin on 2/7/2016.
@@ -114,7 +115,7 @@ public class ImplementationIntentionDialog extends DialogFragment implements Tex
 
     }
 
-    interface OnSetIntentionListener {
+    public interface OnSetIntentionListener {
         void onImplementationIntentionSet(String name, String relativity, String cue);
     }
 }

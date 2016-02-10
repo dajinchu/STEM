@@ -20,7 +20,7 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,16 +28,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".TimeToDoReceiver"/>
-        <receiver android:name=".NotificationPublisher"
+        <receiver android:name=".receivers.TimeToDoReceiver"/>
+        <receiver android:name=".view.NotificationPublisher"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.dajinchu.stem.TIME_TO_DO"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".DoneActionReceiver" />
-        <receiver android:name=".MidnightFailureChecker"/>
-        <receiver android:name=".BackupAlarmReceiver"/>
+        <receiver android:name=".receivers.DoneActionReceiver" />
+        <receiver android:name=".receivers.MidnightFailureChecker"/>
+        <receiver android:name=".receivers.BackupAlarmReceiver"/>
     </application>
 
 </manifest>

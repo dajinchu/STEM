@@ -1,4 +1,4 @@
-package com.gmail.dajinchu.stem;
+package com.gmail.dajinchu.stem.view;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -12,6 +12,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
 
+import com.gmail.dajinchu.stem.dialogs.BackupAlarmDialog;
+import com.gmail.dajinchu.stem.dialogs.DayOfWeekPicker;
+import com.gmail.dajinchu.stem.dialogs.ImplementationIntentionDialog;
+import com.gmail.dajinchu.stem.model.Routine;
+import com.gmail.dajinchu.stem.R;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
@@ -55,7 +60,7 @@ public class NewRoutineFragment extends DialogFragment implements
         }
         //Make it full screen, in the future, we can have smarter options that can make it a
         //  true dialog depending on screen size/orientation
-        setStyle(DialogFragment.STYLE_NO_TITLE,R.style.AppTheme);
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme);
     }
 
     @Override

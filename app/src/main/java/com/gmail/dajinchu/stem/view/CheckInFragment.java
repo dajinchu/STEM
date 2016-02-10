@@ -1,4 +1,4 @@
-package com.gmail.dajinchu.stem;
+package com.gmail.dajinchu.stem.view;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,6 +20,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.gmail.dajinchu.stem.model.FilteringRoutineListener;
+import com.gmail.dajinchu.stem.R;
+import com.gmail.dajinchu.stem.model.Routine;
+import com.gmail.dajinchu.stem.model.RoutineComparator;
+import com.gmail.dajinchu.stem.model.TimeComparator;
+import com.gmail.dajinchu.stem.receivers.TimeToDoReceiver;
 
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -1,4 +1,4 @@
-package com.gmail.dajinchu.stem;
+package com.gmail.dajinchu.stem.view;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

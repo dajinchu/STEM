@@ -1,4 +1,4 @@
-package com.gmail.dajinchu.stem;
+package com.gmail.dajinchu.stem.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;

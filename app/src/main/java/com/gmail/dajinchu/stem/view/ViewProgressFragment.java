@@ -1,4 +1,4 @@
-package com.gmail.dajinchu.stem;
+package com.gmail.dajinchu.stem.view;
 
 
 import android.os.Bundle;
@@ -9,6 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.gmail.dajinchu.stem.model.FilteringRoutineListener;
+import com.gmail.dajinchu.stem.R;
+import com.gmail.dajinchu.stem.model.Routine;
 
 import java.util.ArrayList;
 

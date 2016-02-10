@@ -1,4 +1,4 @@
-package com.gmail.dajinchu.stem;
+package com.gmail.dajinchu.stem.model;
 
 import java.util.Calendar;
 import java.util.Comparator;

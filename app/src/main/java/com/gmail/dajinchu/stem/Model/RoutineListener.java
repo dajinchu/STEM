@@ -1,4 +1,4 @@
-package com.gmail.dajinchu.stem;
+package com.gmail.dajinchu.stem.model;
 
 /**
  * Created by Da-Jin on 2/1/2016.

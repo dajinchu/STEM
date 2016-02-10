@@ -1,4 +1,4 @@
-package com.gmail.dajinchu.stem;
+package com.gmail.dajinchu.stem.view;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;

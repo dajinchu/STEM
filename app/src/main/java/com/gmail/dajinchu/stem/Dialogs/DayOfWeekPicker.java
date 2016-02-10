@@ -1,4 +1,4 @@
-package com.gmail.dajinchu.stem;
+package com.gmail.dajinchu.stem.dialogs;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.afollestad.materialdialogs.AlertDialogWrapper;
+import com.gmail.dajinchu.stem.R;
 
 import org.solovyev.android.views.llm.LinearLayoutManager;
 
@@ -21,7 +22,7 @@ public class DayOfWeekPicker extends DialogFragment {
     private boolean[] daysChecked = new boolean[7];
     private OnDaysOfWeekPickedListener listener;
 
-    interface OnDaysOfWeekPickedListener {
+    public interface OnDaysOfWeekPickedListener {
         void onDaysOfWeekPicked(boolean[] daysPicked);
     }
     public DayOfWeekPicker(){

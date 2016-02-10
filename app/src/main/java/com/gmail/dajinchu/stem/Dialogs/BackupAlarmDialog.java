@@ -1,4 +1,4 @@
-package com.gmail.dajinchu.stem;
+package com.gmail.dajinchu.stem.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.gmail.dajinchu.stem.model.Routine;
+import com.gmail.dajinchu.stem.R;
 
 import org.solovyev.android.views.llm.LinearLayoutManager;
 
@@ -24,7 +26,7 @@ public class BackupAlarmDialog extends DialogFragment {
     private OnSetAlarmListener listener;
     private BackupAlarmAdapter adapter;
 
-    interface OnSetAlarmListener {
+    public interface OnSetAlarmListener {
         void onMinutesPicked(String minutes);
     }
 
