@@ -114,19 +114,6 @@ public class CheckInFragment extends Fragment {
             }
         });
 
-
-        routineListener = new FilteringRoutineListener(routineList){
-            @Override
-            public boolean shouldKeep(Routine routine) {
-                return !routine.isCompletedNow()
-                        && routine.getDays()[Routine.calendarDayWeekToDisplay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))];
-            }
-            @Override
-            public void onListChanged() {
-                sortAndSectionRoutines();
-            }
-        };
-
         return view;
     }
 
@@ -187,7 +174,7 @@ public class CheckInFragment extends Fragment {
     }
 
     //Broadcast receiver to intercept broadcast of it being time to do a routine
-    BroadcastReceiver updateReceiver = new BroadcastReceiver() {
+    BroadcastReceiver timeToDoReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             sortAndSectionRoutines();
@@ -200,15 +187,26 @@ public class CheckInFragment extends Fragment {
         super.onResume();
         IntentFilter filter = new IntentFilter(TimeToDoReceiver.ACTION_TIME_TO_DO);
         filter.setPriority(1);
-        getContext().registerReceiver(updateReceiver, filter);
+        getContext().registerReceiver(timeToDoReceiver, filter);
 
+        routineListener = new FilteringRoutineListener(routineList){
+            @Override
+            public boolean shouldKeep(Routine routine) {
+                return !routine.isCompletedNow()
+                        && routine.getDays()[Routine.calendarDayWeekToDisplay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))];
+            }
+            @Override
+            public void onListChanged() {
+                sortAndSectionRoutines();
+            }
+        };
         Routine.subscribe(routineListener);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getContext().unregisterReceiver(updateReceiver);
+        getContext().unregisterReceiver(timeToDoReceiver);
 
         Routine.unsubscribe(routineListener);
     }

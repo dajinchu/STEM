@@ -37,6 +37,12 @@ public class ViewProgressFragment extends Fragment {
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         routineListener = new FilteringRoutineListener(routinesWithCompletions){
             @Override
             public boolean shouldKeep(Routine routine) {
@@ -47,12 +53,6 @@ public class ViewProgressFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         };
-        return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         Routine.subscribe(routineListener);
     }
 
