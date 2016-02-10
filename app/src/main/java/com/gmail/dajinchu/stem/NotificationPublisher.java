@@ -36,21 +36,21 @@ public class NotificationPublisher extends BroadcastReceiver {
         builder.setAutoCancel(true);
 
         if(type == TIME_TO_DO) {
+            builder.setContentText(res.getString(R.string.gentle_remind)+" "+
+                    routine.getName()+" "+
+                    routine.getRelativity()+" "+
+                    routine.getCue());
+        }
+        if(type == BACKUP_ALARM){
             //Intent for done action button in notification
             Intent notificationDoneActionIntent = new Intent(context, DoneActionReceiver.class);
             notificationDoneActionIntent.putExtra(ROUTINE_ID, id);
             PendingIntent notificationDoneActionPendingIntent = PendingIntent.getBroadcast(context, id,
                     notificationDoneActionIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-            builder.setContentText(res.getString(R.string.gentle_remind)+" "+
-                    routine.getName()+" "+
-                    routine.getRelativity()+" "+
-                    routine.getCue());
-            builder.addAction(R.drawable.ic_add_white_24dp, "Done", notificationDoneActionPendingIntent);
-        }
-        if(type == BACKUP_ALARM){
-            //Intent affirmative = new Intent(context, )
             builder.setContentText(res.getString(R.string.backup_notif)+" "+routine.getName());
+            builder.addAction(R.drawable.ic_done_white_24dp, "I did", notificationDoneActionPendingIntent);
+
         }
         Log.d("NotifPublish",type+"");
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

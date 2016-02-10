@@ -182,12 +182,12 @@ public class Routine extends SugarRecord implements ParentRecord {
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent reminderIntent = new Intent(context, TimeToDoReceiver.class);
         reminderIntent.putExtra(NotificationPublisher.ROUTINE_ID, getId().intValue());
-        PendingIntent reminderPending = PendingIntent.getBroadcast(context, getId().intValue()*2, reminderIntent, 0);
+        PendingIntent reminderPending = PendingIntent.getBroadcast(context, getId().intValue(), reminderIntent, 0);
         am.cancel(reminderPending);
 
         Intent backupIntent = new Intent(context, BackupAlarmReceiver.class);
         backupIntent.putExtra(NotificationPublisher.ROUTINE_ID, getId().intValue());
-        PendingIntent backupPending = PendingIntent.getBroadcast(context, getId().intValue()*2-1, backupIntent,0);
+        PendingIntent backupPending = PendingIntent.getBroadcast(context, getId().intValue(), backupIntent,0);
         am.cancel(backupPending);
 
         updateTimeToDo();
