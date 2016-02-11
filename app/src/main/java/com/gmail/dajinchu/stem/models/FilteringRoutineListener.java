@@ -35,7 +35,7 @@ public abstract class FilteringRoutineListener implements RoutineListener {
                 iterator.remove();
             }
         }
-        if (shouldKeep(routine)) {
+        if (Routine.findById(Routine.class,record.getId())!=null && shouldKeep(routine)) {
             routineList.add(routine);
         }
         onListChanged();

@@ -18,6 +18,9 @@ public class TimeToDoReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         int id = intent.getIntExtra(NotificationPublisher.ROUTINE_ID, 0);
         Routine routine = Routine.findById(Routine.class,id);
+        if(routine==null){
+            return;
+        }
         //Check if notification should really go off
         //Don't publish notification if it's already done.
         if(routine.isCompletedNow()){

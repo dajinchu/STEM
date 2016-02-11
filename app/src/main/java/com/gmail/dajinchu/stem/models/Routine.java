@@ -216,6 +216,13 @@ public class Routine extends SugarRecord implements ParentRecord {
         return save;
     }
 
+    @Override
+    public boolean delete() {
+        boolean delete = super.delete();
+        notifyAllSubscribers();
+        return delete;
+    }
+
     private void refreshCompletionCache(){
         cachedCompletions = find(Completion.class,"routine = ?", String.valueOf(getId()));
     }

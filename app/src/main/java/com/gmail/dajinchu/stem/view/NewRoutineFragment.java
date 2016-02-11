@@ -1,6 +1,7 @@
 package com.gmail.dajinchu.stem.view;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.gmail.dajinchu.stem.view.dialogs.BackupAlarmDialog;
 import com.gmail.dajinchu.stem.view.dialogs.DayOfWeekPicker;
 import com.gmail.dajinchu.stem.view.dialogs.ImplementationIntentionDialog;
@@ -158,6 +161,24 @@ public class NewRoutineFragment extends DialogFragment implements
         dayweekTextView = (TextView) view.findViewById(R.id.repeat_textview);
         updateDayWeekTextView();
 
+        //Delete Button
+        view.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MaterialDialog.Builder builder = new MaterialDialog.Builder(getContext())
+                        .title("Permanently delete this routine?")
+                        .positiveText("Delete")
+                        .negativeText("Cancel")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                routine.delete();
+                                close();
+                            }
+                        });
+                builder.show().show();
+            }
+        });
 
         //Open Intention dialog if it's a new routine
         if(newroutine)openIIDialog();

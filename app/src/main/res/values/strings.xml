@@ -22,5 +22,6 @@
     <string name="backup_alarm_dialog_title">Alert you again after…</string>
     <string name="gentle_remind">Don\'t forget to</string>
     <string name="backup_notif">Did you remember to</string>
+    <string name="deleteHint">Delete</string>
 
 </resources>
