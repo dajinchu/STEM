@@ -46,13 +46,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingBottom="15dp"
-                android:paddingTop="15dp">
+                android:paddingTop="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
                     android:text="@string/implementation_intention"
                     android:textColor="@color/primary_text_default_material_light"
                     android:textSize="16sp"
@@ -62,8 +62,6 @@
                     style="@style/AppTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
                     android:id="@+id/ii_text_view"
                     android:textColor="@color/secondary_text_default_material_light"
                     android:textSize="14sp" />
@@ -88,14 +86,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingBottom="15dp"
-                android:paddingTop="15dp">
+                android:paddingTop="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp">
 
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
                     android:text="@string/timeHint"
                     android:textColor="@color/primary_text_default_material_light"
                     android:textSize="16sp"
@@ -105,8 +103,6 @@
                     style="@style/AppTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
                     android:id="@+id/time_text_view"
                     android:textColor="@color/secondary_text_default_material_light"
                     android:textSize="14sp" />
@@ -131,13 +127,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingBottom="15dp"
-                android:paddingTop="15dp">
+                android:paddingTop="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
                     android:text="@string/backup_alarm_hint"
                     android:textColor="@color/primary_text_default_material_light"
                     android:textSize="16sp"
@@ -147,8 +143,6 @@
                     style="@style/AppTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
                     android:id="@+id/backup_alarm_text_view"
                     android:textColor="@color/secondary_text_default_material_light"
                     android:textSize="14sp" />
@@ -172,13 +166,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingBottom="15dp"
-                android:paddingTop="15dp">
+                android:paddingTop="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
                     android:text="@string/repeatHint"
                     android:textColor="@color/primary_text_default_material_light"
                     android:textSize="16sp"
@@ -189,8 +183,6 @@
                     style="@style/AppTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
                     android:textColor="@color/secondary_text_default_material_light"
                     android:textSize="14sp" />
             </LinearLayout>

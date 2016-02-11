@@ -1,14 +1,15 @@
 package com.gmail.dajinchu.stem.view.dialogs;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.afollestad.materialdialogs.AlertDialogWrapper;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.gmail.dajinchu.stem.R;
 
 import org.solovyev.android.views.llm.LinearLayoutManager;
@@ -40,25 +41,16 @@ public class DayOfWeekPicker extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialogWrapper.Builder builder = new AlertDialogWrapper.Builder(getActivity())
-                .setTitle(R.string.repeatHint)
-                .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                listener.onDaysOfWeekPicked(daysChecked);
-                                dialog.dismiss();
-                            }
-                        }
-                )
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }
-                );
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
+                .title(R.string.repeatHint)
+                .positiveText("OK")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        listener.onDaysOfWeekPicked(daysChecked);
+                    }
+                })
+                .negativeText("Cancel");
 
         LayoutInflater i = getActivity().getLayoutInflater();
 
@@ -72,7 +64,7 @@ public class DayOfWeekPicker extends DialogFragment {
 
         recyclerView.setAdapter(adapter);
 
-        builder.setView(v);
-        return builder.create();
+        builder.customView(v,true);
+        return builder.show();
     }
 }
