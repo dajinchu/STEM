@@ -54,7 +54,7 @@ public class ProgressPreviewAdapter extends RecyclerView.Adapter<ProgressPreview
         }
 
         public void bind(Routine routine) {
-            float percent = routine.successfulCompletions()/(float)routine.getCompletions().size()*100f;
+            int percent = routine.successfulCompletions()*100/routine.getCompletions().size();
             title.setText(routine.getName());
             completionText.setText(percent+"% successful");
             percentCompletion.showValue(percent,100f,true);

@@ -45,9 +45,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/progress_preview_percent_text"
                 android:textSize="14sp"
-                android:text="0%"
                 android:textAppearance="@android:style/TextAppearance.Large"
-                android:textColor="@color/secondary_text_default_material_light" />
+                android:textColor="@color/secondary_text_default_material_light"
+                android:text="%" />
         </LinearLayout>
 
     </LinearLayout>
