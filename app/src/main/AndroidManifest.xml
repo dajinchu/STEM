@@ -3,6 +3,7 @@
     package="com.gmail.dajinchu.stem" >
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -38,6 +39,16 @@
         <receiver android:name=".receivers.DoneActionReceiver" />
         <receiver android:name=".receivers.MidnightFailureChecker"/>
         <receiver android:name=".receivers.BackupAlarmReceiver"/>
+        <receiver android:name=".receivers.BootCompletedReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+            </intent-filter>
+        </receiver>
+
+
+        <service android:name=".services.AlarmManagingService"/>
+
     </application>
 
 </manifest>

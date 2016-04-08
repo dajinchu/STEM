@@ -1,11 +1,12 @@
 package com.gmail.dajinchu.stem.models;
 
+
 import com.orm.SugarRecord;
 
 /**
  * Created by Da-Jin on 2/5/2016.
  */
-public abstract class ChildRecord extends SugarRecord{
+public abstract class ChildRecord extends SugarRecord {
 
     protected abstract ParentRecord getParent();
 
