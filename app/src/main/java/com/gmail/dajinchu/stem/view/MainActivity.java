@@ -7,7 +7,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 
-import com.facebook.appevents.AppEventsLogger;
 import com.gmail.dajinchu.stem.R;
 import com.gmail.dajinchu.stem.services.AlarmManagingService;
 
@@ -58,18 +57,5 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         return false;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        AppEventsLogger.activateApp(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        AppEventsLogger.deactivateApp(this);
-
     }
 }

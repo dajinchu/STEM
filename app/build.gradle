@@ -36,5 +36,5 @@ dependencies {
         transitive = true
     }
     compile 'biz.kasual:materialnumberpicker:1.2.0'
-    compile 'com.facebook.android:facebook-android-sdk:4.6.0'
+    compile 'com.github.deano2390:MaterialShowcaseView:1.1.0'
 }

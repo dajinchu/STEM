@@ -37,7 +37,7 @@ public class NotificationPublisher extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setContentTitle(res.getString(R.string.app_name));
         builder.setContentIntent(notificationResultPendingIntent);
-        builder.setSmallIcon(R.mipmap.notif_xxxhdpi);//TODO make a real white and transparent icon
+        builder.setSmallIcon(R.mipmap.notif_xxxhdpi);
         builder.setAutoCancel(true);
         builder.setPriority(Notification.PRIORITY_HIGH);
 
