@@ -174,12 +174,12 @@ public class Routine extends SugarRecord implements ParentRecord {
         Calendar timeToDo = getTimeToDo();
         timeToDo.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DATE));
         timeToDo.set(Calendar.SECOND,0);
-        setTimeToDo(timeToDo);
 
         if(timeToDo.before(now)){
             //timeToDo already happened today, set to next
             timeToDo.add(Calendar.DATE, daysToNextOccurence());
         }
+        setTimeToDo(timeToDo);
     }
 
     public void updateNotification(Context context){

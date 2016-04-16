@@ -1,5 +1,6 @@
 package com.gmail.dajinchu.stem.view;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -36,8 +37,9 @@ public class NotificationPublisher extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setContentTitle(res.getString(R.string.app_name));
         builder.setContentIntent(notificationResultPendingIntent);
-        builder.setSmallIcon(R.mipmap.ic_launcher);//TODO make a real white and transparent icon
+        builder.setSmallIcon(R.mipmap.notif_xxxhdpi);//TODO make a real white and transparent icon
         builder.setAutoCancel(true);
+        builder.setPriority(Notification.PRIORITY_HIGH);
 
         if(type == TIME_TO_DO) {
             builder.setContentText(res.getString(R.string.gentle_remind)+" "+
