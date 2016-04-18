@@ -5,7 +5,7 @@
     android:background="@color/material_grey_300">
 
     <android.support.v7.widget.RecyclerView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/progress_preview_list"
         android:paddingRight="8dp"

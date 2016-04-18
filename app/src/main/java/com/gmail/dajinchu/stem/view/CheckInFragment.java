@@ -21,8 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.gmail.dajinchu.stem.models.FilteringRoutineListener;
 import com.gmail.dajinchu.stem.R;
+import com.gmail.dajinchu.stem.models.FilteringRoutineListener;
 import com.gmail.dajinchu.stem.models.Routine;
 import com.gmail.dajinchu.stem.models.RoutineComparator;
 import com.gmail.dajinchu.stem.models.TimeComparator;
@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
  * Created by Da-Jin on 11/25/2015.
@@ -113,7 +115,13 @@ public class CheckInFragment extends Fragment {
                 openRoutineFragment(NewRoutineFragment.ID_NEW_ROUTINE);
             }
         });
-
+        new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(fab)
+                .setDismissOnTargetTouch(true)
+                .setTargetTouchable(true)
+                .setContentText(R.string.showcase_new_habit)
+                .singleUse("fab")
+                .show();
         return view;
     }
 
@@ -198,6 +206,17 @@ public class CheckInFragment extends Fragment {
             @Override
             public void onListChanged() {
                 sortAndSectionRoutines();
+                if(!routineList.isEmpty()) {
+                    new MaterialShowcaseView.Builder(getActivity())
+                            .setTarget(recyclerView)
+                            .setTargetTouchable(true)
+                            .setDismissOnTargetTouch(true)
+                            .setContentText(R.string.showcase_swipe)
+                            .setDismissText(R.string.showcase_dismiss)
+                            .withRectangleShape()
+                            .singleUse("swipe")
+                            .show();
+                }
             }
         };
         Routine.subscribe(routineListener);

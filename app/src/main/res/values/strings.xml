@@ -12,7 +12,6 @@
     <string name="no_routines_todo">Nothing to do today.\nYou\'re all set!</string>
     <string name="main_title">Routine Tracker</string>
 
-    <string name="facebook_app_id">834969276620921</string>
     <string name="implementation_intention">Intention</string>
     <string name="dismiss">Cancel</string>
     <string name="ok">OK</string>
@@ -23,5 +22,11 @@
     <string name="gentle_remind">Don\'t forget to</string>
     <string name="backup_notif">Did you remember to</string>
     <string name="deleteHint">Delete</string>
+
+    <!--Showcase-->
+    <string name="showcase_dismiss">GOT IT</string>
+    <string name="showcase_swipe">When you finish a habit, swipe it right</string>
+    <string name="showcase_new_habit">Define a new habit</string>
+    <string name="showcase_progress">View your habit progression</string>
 
 </resources>
