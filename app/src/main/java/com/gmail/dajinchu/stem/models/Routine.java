@@ -38,9 +38,9 @@ public class Routine extends SugarRecord implements ParentRecord {
     @Ignore
     private List<Completion> cachedCompletions;
     @Ignore
-    private static String[] choiceNames = new String[]{"5 minutes", "Half hour", "1 hour", "2 hours"};
+    private static String[] choiceNames = new String[]{"Half hour", "1 hour", "2 hours", "3 hours"};
     @Ignore
-    private static Integer[] choiceValues = new Integer[]{5,30,60,120};
+    private static Integer[] choiceValues = new Integer[]{30,60,120,180};
 
     //Getters and Setters
     public List<Completion> getCompletions(){

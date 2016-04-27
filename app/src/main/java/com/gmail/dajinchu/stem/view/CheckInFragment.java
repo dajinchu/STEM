@@ -112,7 +112,7 @@ public class CheckInFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openRoutineFragment(NewRoutineFragment.ID_NEW_ROUTINE);
+                openRoutineFragment(RoutineDetailFragment.ID_NEW_ROUTINE);
             }
         });
         new MaterialShowcaseView.Builder(getActivity())
@@ -137,7 +137,7 @@ public class CheckInFragment extends Fragment {
         bundle.putInt("routineId", id);
 
         // Create and show the dialog.
-        DialogFragment newFragment = new NewRoutineFragment();
+        DialogFragment newFragment = new RoutineDetailFragment();
         newFragment.setArguments(bundle);
         newFragment.show(ft, "newroutine");
     }
