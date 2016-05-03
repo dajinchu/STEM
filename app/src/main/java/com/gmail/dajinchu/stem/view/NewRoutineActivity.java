@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,7 @@ public class NewRoutineActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_input_routine, container, false);
             name = (EditText) view.findViewById(R.id.routine_input);
+            name.setInputType(InputType.TYPE_CLASS_TEXT);
             return view;
         }
         @Override
@@ -71,6 +73,7 @@ public class NewRoutineActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_input_cue, container, false);
             cue = ((EditText)view.findViewById(R.id.cue_input));
+            cue.setInputType(InputType.TYPE_CLASS_TEXT);
             return view;
         }
 
