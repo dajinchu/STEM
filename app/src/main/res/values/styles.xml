@@ -17,4 +17,7 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="TutTextView" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textSize">@dimen/tut_text_size</item>
+    </style>
 </resources>

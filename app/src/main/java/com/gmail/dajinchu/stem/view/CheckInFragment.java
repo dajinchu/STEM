@@ -112,7 +112,8 @@ public class CheckInFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openRoutineFragment(RoutineDetailFragment.ID_NEW_ROUTINE);
+                Intent intent = new Intent(getContext(), NewRoutineActivity.class);
+                startActivity(intent);
             }
         });
         new MaterialShowcaseView.Builder(getActivity())
@@ -127,7 +128,7 @@ public class CheckInFragment extends Fragment {
 
     public void openRoutineFragment(int id) {
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("newroutine");
+        Fragment prev = getFragmentManager().findFragmentByTag("editroutine");
         if (prev != null) {
             ft.remove(prev);
         }
@@ -139,7 +140,7 @@ public class CheckInFragment extends Fragment {
         // Create and show the dialog.
         DialogFragment newFragment = new RoutineDetailFragment();
         newFragment.setArguments(bundle);
-        newFragment.show(ft, "newroutine");
+        newFragment.show(ft, "editroutine");
     }
 
     private void markRoutineDone(int listIndex) {

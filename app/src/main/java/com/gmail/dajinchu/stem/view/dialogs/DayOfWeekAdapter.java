@@ -1,6 +1,7 @@
 package com.gmail.dajinchu.stem.view.dialogs;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.checkbox.setText(dayNames[position]);
+        Log.i("DayOfWeek",dayNames[position]);
         holder.checkbox.setChecked(daysChecked[position]);
     }
 

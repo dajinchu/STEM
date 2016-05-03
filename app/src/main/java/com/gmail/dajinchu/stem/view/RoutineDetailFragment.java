@@ -71,10 +71,10 @@ public class RoutineDetailFragment extends DialogFragment implements
         //Get rid of the dialog title, we have our own toolbar stuff.
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         //Inflate the fragment early so we can call findViewById on things inside the fragment
-        View view = inflater.inflate(R.layout.fragment_new_routine, container, false);
+        View view = inflater.inflate(R.layout.fragment_routine_detail, container, false);
 
         //Get the fragment toolbar(NOT the activity toolbar)
-        Toolbar toolbar = ((Toolbar)view.findViewById(R.id.new_routine_toolbar));
+        Toolbar toolbar = ((Toolbar)view.findViewById(R.id.routine_detail_toolbar));
         //add the save menu button to the toolbar
         toolbar.inflateMenu(R.menu.save_menu);
         //set toolbar title using string resource

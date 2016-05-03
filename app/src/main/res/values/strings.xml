@@ -23,10 +23,30 @@
     <string name="backup_notif">Did you remember to</string>
     <string name="deleteHint">Delete</string>
 
+    <string-array name="days">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
     <!--Showcase-->
     <string name="showcase_dismiss">GOT IT</string>
     <string name="showcase_swipe">When you finish a habit, swipe it right</string>
     <string name="showcase_new_habit">Define a new habit</string>
     <string name="showcase_progress">View your habit progression</string>
+
+    <string name="next">NEXT</string>
+    <string name="new_routine">New Routine</string>
+
+    <string name="habit_overview">Habits consist of a cue, routine, and reward.</string>
+    <string name="habit_trigger_info">Cues trigger your mind into doing the routine automatically.</string>
+    <string name="habit_reward_info">Rewards strengthen the habit-cue connection.</string>
+    <string name="routine_name_prompt">What habit would you like to start building?</string>
+    <string name="routine_name_hint">habit name</string>
+    <string name="routine_name_example">eg. brush my teeth, read, walk the dog</string>
 
 </resources>

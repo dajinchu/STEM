@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        style="@style/TutTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="To help you remember your habit, we'll remind you of your intention." />
+
+
+    <TextView
+        style="@style/TutTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="When's the earliest time you will do your cue?" />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/choose_time_container"/>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/picker_frame"
+        android:layout_gravity="center_horizontal" />
+    <TextView
+        style="@style/TutTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You will be sent a notification at your chosen time." />
+</LinearLayout>

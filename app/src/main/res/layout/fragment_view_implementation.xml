@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        style="@style/TutTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remembering your intent to form a habit will accelerate progress." />
+
+    <TextView
+        style="@style/TutTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/view_intention"
+        android:text="I will x before y"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical"
+        android:textStyle="italic" />
+
+</LinearLayout>

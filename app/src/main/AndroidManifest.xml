@@ -26,6 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.NewRoutineActivity"></activity>
         <receiver android:name=".receivers.TimeToDoReceiver"/>
         <receiver android:name=".view.NotificationPublisher"
             android:exported="false">
