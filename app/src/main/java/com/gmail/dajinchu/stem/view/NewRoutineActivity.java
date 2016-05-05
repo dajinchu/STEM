@@ -23,7 +23,6 @@ import android.widget.TextView;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import com.gmail.dajinchu.stem.R;
 import com.gmail.dajinchu.stem.models.Routine;
-import com.gmail.dajinchu.stem.view.dialogs.BackupAlarmAdapter;
 import com.gmail.dajinchu.stem.view.dialogs.DayOfWeekAdapter;
 import com.gmail.dajinchu.stem.view.dialogs.MiniTimePicker;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -252,28 +251,51 @@ public class NewRoutineActivity extends Activity {
             routine.setTimeToDo(timeToDo);
         }
     }
-    public static class BackupAlarm extends StepFragment {
-        private BackupAlarmAdapter adapter;
-
+    public static class BackupAlarm extends StepFragment implements TimePickerDialog.OnTimeSetListener {
+        private MiniTimePicker picker;
+        private int hour, minute;
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.fragment_guided_backup_alarm,container,false);
-
-            RecyclerView recycler = (RecyclerView)v.findViewById(R.id.back_up_alarm_recycler_options);
-            recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-            recycler.setHasFixedSize(true);
-            adapter = new BackupAlarmAdapter(Routine.possibleBackupChoices(), 0);
-
-            recycler.setAdapter(adapter);
+            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+            Calendar backupTime = routine.getBackupTime();
+            picker = MiniTimePicker.newInstance(this, backupTime.get(Calendar.HOUR_OF_DAY), backupTime.get(Calendar.MINUTE), false);
+            picker.setOnTimeSetListener(this);
+            ft.add(R.id.picker_frame_backup, picker);
+            ft.commit();
 
             ready();
             return v;
         }
+        @Override
+        public void onDetach() {
+            super.onDetach();
+
+            try {
+                Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+                childFragmentManager.setAccessible(true);
+                childFragmentManager.set(this, null);
+
+            } catch (NoSuchFieldException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        @Override
+        public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+            this.hour = hourOfDay;
+            this.minute = minute;
+        }
 
         @Override
         public void save() {
-            routine.setBackupMinutes(Routine.minuteStringToInt(Routine.possibleBackupChoices()[adapter.getSelectedPos()]));
+            picker.notifyOnDateListener();
+            Calendar backup = routine.getBackupTime();
+            backup.set(Calendar.HOUR_OF_DAY, hour);
+            backup.set(Calendar.MINUTE, minute);
+            routine.setBackupTime(backup);
         }
     }
 

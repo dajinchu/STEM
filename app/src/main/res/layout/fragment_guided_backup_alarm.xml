@@ -16,5 +16,10 @@
         android:layout_height="wrap_content"
         android:text="When is the latest you would likely do your habit?"
         style="@style/TutTextView"/>
-    <include layout="@layout/backup_alarm_dialog"/>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/picker_frame_backup"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

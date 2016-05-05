@@ -6,12 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
-import com.gmail.dajinchu.stem.receivers.BackupAlarmReceiver;
 import com.gmail.dajinchu.stem.Bench;
-import com.gmail.dajinchu.stem.view.NotificationPublisher;
+import com.gmail.dajinchu.stem.receivers.BackupAlarmReceiver;
 import com.gmail.dajinchu.stem.receivers.TimeToDoReceiver;
+import com.gmail.dajinchu.stem.view.NotificationPublisher;
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 
@@ -29,7 +28,7 @@ public class Routine extends SugarRecord implements ParentRecord {
     private String _cue;
     private long _timeToDo;
     private int _days;
-    private int _backupMins;
+    private long _timeBackup;
 
     @Ignore
     private static DateFormat format = DateFormat.getDateTimeInstance();
@@ -37,10 +36,6 @@ public class Routine extends SugarRecord implements ParentRecord {
     private static List<RoutineListener> subs = new ArrayList<>();
     @Ignore
     private List<Completion> cachedCompletions;
-    @Ignore
-    private static String[] choiceNames = new String[]{"Half hour", "1 hour", "2 hours", "3 hours"};
-    @Ignore
-    private static Integer[] choiceValues = new Integer[]{30,60,120,180};
 
     //Getters and Setters
     public List<Completion> getCompletions(){
@@ -67,6 +62,14 @@ public class Routine extends SugarRecord implements ParentRecord {
     public void setTimeToDo(Calendar timeToDo){
         _timeToDo = timeToDo.getTimeInMillis();
     }
+    public Calendar getBackupTime(){
+        Calendar temp = Calendar.getInstance();
+        temp.setTimeInMillis(_timeBackup);
+        return temp;
+    }
+    public void setBackupTime(Calendar backupTime){
+        _timeBackup = backupTime.getTimeInMillis();
+    }
     public boolean[] getDays(){
         boolean[] temp = new boolean[7];
         for(int i = 0; i < 7; i++){
@@ -82,16 +85,16 @@ public class Routine extends SugarRecord implements ParentRecord {
 
 
     public Routine(){
-        this("","","",choiceValues[1],Calendar.getInstance(),new boolean[]{true,true,true,true,true,true,true});
+        this("","","",Calendar.getInstance(),Calendar.getInstance(),new boolean[]{true,true,true,true,true,true,true});
     }
 
-    public Routine(String name, String rel, String cue, int mins, Calendar time, boolean[] days){
+    public Routine(String name, String rel, String cue, Calendar backup, Calendar time, boolean[] days){
         setName(name);
         setRelativity(rel);
         setCue(cue);
         setTimeToDo(time);
+        setBackupTime(backup);
         setDays(days);
-        setBackupMinutes(mins);
     }
 
     public void addCompletionNow(){
@@ -196,9 +199,8 @@ public class Routine extends SugarRecord implements ParentRecord {
 
         updateTimeToDo();
         am.setRepeating(AlarmManager.RTC_WAKEUP,getTimeToDo().getTimeInMillis(),24*60*60*1000,reminderPending);
-        Log.d("Routine","backup at "+getBackupMinutes()*60*1000);
         am.setRepeating(AlarmManager.RTC_WAKEUP,
-                getTimeToDo().getTimeInMillis()+getBackupMinutes()*60*1000,
+                getBackupTime().getTimeInMillis()*60*1000,
                 24*60*60*1000,
                 backupPending);
     }
@@ -244,34 +246,5 @@ public class Routine extends SugarRecord implements ParentRecord {
 
     public static void subscribe(RoutineListener subscriber) {
         subs.add(subscriber);
-    }
-
-    public int getBackupMinutes() {
-        return _backupMins;
-    }
-
-    public void setBackupMinutes(int backupMinutes) {
-        this._backupMins = backupMinutes;
-    }
-
-    public static String[] possibleBackupChoices(){
-        return choiceNames;
-    }
-
-    public static int minuteStringToInt(String s){
-        for(int i = 0; i<choiceNames.length; i++){
-            if(s.equals(choiceNames[i])){
-                return choiceValues[i];
-            }
-        }
-        return 1;
-    }
-    public static String minuteIntToString(int minInt){
-        for(int i = 0; i<choiceValues.length; i++){
-            if(minInt==choiceValues[i]){
-                return choiceNames[i];
-            }
-        }
-        return "";
     }
 }

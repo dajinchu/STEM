@@ -15,11 +15,10 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.gmail.dajinchu.stem.view.dialogs.BackupAlarmDialog;
+import com.gmail.dajinchu.stem.R;
+import com.gmail.dajinchu.stem.models.Routine;
 import com.gmail.dajinchu.stem.view.dialogs.DayOfWeekPicker;
 import com.gmail.dajinchu.stem.view.dialogs.ImplementationIntentionDialog;
-import com.gmail.dajinchu.stem.models.Routine;
-import com.gmail.dajinchu.stem.R;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
@@ -30,9 +29,8 @@ import java.util.Calendar;
  * Created by Da-Jin on 11/25/2015.
  */
 public class RoutineDetailFragment extends DialogFragment implements
-        TimePickerDialog.OnTimeSetListener,
         DayOfWeekPicker.OnDaysOfWeekPickedListener,
-        ImplementationIntentionDialog.OnSetIntentionListener, BackupAlarmDialog.OnSetAlarmListener {
+        ImplementationIntentionDialog.OnSetIntentionListener {
 
     //use ID_NEW_ROUTINE as routine ID to specify creating new routine
     public static final int ID_NEW_ROUTINE = -1;
@@ -52,12 +50,12 @@ public class RoutineDetailFragment extends DialogFragment implements
 
         int routineId = ID_NEW_ROUTINE;
         Bundle bundle = this.getArguments();
-        if(bundle!=null){
+        if (bundle != null) {
             routineId = bundle.getInt("routineId", ID_NEW_ROUTINE);
         }
-        if(routineId != ID_NEW_ROUTINE){
+        if (routineId != ID_NEW_ROUTINE) {
             routine = Routine.findById(Routine.class, routineId);
-        }else{
+        } else {
             newroutine = true;
             routine = new Routine();
         }
@@ -74,7 +72,7 @@ public class RoutineDetailFragment extends DialogFragment implements
         View view = inflater.inflate(R.layout.fragment_routine_detail, container, false);
 
         //Get the fragment toolbar(NOT the activity toolbar)
-        Toolbar toolbar = ((Toolbar)view.findViewById(R.id.routine_detail_toolbar));
+        Toolbar toolbar = ((Toolbar) view.findViewById(R.id.routine_detail_toolbar));
         //add the save menu button to the toolbar
         toolbar.inflateMenu(R.menu.save_menu);
         //set toolbar title using string resource
@@ -112,12 +110,12 @@ public class RoutineDetailFragment extends DialogFragment implements
             @Override
             public void onClick(View v) {
                 Calendar timeToDo = routine.getTimeToDo();
-                TimePickerDialog picker = TimePickerDialog.newInstance(RoutineDetailFragment.this,
+                TimePickerDialog picker = TimePickerDialog.newInstance(todoPickerListener,
                         timeToDo.get(Calendar.HOUR_OF_DAY),
                         timeToDo.get(Calendar.MINUTE),
                         timeToDo.get(Calendar.SECOND),
                         false);
-                picker.show(getActivity().getFragmentManager(),"timepickerdialog");
+                picker.show(getActivity().getFragmentManager(), "timepickerdialog");
             }
         });
 
@@ -127,17 +125,13 @@ public class RoutineDetailFragment extends DialogFragment implements
         view.findViewById(R.id.back_up_alarm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                Fragment prev = getFragmentManager().findFragmentByTag("backupdialog");
-                if (prev != null) {
-                    ft.remove(prev);
-                }
-                ft.addToBackStack(null);
-
-                // Create and show the dialog.
-                BackupAlarmDialog newFragment = BackupAlarmDialog.newInstance(RoutineDetailFragment.this,
-                        Routine.minuteIntToString(routine.getBackupMinutes()));
-                newFragment.show(ft, "backupdialog");
+                Calendar backupTime = routine.getBackupTime();
+                TimePickerDialog picker = TimePickerDialog.newInstance(backupPickerListener,
+                        backupTime.get(Calendar.HOUR_OF_DAY),
+                        backupTime.get(Calendar.MINUTE),
+                        backupTime.get(Calendar.SECOND),
+                        false);
+                picker.show(getActivity().getFragmentManager(), "backupdialog");
             }
         });
 
@@ -181,7 +175,7 @@ public class RoutineDetailFragment extends DialogFragment implements
         });
 
         //Open Intention dialog if it's a new routine
-        if(newroutine)openIIDialog();
+        if (newroutine) openIIDialog();
         return view;
     }
 
@@ -195,16 +189,7 @@ public class RoutineDetailFragment extends DialogFragment implements
         //create and show
         ImplementationIntentionDialog ii = ImplementationIntentionDialog.newInstance(RoutineDetailFragment.this,
                 routine.getName(), routine.getRelativity(), routine.getCue());
-        ii.show(ft,"iidialog");
-    }
-
-    @Override
-    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
-        Calendar timeToDo= routine.getTimeToDo();
-        timeToDo.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        timeToDo.set(Calendar.MINUTE,minute);
-        routine.setTimeToDo(timeToDo);
-        updateTimeTextView();
+        ii.show(ft, "iidialog");
     }
 
     @Override
@@ -215,30 +200,27 @@ public class RoutineDetailFragment extends DialogFragment implements
 
     @Override
     public void onImplementationIntentionSet(String name, String relativity, String cue) {
-        Log.d("NewRoutineFragment",name+" "+relativity+" "+cue);
+        Log.d("NewRoutineFragment", name + " " + relativity + " " + cue);
         routine.setName(name);
         routine.setRelativity(relativity);
         routine.setCue(cue);
         updateIITextView();
     }
-    @Override
-    public void onMinutesPicked(String minutes) {
-        routine.setBackupMinutes(Routine.minuteStringToInt(minutes));
-        updateBackupTextView();
-    }
 
-    private void updateTimeTextView(){
+    private void updateTimeTextView() {
         timeTextView.setText(format.format(routine.getTimeToDo().getTime()));
     }
+
     private void updateIITextView() {
-        iiTextView.setText(routine.getName()+" "+routine.getRelativity()+" "+routine.getCue());
+        iiTextView.setText(routine.getName() + " " + routine.getRelativity() + " " + routine.getCue());
     }
-    private void updateDayWeekTextView(){
-        String[] shortDayNames={"MON","TUE","WED","THU","FRI","SAT","SUN"};
+
+    private void updateDayWeekTextView() {
+        String[] shortDayNames = {"MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"};
         StringBuilder sb = new StringBuilder();
-        int index=0;
-        for(boolean day:routine.getDays()){
-            if(day){
+        int index = 0;
+        for (boolean day : routine.getDays()) {
+            if (day) {
                 sb.append(shortDayNames[index]);
                 sb.append(" ");
             }
@@ -246,16 +228,43 @@ public class RoutineDetailFragment extends DialogFragment implements
         }
         dayweekTextView.setText(sb.toString());
     }
-    private void updateBackupTextView(){
-        backupTextView.setText(Routine.minuteIntToString(routine.getBackupMinutes())+" after reminder");
+
+    private void updateBackupTextView() {
+        backupTextView.setText(format.format(routine.getBackupTime().getTime()));
     }
+
+    TimePickerDialog.OnTimeSetListener backupPickerListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+            Calendar backupnew = routine.getBackupTime();
+            backupnew.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            backupnew.set(Calendar.MINUTE, minute);
+            routine.setBackupTime(backupnew);
+            updateBackupTextView();
+        }
+    };
+
+    TimePickerDialog.OnTimeSetListener todoPickerListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+            Calendar timeToDo= routine.getTimeToDo();
+            timeToDo.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            timeToDo.set(Calendar.MINUTE,minute);
+            routine.setTimeToDo(timeToDo);
+            updateTimeTextView();
+        }
+    };
 
     @Override
     public void onResume() {
         super.onResume();
         TimePickerDialog picker = (TimePickerDialog)getActivity().getFragmentManager().findFragmentByTag("timepickerdialog");
         if(picker != null){
-            picker.setOnTimeSetListener(this);
+            picker.setOnTimeSetListener(todoPickerListener);
+        }
+        TimePickerDialog backuppicker = (TimePickerDialog)getActivity().getFragmentManager().findFragmentByTag("backupdialog");
+        if(backuppicker != null){
+            backuppicker.setOnTimeSetListener(backupPickerListener);
         }
     }
 
