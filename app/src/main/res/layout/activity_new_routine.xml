@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,39 +13,98 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/new_routine_toolbar"
+            style="@style/ToolBarStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            style="@style/ToolBarStyle"
-            app:layout_scrollFlags="scroll|enterAlways"
             app:contentInsetLeft="72dp"
-            app:contentInsetStart="72dp" >
+            app:contentInsetStart="72dp"
+            app:layout_scrollFlags="scroll|enterAlways">
 
             <TextView
+                style="@style/ToolBarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
                 android:text="@string/new_routine"
-                style="@style/ToolBarStyle"/>
+                android:textSize="20sp" />
 
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
+    <ScrollView
+        android:id="@+id/new_routine_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/new_routine_container"
-        android:layout_below="@+id/new_routine_appBar"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"></FrameLayout>
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/new_routine_appBar"
+        android:scrollbars="none"
+        android:layout_above="@+id/footer"></ScrollView>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/next"
-        android:id="@+id/new_routine_next_button"
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:background="@color/primary">
+
+        <View
+            android:id="@+id/footer_split"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true" />
+
+        <LinearLayout
+            android:id="@+id/new_routine_prev_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/footer_split"
+            android:clickable="true"
+            android:gravity="center_vertical|left"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                android:tint="#fff" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prev"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="8dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/new_routine_next_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/footer_split"
+            android:clickable="true"
+            android:gravity="center_vertical|right"
+            android:orientation="horizontal"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/next"
+                android:textColor="#ffffff"
+                android:id="@+id/new_next"
+                android:layout_marginRight="8dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_forward_black_24dp"
+                android:tint="#fff"
+                android:id="@+id/new_next_img" />
+        </LinearLayout>
+
+    </RelativeLayout>
 </RelativeLayout>

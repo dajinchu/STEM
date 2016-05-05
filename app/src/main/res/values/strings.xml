@@ -40,13 +40,20 @@
     <string name="showcase_progress">View your habit progression</string>
 
     <string name="next">NEXT</string>
-    <string name="new_routine">New Routine</string>
+    <string name="prev">PREVIOUS</string>
+    <string name="new_routine">Define New Habit</string>
 
-    <string name="habit_overview">Habits consist of a cue, routine, and reward.</string>
-    <string name="habit_trigger_info">Cues trigger your mind into doing the routine automatically.</string>
-    <string name="habit_reward_info">Rewards strengthen the habit-cue connection.</string>
+    <string name="habit_overview">The Habit Loop</string>
+    <string name="habit_trigger_info">Cues begin the habit loop.</string>
+    <string name="habit_routine_info">Routines are the actual tasks.</string>
+    <string name="habit_reward_info">Rewards make the habit stronger.</string>
+    <string name="habit_automaticity_info">The time it takes to form a habit differs based on the habit and the person.</string>
+    <string name="habit_technique_info">Habit App-It can help you make use of techniques known to accelerate habit growth.</string>
     <string name="routine_name_prompt">What habit would you like to start building?</string>
     <string name="routine_name_hint">habit name</string>
     <string name="routine_name_example">eg. brush my teeth, read, walk the dog</string>
+    <string name="psychology_assurance">Habit App-It uses psychology to help you build healthful habits.</string>
+    <string name="learn_more">Learn more</string>
+    <string name="finish">FINISH</string>
 
 </resources>

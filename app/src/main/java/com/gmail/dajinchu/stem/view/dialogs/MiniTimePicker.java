@@ -14,9 +14,9 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 public class MiniTimePicker extends TimePickerDialog {
 
     public static MiniTimePicker newInstance(OnTimeSetListener callback,
-                                             int hourOfDay, int minute, int second, boolean is24HourMode) {
+                                             int hourOfDay, int minute, boolean is24HourMode) {
         MiniTimePicker ret = new MiniTimePicker();
-        ret.initialize(callback, hourOfDay, minute, second, is24HourMode);
+        ret.initialize(callback, hourOfDay, minute,0, is24HourMode);
         return ret;
     }
 
@@ -31,4 +31,5 @@ public class MiniTimePicker extends TimePickerDialog {
         }
         return view;
     }
+
 }

@@ -1,23 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="8dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp">
 
     <TextView
+        style="@style/TutTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/habit_overview"
-        style="@style/TutTextView"/>
+        android:text="@string/psychology_assurance" />
 
-    <TextView
+    <Button
+        android:id="@+id/learn_more_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/habit_trigger_info"
-        style="@style/TutTextView" />
+        android:layout_gravity="center_horizontal"
+        android:text="@string/learn_more" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/habit_reward_info"
-        style="@style/TutTextView" />
+    <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+        android:id="@+id/habit_loop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:ael_duration="500"
+        app:ael_expanded="false"
+        app:ael_interpolator="bounce"
+        app:ael_orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_gravity="center_horizontal"
+                android:textSize="30sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/habit_overview" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                android:src="@drawable/loop"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                style="@style/TutTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/habit_trigger_info" />
+            <TextView
+                style="@style/TutTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/habit_routine_info" />
+            <TextView
+                style="@style/TutTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/habit_reward_info" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                android:src="@drawable/automaticity3"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
+            <TextView
+                style="@style/TutTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/habit_automaticity_info" />
+            <TextView
+                style="@style/TutTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/habit_technique_info" />
+        </LinearLayout>
+    </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
 </LinearLayout>
