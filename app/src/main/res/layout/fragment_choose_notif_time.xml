@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="8dp"
     android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp">
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="8dp"
+    android:orientation="vertical">
 
     <TextView
         style="@style/TutTextView"
@@ -12,22 +13,37 @@
         android:layout_height="wrap_content"
         android:text="To help you remember your habit, we'll remind you of your intention." />
 
+    <android.support.v7.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/remind" />
+
+    </android.support.v7.widget.CardView>
 
     <TextView
         style="@style/TutTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="When's the earliest time you will do your cue?" />
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/choose_time_container"/>
 
     <FrameLayout
+        android:id="@+id/choose_time_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:id="@+id/picker_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/picker_frame"
         android:layout_gravity="center_horizontal" />
+
     <TextView
         style="@style/TutTextView"
         android:layout_width="wrap_content"
