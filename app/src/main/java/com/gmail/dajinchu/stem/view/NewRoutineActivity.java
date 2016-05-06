@@ -46,6 +46,13 @@ public class NewRoutineActivity extends Activity {
     public static abstract class StepFragment extends Fragment{
         protected Routine routine;
         private ReadyNextListener listener;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setRetainInstance(true);
+        }
+
         public StepFragment initialize(Routine r, ReadyNextListener ready){
             routine = r;
             listener = ready;
