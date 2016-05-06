@@ -2,16 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_marginTop="8dp"
     android:orientation="vertical">
 
     <TextView
         style="@style/TutTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="To make sure you do your habit, a backup notification will also be sent if you forget to check off your habit." />
+        android:text="A backup notification will also be sent if you forget to check off your habit." />
 
     <android.support.v7.widget.CardView
         android:layout_width="wrap_content"
@@ -31,7 +28,7 @@
         style="@style/TutTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="When is the latest you would likely do your habit?" />
+        android:text="Pick a convenient time to be alerted. Make sure it is after you would likely finish your habit." />
 
     <FrameLayout
         android:id="@+id/picker_frame_backup"

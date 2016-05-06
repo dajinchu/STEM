@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_content"
+    android:clipToPadding="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -36,11 +37,16 @@
         android:id="@+id/new_routine_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/footer"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/new_routine_appBar"
-        android:scrollbars="none"
-        android:layout_above="@+id/footer"></ScrollView>
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:clipToPadding="false"
+        android:scrollbars="none"></ScrollView>
 
     <RelativeLayout
         android:id="@+id/footer"
@@ -74,9 +80,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:text="@string/prev"
-                android:textColor="#ffffff"
-                android:layout_marginLeft="8dp" />
+                android:textColor="#ffffff" />
 
         </LinearLayout>
 
@@ -91,19 +97,19 @@
             android:paddingRight="16dp">
 
             <TextView
+                android:id="@+id/new_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
                 android:text="@string/next"
-                android:textColor="#ffffff"
-                android:id="@+id/new_next"
-                android:layout_marginRight="8dp" />
+                android:textColor="#ffffff" />
 
             <ImageView
+                android:id="@+id/new_next_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_forward_black_24dp"
-                android:tint="#fff"
-                android:id="@+id/new_next_img" />
+                android:tint="#fff" />
         </LinearLayout>
 
     </RelativeLayout>

@@ -2,16 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_marginTop="8dp"
     android:orientation="vertical">
 
     <TextView
         style="@style/TutTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="To help you remember your habit, we'll remind you of your intention." />
+        android:text="To help you remember your habit, we'll remind you of your intention with a notification similar to this:" />
 
     <android.support.v7.widget.CardView
         android:layout_width="wrap_content"
@@ -31,22 +28,11 @@
         style="@style/TutTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="When's the earliest time you will do your cue?" />
-
-    <FrameLayout
-        android:id="@+id/choose_time_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:text="Pick a convenient time to be notified. Make sure it happens before your cue event." />
 
     <FrameLayout
         android:id="@+id/picker_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal" />
-
-    <TextView
-        style="@style/TutTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="You will be sent a notification at your chosen time." />
 </LinearLayout>
