@@ -9,9 +9,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -24,23 +22,21 @@ import com.gmail.dajinchu.stem.R;
 public class ImplementationIntentionDialog extends DialogFragment implements TextWatcher {
 
     private EditText name,cue;
-    private Spinner spinner;
     private OnSetIntentionListener listener;
-    private String nameText, relativityText, cueText;
+    private String nameText, cueText;
     private MDButton positive;
 
-    private void initialize(OnSetIntentionListener listener, String name, String relativity, String cue){
+    private void initialize(OnSetIntentionListener listener, String name, String cue){
         this.listener = listener;
         this.nameText = name;
-        this.relativityText = relativity;
         this.cueText = cue;
     }
 
     public static ImplementationIntentionDialog newInstance(
             OnSetIntentionListener listener,
-            String name, String relativity, String cue){
+            String name, String cue){
         ImplementationIntentionDialog instance = new ImplementationIntentionDialog();
-        instance.initialize(listener, name, relativity, cue);
+        instance.initialize(listener, name, cue);
         return instance;
     }
 
@@ -56,7 +52,6 @@ public class ImplementationIntentionDialog extends DialogFragment implements Tex
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         listener.onImplementationIntentionSet(
                                 name.getText().toString(),
-                                spinner.getSelectedItem().toString(),
                                 cue.getText().toString());
                     }
                 });
@@ -64,17 +59,8 @@ public class ImplementationIntentionDialog extends DialogFragment implements Tex
 
         View v = i.inflate(R.layout.implementation_intention_dialog, null);
 
-        //Get Views
-        spinner = (Spinner) v.findViewById(R.id.routine_cue_relativity_spinner);
         name = (EditText) v.findViewById(R.id.implementation_name_edit_text);
         cue = (EditText) v.findViewById(R.id.implementation_cue_edit_text);
-
-        //Set up Spinner
-        final String[] relativityChoices =  new String[]{"before","after","while"};
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, relativityChoices);
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(spinnerArrayAdapter);
 
         //Set up EditText inputType
         name.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -91,7 +77,6 @@ public class ImplementationIntentionDialog extends DialogFragment implements Tex
         cue.addTextChangedListener(this);
 
         //Set initial values
-        spinner.setSelection(spinnerArrayAdapter.getPosition(relativityText));
         name.setText(nameText);
         cue.setText(cueText);
 
@@ -116,6 +101,6 @@ public class ImplementationIntentionDialog extends DialogFragment implements Tex
     }
 
     public interface OnSetIntentionListener {
-        void onImplementationIntentionSet(String name, String relativity, String cue);
+        void onImplementationIntentionSet(String name, String cue);
     }
 }

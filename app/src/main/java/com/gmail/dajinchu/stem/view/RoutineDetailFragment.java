@@ -6,7 +6,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -188,7 +187,7 @@ public class RoutineDetailFragment extends DialogFragment implements
         ft.addToBackStack(null);
         //create and show
         ImplementationIntentionDialog ii = ImplementationIntentionDialog.newInstance(RoutineDetailFragment.this,
-                routine.getName(), routine.getRelativity(), routine.getCue());
+                routine.getName(), routine.getCue());
         ii.show(ft, "iidialog");
     }
 
@@ -199,10 +198,8 @@ public class RoutineDetailFragment extends DialogFragment implements
     }
 
     @Override
-    public void onImplementationIntentionSet(String name, String relativity, String cue) {
-        Log.d("NewRoutineFragment", name + " " + relativity + " " + cue);
+    public void onImplementationIntentionSet(String name, String cue) {
         routine.setName(name);
-        routine.setRelativity(relativity);
         routine.setCue(cue);
         updateIITextView();
     }
@@ -212,7 +209,7 @@ public class RoutineDetailFragment extends DialogFragment implements
     }
 
     private void updateIITextView() {
-        iiTextView.setText(routine.getName() + " " + routine.getRelativity() + " " + routine.getCue());
+        iiTextView.setText(routine.getName() + " after " + routine.getCue());
     }
 
     private void updateDayWeekTextView() {

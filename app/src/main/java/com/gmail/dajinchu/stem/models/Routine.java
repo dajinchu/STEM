@@ -24,7 +24,6 @@ import java.util.List;
  */
 public class Routine extends SugarRecord implements ParentRecord {
     private String _name;
-    private String _relativity;
     private String _cue;
     private long _timeToDo;
     private int _days;
@@ -50,8 +49,6 @@ public class Routine extends SugarRecord implements ParentRecord {
     public void setName(String name){
         _name = name;
     }
-    public String getRelativity(){return _relativity;}
-    public void setRelativity(String relativity){_relativity=relativity;}
     public String getCue(){return _cue;}
     public void setCue(String cue){_cue = cue;}
     public Calendar getTimeToDo(){
@@ -85,12 +82,11 @@ public class Routine extends SugarRecord implements ParentRecord {
 
 
     public Routine(){
-        this("","","",Calendar.getInstance(),Calendar.getInstance(),new boolean[]{true,true,true,true,true,true,true});
+        this("","",Calendar.getInstance(),Calendar.getInstance(),new boolean[]{true,true,true,true,true,true,true});
     }
 
-    public Routine(String name, String rel, String cue, Calendar backup, Calendar time, boolean[] days){
+    public Routine(String name, String cue, Calendar backup, Calendar time, boolean[] days){
         setName(name);
-        setRelativity(rel);
         setCue(cue);
         setTimeToDo(time);
         setBackupTime(backup);
@@ -200,7 +196,7 @@ public class Routine extends SugarRecord implements ParentRecord {
         updateTimeToDo();
         am.setRepeating(AlarmManager.RTC_WAKEUP,getTimeToDo().getTimeInMillis(),24*60*60*1000,reminderPending);
         am.setRepeating(AlarmManager.RTC_WAKEUP,
-                getBackupTime().getTimeInMillis()*60*1000,
+                getBackupTime().getTimeInMillis()*24*60*60*1000,
                 24*60*60*1000,
                 backupPending);
     }

@@ -43,8 +43,7 @@ public class NotificationPublisher extends BroadcastReceiver {
 
         if(type == TIME_TO_DO) {
             builder.setContentText(res.getString(R.string.gentle_remind)+" "+
-                    routine.getName()+" "+
-                    routine.getRelativity()+" "+
+                    routine.getName()+" after "+
                     routine.getCue());
         }
         if(type == BACKUP_ALARM){

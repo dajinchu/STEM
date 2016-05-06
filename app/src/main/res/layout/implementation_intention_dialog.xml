@@ -22,16 +22,25 @@
             android:hint="@string/imp_name_hint"/>
     </LinearLayout>
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/routine_cue_relativity_spinner" />
-
-    <EditText
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/implementation_cue_edit_text"
-        android:layout_weight="1"
-        android:hint="@string/imp_cue_hint"/>
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="before"
+            android:id="@+id/textView3" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/implementation_cue_edit_text"
+            android:layout_weight="1"
+            android:hint="@string/imp_cue_hint"/>
+
+    </LinearLayout>
 
 </LinearLayout>
